@@ -3,11 +3,27 @@
 
 #include <iostream>
 #include<stdlib.h>
+#include"Arbol.h"
+#include"Jugador.h"
 int main()
 {
     system("color a");
-    system("PAUSE");
-    std::cout << "Hello World!\n";
+    Arbol* nuevaInstancia = new Arbol();
+    Jugador* j1 = new Jugador("Pablo"); 
+    Jugador* j2 = new Jugador("Anthony");
+    Jugador* j3 = new Jugador("Juan");
+    Jugador* j4 = new Jugador("Javier");
+    NodoArbol* nuevo = new NodoArbol(j1);
+    NodoArbol* nuevo2 = new NodoArbol(j2);
+    NodoArbol* nuevo3 = new NodoArbol(j3);
+    NodoArbol* nuevo4 = new NodoArbol(j4);
+    nuevaInstancia->add(nuevo);
+    nuevaInstancia->add(nuevo2);
+    nuevaInstancia->add(nuevo3);
+    nuevaInstancia->add(nuevo4);
+    nuevaInstancia->recorrido_inOrder();
+    nuevaInstancia->recorrido_PreOrder(); 
+    nuevaInstancia->recorrido_PostOrder(); 
     system("PAUSE");
 }
 

@@ -8,5 +8,6 @@ private:
 
 public:
 	Jugador(string nom) { this->nombre = nom; };
+	inline string getNombre() { return this->nombre; }; 
 };
 
