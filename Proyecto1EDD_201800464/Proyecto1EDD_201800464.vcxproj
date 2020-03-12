@@ -149,12 +149,17 @@
   <ItemGroup>
     <ClCompile Include="Arbol.cpp" />
     <ClCompile Include="Jugador.cpp" />
+    <ClCompile Include="ListaSimpleOrdenada.cpp" />
     <ClCompile Include="Proyecto1EDD_201800464.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arbol.h" />
+    <ClInclude Include="IO_Archivos.h" />
     <ClInclude Include="Jugador.h" />
+    <ClInclude Include="ListaSimpleOrdenada.h" />
     <ClInclude Include="NodoArbol.h" />
+    <ClInclude Include="NodoSimple.h" />
+    <ClInclude Include="RegistroPuntaje.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

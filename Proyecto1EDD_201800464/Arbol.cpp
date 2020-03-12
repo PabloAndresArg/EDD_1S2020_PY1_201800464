@@ -13,7 +13,7 @@ void Arbol::add(NodoArbol* nuevo) { // todo los nombre que agregue deben de ir e
 	}
 }
 void Arbol::recursive_add(NodoArbol* actual, NodoArbol* nuevo) {
-    if (compararAlfabeticamente(actual->getJugador()->getNombre() , nuevo->getJugador()->getNombre())) {
+    if ((compararAlfabeticamente(actual->getJugador()->getNombre() , nuevo->getJugador()->getNombre())) == 1) {
         cout << actual->getJugador()->getNombre()<<" es mayor alfabeticamente que :"<< nuevo->getJugador()->getNombre()<< "se va por la izq"<<endl ; // si es mas grande el actual pues me voy por la izq 
         if (actual->getIzq() != NULL) {
             recursive_add(actual->getIzq(),nuevo);
@@ -22,7 +22,7 @@ void Arbol::recursive_add(NodoArbol* actual, NodoArbol* nuevo) {
             actual->setIzq(nuevo);
         }
     }
-    else {
+    else if((compararAlfabeticamente(actual->getJugador()->getNombre(), nuevo->getJugador()->getNombre())) == 0) {
         cout << actual->getJugador()->getNombre() << " es menor alfabeticamente que :" << nuevo->getJugador()->getNombre() << "se va por la der" << endl;
         if (actual->getDer() != NULL) {
             recursive_add(actual->getDer(), nuevo);
@@ -31,14 +31,20 @@ void Arbol::recursive_add(NodoArbol* actual, NodoArbol* nuevo) {
             actual->setDer(nuevo);
         }
     }
+    else {
+        cout << "REPETIDO: " + nuevo->getJugador()->getNombre();
+    }
 }
 
 
 
 
-bool Arbol::compararAlfabeticamente(string p1, string p2) {
+int Arbol::compararAlfabeticamente(string p1, string p2) {
     // p1 nuevo  , p2 de la lista 
     // retorno true para seguir buscando , retorno false si ya enccontre le nodo donde deseo ingresar 
+    if (p1.compare(p2) == 0 ) {
+        return 2; 
+    }else{
     string palabraOrdenada = "";
     int repeticiones = 0, p1_size, p2_size;
     p1_size = (int)p1.size();
@@ -64,19 +70,18 @@ bool Arbol::compararAlfabeticamente(string p1, string p2) {
         else if (letra2 > letra1) { // palabra 1 va antes que palabra 2 
             cout << "la letra: " << letra1 << " VA ANTES QUE : " << letra2 << endl;
             palabraOrdenada = p1;
-            return false;
+            return 0;
         }
         else if (letra1 > letra2) {
             cout << "AVANZA DE NODO " << letra1 << endl;
             palabraOrdenada = p2;
-            return true;
+            return 1;
         }
     }
-    // si llega aca las palabras son iguales entonces debo de manejar una excepcion 
     cout << "LA PALABRA QUE IRIA PRIMERO ES : " << palabraOrdenada << endl;
-    return false;
+    return 1;
 
-
+    }
 }
 
 // RECORRIDOS 

@@ -12,7 +12,7 @@ public:
 	}
 	void add(NodoArbol*);
 	void recursive_add(NodoArbol*, NodoArbol*);
-	bool compararAlfabeticamente(string , string ); // CAMBIAR A QUE RETORNE UN ENTERO PARA MANEJAR LO DEL ERROR 
+	int compararAlfabeticamente(string , string ); // CAMBIAR A QUE RETORNE UN ENTERO PARA MANEJAR LO DEL ERROR 
 	void recorrido_inOrder();
 	void recursive_inOrder(NodoArbol*);
 	void inline recorrido_PreOrder() { cout << "recorrido PREORDER: "; recursive_PreOrder(this->raiz); cout << endl; };
