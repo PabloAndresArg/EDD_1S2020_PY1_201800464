@@ -45,7 +45,9 @@ void ListaSimpleOrdenada::imprimir() {
 		aux = aux->getSig();
 	}
 }
-void ListaSimpleOrdenada::getGraphvizPorJugador(string nombreJugador) {
+
+void ListaSimpleOrdenada::getGraphviz() {
 	IO_Archivos obj;
-	obj.Graph_ordenadas1(L->getCabeza());
+	obj.PuntajePorJugador(this->cabeza);
 }
+

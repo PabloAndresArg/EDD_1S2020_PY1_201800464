@@ -1,0 +1,9 @@
+digraph ARBOL { rankdir=TB; style = filled;bgcolor = white;color = lightgrey;node[style = filled, color = green, shape = record];   
+ Pablo[label = " <C0>|Pablo|<C1>" ];   
+ Pablo:C0->Anthony [arrowhead = none color = black];   
+ Anthony[label = " <C0>|Anthony|<C1>" ];   
+ Anthony:C1->Javier [arrowhead = none color = black];   
+ Javier[label = " <C0>|Javier|<C1>" ];   
+ Pablo:C1->Walter [arrowhead = none color = black];   
+ Walter[label = " <C0>|Walter|<C1>" ];   
+ }

@@ -149,6 +149,7 @@
   <ItemGroup>
     <ClCompile Include="Arbol.cpp" />
     <ClCompile Include="Jugador.cpp" />
+    <ClCompile Include="ListaDobleCircular.cpp" />
     <ClCompile Include="ListaSimpleOrdenada.cpp" />
     <ClCompile Include="Proyecto1EDD_201800464.cpp" />
   </ItemGroup>
@@ -156,8 +157,10 @@
     <ClInclude Include="Arbol.h" />
     <ClInclude Include="IO_Archivos.h" />
     <ClInclude Include="Jugador.h" />
+    <ClInclude Include="ListaDobleCircular.h" />
     <ClInclude Include="ListaSimpleOrdenada.h" />
     <ClInclude Include="NodoArbol.h" />
+    <ClInclude Include="NodoDobleC.h" />
     <ClInclude Include="NodoSimple.h" />
     <ClInclude Include="RegistroPuntaje.h" />
   </ItemGroup>

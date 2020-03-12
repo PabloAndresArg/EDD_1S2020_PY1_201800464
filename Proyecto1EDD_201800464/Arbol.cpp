@@ -3,6 +3,7 @@
 #include<iostream>
 #include<stdlib.h>
 #include<string>
+#include"IO_Archivos.h"
 using namespace std; 
 void Arbol::add(NodoArbol* nuevo) { // todo los nombre que agregue deben de ir en minusculas :o 
 	if (this->raiz == NULL) {
@@ -124,5 +125,32 @@ void Arbol::recursive_PostOrder(NodoArbol* actual) {
         recursive_inOrder(actual->getDer());
     }
     cout << actual->getJugador()->getNombre() << " -> ";
+}
+
+void  Arbol::getGraphviz() {
+    
+  
+    this->Graph += "digraph ARBOL { rankdir=TB; style = filled;bgcolor = white;color = lightgrey;node[style = filled, color = green, shape = record];   \n ";
+    getGraphviz(this->raiz);
+    this->Graph += "}";
+    IO_Archivos* llama = new IO_Archivos(); 
+    llama->graficaArbol(this->Graph);
+    this->Graph = ""; 
+    // tener en cuenta que tengo que recolectar 3 recorridos diferentes 
+}
+
+void Arbol::getGraphviz(NodoArbol* R_actual) {
+    this->Graph += ""+ R_actual->getJugador()->getNombre() +"[label = \" <C0>|" + R_actual->getJugador()->getNombre() + "|<C1>"+ "\" ];   \n ";
+    //cout << actual->getJugador()->getNombre() << " -> ";
+    if (R_actual->getIzq() != NULL) {
+        //nodo9:C0->nodo10
+        this->Graph += R_actual->getJugador()->getNombre() +":C0->" + R_actual->getIzq()->getJugador()->getNombre()+ " [arrowhead = none color = black];   \n ";
+        getGraphviz(R_actual->getIzq());
+    }
+
+    if (R_actual->getDer() != NULL) {
+        this->Graph += R_actual->getJugador()->getNombre() + ":C1->" + R_actual->getDer()->getJugador()->getNombre() + " [arrowhead = none color = black];   \n ";
+        getGraphviz(R_actual->getDer());
+    }
 }
 

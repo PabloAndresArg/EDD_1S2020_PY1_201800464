@@ -6,9 +6,12 @@ class Arbol
 {
 private: 
 	NodoArbol* raiz;
+	string Graph;
 public:
 	Arbol() {
 		this->raiz = NULL;
+		Graph = "";
+		// TAMANIO Y CON ESO UN ARREGLO PARA NO TENER QUE CREAR UNA LISTA SIMPLE DIFERENTE 
 	}
 	void add(NodoArbol*);
 	void recursive_add(NodoArbol*, NodoArbol*);
@@ -19,5 +22,7 @@ public:
 	void recursive_PreOrder(NodoArbol*);
 	void recorrido_PostOrder() { cout << "recorrido POSTORDER "; recursive_PostOrder(this->raiz); cout << endl; }
 	void recursive_PostOrder(NodoArbol*);
+	void getGraphviz(); 
+	void getGraphviz(NodoArbol*); // recolecto en preorder raiz izq derecha 
 };
 
