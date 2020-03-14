@@ -4,6 +4,8 @@
 #include<stdlib.h>
 #include<string>
 #include"IO_Archivos.h"
+#include <sstream>
+#include"RegistroPuntaje.h"
 using namespace std; 
 void Arbol::add(NodoArbol* nuevo) { // todo los nombre que agregue deben de ir en minusculas :o 
 	if (this->raiz == NULL) {
@@ -132,12 +134,61 @@ void  Arbol::getGraphviz() {
   
     this->Graph += "digraph ARBOL { rankdir=TB; style = filled;bgcolor = white;color = lightgrey;node[style = filled, color = green, shape = record];   \n ";
     getGraphviz(this->raiz);
-    this->Graph += "}";
+    llenarListasSimples(); // llen mis listas limples 
+    listaPreOder.imprimir();
+    listaInOrder.imprimir();
+    listaPostOrder.imprimir();
     IO_Archivos* llama = new IO_Archivos(); 
-    llama->graficaArbol(this->Graph);
-    this->Graph = ""; 
-    // tener en cuenta que tengo que recolectar 3 recorridos diferentes 
+    llama->graficaArbol(this->Graph, listaPreOder.getCabeza(), listaInOrder.getCabeza(), listaPostOrder.getCabeza());
+    listaPreOder.getGraphviz();
+    this->Graph = "";
+    this->indice = 0;
+    limpiarListasAux();
+    
 }
+
+void Arbol::llenarListaPreOrder(NodoArbol* actual) {
+    RegistroPuntaje* nodoRaiz = new RegistroPuntaje(actual->getJugador()->getNombre() , this->indice);
+    this->listaPreOder.add(nodoRaiz);
+    this->indice++;
+    if (actual->getIzq() != NULL) {
+        llenarListaPreOrder(actual->getIzq());
+    }
+    if (actual->getDer() != NULL) {
+        llenarListaPreOrder(actual->getDer());
+    }
+}
+void Arbol::llenarListaInOrder(NodoArbol* actual) {
+
+    if (actual->getIzq() != NULL) {
+        llenarListaInOrder(actual->getIzq());
+    }
+    RegistroPuntaje* nodoRaiz = new RegistroPuntaje(actual->getJugador()->getNombre(), this->indice);
+    this->listaInOrder.add(nodoRaiz);
+    this->indice++;
+    if (actual->getDer() != NULL) {
+        llenarListaInOrder(actual->getDer());
+    }
+}
+void Arbol::llenarListaPostOrder(NodoArbol* actual) {
+
+    if (actual->getIzq() != NULL) {
+        llenarListaPostOrder(actual->getIzq());
+    }
+    if (actual->getDer() != NULL) {
+        llenarListaPostOrder(actual->getDer());
+    }
+    RegistroPuntaje* nodoRaiz = new RegistroPuntaje(actual->getJugador()->getNombre(), this->indice);
+    this->listaPostOrder.add(nodoRaiz);
+    this->indice++;
+}
+void Arbol::llenarListasSimples() {
+    llenarListaPreOrder(this->raiz);
+    llenarListaInOrder(this->raiz); 
+    llenarListaPostOrder(this->raiz);
+}
+
+
 
 void Arbol::getGraphviz(NodoArbol* R_actual) {
     this->Graph += ""+ R_actual->getJugador()->getNombre() +"[label = \" <C0>|" + R_actual->getJugador()->getNombre() + "|<C1>"+ "\" ];   \n ";
@@ -152,5 +203,11 @@ void Arbol::getGraphviz(NodoArbol* R_actual) {
         this->Graph += R_actual->getJugador()->getNombre() + ":C1->" + R_actual->getDer()->getJugador()->getNombre() + " [arrowhead = none color = black];   \n ";
         getGraphviz(R_actual->getDer());
     }
+}
+
+void Arbol::limpiarListasAux() {
+    this->listaPreOder.vaciar(); 
+    this->listaInOrder.vaciar(); 
+    this->listaPostOrder.vaciar();
 }
 

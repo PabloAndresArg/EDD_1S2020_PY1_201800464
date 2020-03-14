@@ -11,12 +11,12 @@
 #include"ListaDobleCircular.h"
 #include"NodoDobleC.h"
 int main()
-{
+{ // NOTA AL ARBOL TENGO QUE VALIDAR QUE TODO ENTRE EN MINUSCULA 
     system("color a");
     Arbol* nuevaInstancia = new Arbol();
     Jugador* j1 = new Jugador("Pablo"); 
     Jugador* j2 = new Jugador("Anthony");
-    Jugador* j3 = new Jugador("Walter");
+    Jugador* j3 = new Jugador("Zeta");
     Jugador* j4 = new Jugador("Javier");
     Jugador* j5 = new Jugador("Javier");
     NodoArbol* nuevo = new NodoArbol(j1);

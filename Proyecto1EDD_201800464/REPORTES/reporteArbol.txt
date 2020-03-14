@@ -4,6 +4,24 @@ digraph ARBOL { rankdir=TB; style = filled;bgcolor = white;color = lightgrey;nod
  Anthony[label = " <C0>|Anthony|<C1>" ];   
  Anthony:C1->Javier [arrowhead = none color = black];   
  Javier[label = " <C0>|Javier|<C1>" ];   
- Pablo:C1->Walter [arrowhead = none color = black];   
- Walter[label = " <C0>|Walter|<C1>" ];   
- }
+ Pablo:C1->Zeta [arrowhead = none color = black];   
+ Zeta[label = " <C0>|Zeta|<C1>" ];   
+ subgraph cluster_0 { style = filled; color = lightgrey;node[style = filled, color = gold   , shape = tripleoctagon]; label = "PRE-ORDER" ;  
+ Pablo0[label = " Pablo" ] ; 
+Pablo0->Anthony1[arrowhead = "vee"] ; Anthony1[label = " Anthony" ] ; 
+Anthony1->Javier2[arrowhead = "vee"] ; Javier2[label = " Javier" ] ; 
+Javier2->Zeta3[arrowhead = "vee"] ; Zeta3[label = " Zeta" ] ; 
+}
+subgraph cluster_1 { style = filled; color = lightgrey;node[style = filled, color = lightskyblue2, shape = tripleoctagon]; label = "IN-ORDER" ;  
+ Anthony4[label = " Anthony" ] ; 
+Anthony4->Javier5[arrowhead = "vee"]; Javier5[label = " Javier" ] ; 
+Javier5->Pablo6[arrowhead = "vee"]; Pablo6[label = " Pablo" ] ; 
+Pablo6->Zeta7[arrowhead = "vee"]; Zeta7[label = " Zeta" ] ; 
+}
+subgraph cluster_2 { style = filled; color = lightgrey;node[style = filled, color = orange2, shape = tripleoctagon]; label = "POST-ORDER" ;  
+ Javier8[label = " Javier" ] ; 
+Javier8->Anthony9[arrowhead = "vee"] ; Anthony9[label = " Anthony" ] ; 
+Anthony9->Zeta10[arrowhead = "vee"] ; Zeta10[label = " Zeta" ] ; 
+Zeta10->Pablo11[arrowhead = "vee"] ; Pablo11[label = " Pablo" ] ; 
+}
+}

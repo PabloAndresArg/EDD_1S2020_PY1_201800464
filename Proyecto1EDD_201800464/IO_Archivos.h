@@ -110,8 +110,7 @@ public:
 		}
 	}
 	// graficando el arbol-------------------------------------------------------------------------
-	void graficaArbol(string cadenaGraph) {
-		system("cls");
+	void graficaArbol(string cadenaGraph , NodoSimple* cabezaPre , NodoSimple* cabezaIn , NodoSimple* cabezaPost) {
 		system("color 9");
 		ofstream w;
 		w.open("REPORTES\\reporteArbol.txt", ios::out);//si no existe lo crea  y si ya lo reemplaza
@@ -123,6 +122,41 @@ public:
 		}
 		if (cadenaGraph.compare("") !=0 ) {
 			w << cadenaGraph;
+			// preOrder
+			w<<"subgraph cluster_0 { style = filled; color = lightgrey;node[style = filled, color = gold   , shape = tripleoctagon]; label = \"PRE-ORDER\" ;  \n ";
+			while (cabezaPre != NULL) {
+				w << cabezaPre->getRegistro()->getNombre()<< cabezaPre->getRegistro()->getPuntaje() << "[label = \" " << cabezaPre->getRegistro()->getNombre() << "\" ] ; \n";
+				if (cabezaPre->getSig() != NULL) {
+					w << cabezaPre->getRegistro()->getNombre() << cabezaPre->getRegistro()->getPuntaje() << "->"<< cabezaPre->getSig()->getRegistro()->getNombre() << cabezaPre->getSig()->getRegistro()->getPuntaje() << "[arrowhead = \"" << "vee" << "\"] ; ";
+				}
+				cabezaPre = cabezaPre->getSig(); 
+			}
+			w << "}\n";
+			// innorder
+			w << "subgraph cluster_1 { style = filled; color = lightgrey;node[style = filled, color = lightskyblue2, shape = tripleoctagon]; label = \"IN-ORDER\" ;  \n ";
+			while (cabezaIn != NULL) {
+				w << cabezaIn->getRegistro()->getNombre() << cabezaIn->getRegistro()->getPuntaje() << "[label = \" " << cabezaIn->getRegistro()->getNombre() << "\" ] ; \n";
+				if (cabezaIn->getSig() != NULL) {
+					w << cabezaIn->getRegistro()->getNombre() << cabezaIn->getRegistro()->getPuntaje() << "->" << cabezaIn->getSig()->getRegistro()->getNombre() << cabezaIn->getSig()->getRegistro()->getPuntaje() << "[arrowhead = \"" <<"vee"<<"\"]; ";
+				}
+				cabezaIn = cabezaIn->getSig();
+			}
+			w << "}\n";
+			// postOder
+			w << "subgraph cluster_2 { style = filled; color = lightgrey;node[style = filled, color = orange2, shape = tripleoctagon]; label = \"POST-ORDER\" ;  \n ";
+			while (cabezaPost != NULL) {
+				w << cabezaPost->getRegistro()->getNombre() << cabezaPost->getRegistro()->getPuntaje() << "[label = \" " << cabezaPost->getRegistro()->getNombre() << "\" ] ; \n";
+				if (cabezaPost->getSig() != NULL) {
+					w << cabezaPost->getRegistro()->getNombre() << cabezaPost->getRegistro()->getPuntaje() << "->" << cabezaPost->getSig()->getRegistro()->getNombre() << cabezaPost->getSig()->getRegistro()->getPuntaje() << "[arrowhead = \"" << "vee" << "\"] ; ";
+				}
+				cabezaPost = cabezaPost->getSig();
+			}
+			w << "}\n";
+
+
+				
+				
+			w << "}";
 			w.close();
 			char genera[] = "dot -Tjpg REPORTES\\reporteArbol.txt -o REPORTES\\reporteArbol.jpg";// usando el prueba par mientrasr 
 			system(genera);
