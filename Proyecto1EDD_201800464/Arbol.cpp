@@ -6,18 +6,65 @@
 #include"IO_Archivos.h"
 #include <sstream>
 #include"RegistroPuntaje.h"
+#include<ctype.h> // para usar el tolower
 using namespace std; 
 void Arbol::add(NodoArbol* nuevo) { // todo los nombre que agregue deben de ir en minusculas :o 
-	if (this->raiz == NULL) {
+    string nombre = nuevo->getJugador()->getNombre();
+    nuevo->getJugador()->setNombre(convertirTodoMinuscula(nuevo->getJugador()->getNombre()));
+    if (this->raiz == NULL) {
 		this->raiz = nuevo;
 	}
 	else {
 		recursive_add(this->raiz, nuevo); // minuto 43
 	}
 }
+
+Jugador* Arbol::buscar(string nombre) {
+    nombre = convertirTodoMinuscula(nombre);
+    NodoArbol* encontrado = buscarRecursivo(this->raiz , nombre);
+    if (encontrado != NULL) {
+        return encontrado->getJugador();
+    }
+    Jugador* empty = new Jugador();
+    return empty;
+}
+
+NodoArbol* Arbol::buscarRecursivo(NodoArbol* actual , string nombre) {
+    // 1 me voy por la izquierda actual > busqueda
+    // 0 por la derecha  actual < busqueda
+    //y 2 son iguales  actual == busqueda 
+
+    if (actual == NULL) {
+        return actual; //va retornar un vacio
+    }
+    if (compararAlfabeticamente(actual->getJugador()->getNombre(), nombre) == 2) {
+        return actual;  
+    }
+    if (compararAlfabeticamente(actual->getJugador()->getNombre(), nombre) == 1) {
+        return buscarRecursivo(actual->getIzq() , nombre);
+    }
+    if (compararAlfabeticamente(actual->getJugador()->getNombre(), nombre) == 0) {
+        return buscarRecursivo(actual->getDer(), nombre);
+    }
+
+}
+
+
+string Arbol::convertirTodoMinuscula(string nombre) {
+    string nuevoNombre = "";
+    for (int i = 0; i < nombre.size(); i++)
+    {
+        char letra = tolower(nombre[i]);
+        nuevoNombre += letra;
+    }
+  //  cout << "nombre en minuscula: " << nuevoNombre << endl;
+    return nuevoNombre;
+}
+
+
 void Arbol::recursive_add(NodoArbol* actual, NodoArbol* nuevo) {
     if ((compararAlfabeticamente(actual->getJugador()->getNombre() , nuevo->getJugador()->getNombre())) == 1) {
-        cout << actual->getJugador()->getNombre()<<" es mayor alfabeticamente que :"<< nuevo->getJugador()->getNombre()<< "se va por la izq"<<endl ; // si es mas grande el actual pues me voy por la izq 
+       // cout << actual->getJugador()->getNombre()<<" es mayor alfabeticamente que :"<< nuevo->getJugador()->getNombre()<< "se va por la izq"<<endl ; // si es mas grande el actual pues me voy por la izq 
         if (actual->getIzq() != NULL) {
             recursive_add(actual->getIzq(),nuevo);
         }
@@ -26,7 +73,7 @@ void Arbol::recursive_add(NodoArbol* actual, NodoArbol* nuevo) {
         }
     }
     else if((compararAlfabeticamente(actual->getJugador()->getNombre(), nuevo->getJugador()->getNombre())) == 0) {
-        cout << actual->getJugador()->getNombre() << " es menor alfabeticamente que :" << nuevo->getJugador()->getNombre() << "se va por la der" << endl;
+       // cout << actual->getJugador()->getNombre() << " es menor alfabeticamente que :" << nuevo->getJugador()->getNombre() << "se va por la der" << endl;
         if (actual->getDer() != NULL) {
             recursive_add(actual->getDer(), nuevo);
         }
@@ -71,17 +118,17 @@ int Arbol::compararAlfabeticamente(string p1, string p2) {
         if (letra1 == letra2) {
         }
         else if (letra2 > letra1) { // palabra 1 va antes que palabra 2 
-            cout << "la letra: " << letra1 << " VA ANTES QUE : " << letra2 << endl;
+      //      cout << "la letra: " << letra1 << " VA ANTES QUE : " << letra2 << endl;
             palabraOrdenada = p1;
             return 0;
         }
         else if (letra1 > letra2) {
-            cout << "AVANZA DE NODO " << letra1 << endl;
+      //      cout << "AVANZA DE NODO " << letra1 << endl;
             palabraOrdenada = p2;
             return 1;
         }
     }
-    cout << "LA PALABRA QUE IRIA PRIMERO ES : " << palabraOrdenada << endl;
+  //  cout << "LA PALABRA QUE IRIA PRIMERO ES : " << palabraOrdenada << endl;
     return 1;
 
     }
@@ -135,12 +182,9 @@ void  Arbol::getGraphviz() {
     this->Graph += "digraph ARBOL { rankdir=TB; style = filled;bgcolor = white;color = lightgrey;node[style = filled, color = green, shape = record];   \n ";
     getGraphviz(this->raiz);
     llenarListasSimples(); // llen mis listas limples 
-    listaPreOder.imprimir();
-    listaInOrder.imprimir();
-    listaPostOrder.imprimir();
     IO_Archivos* llama = new IO_Archivos(); 
     llama->graficaArbol(this->Graph, listaPreOder.getCabeza(), listaInOrder.getCabeza(), listaPostOrder.getCabeza());
-    listaPreOder.getGraphviz();
+  //  listaPreOder.getGraphviz();
     this->Graph = "";
     this->indice = 0;
     limpiarListasAux();

@@ -1,27 +1,37 @@
 digraph ARBOL { rankdir=TB; style = filled;bgcolor = white;color = lightgrey;node[style = filled, color = green, shape = record];   
- Pablo[label = " <C0>|Pablo|<C1>" ];   
- Pablo:C0->Anthony [arrowhead = none color = black];   
- Anthony[label = " <C0>|Anthony|<C1>" ];   
- Anthony:C1->Javier [arrowhead = none color = black];   
- Javier[label = " <C0>|Javier|<C1>" ];   
- Pablo:C1->Zeta [arrowhead = none color = black];   
- Zeta[label = " <C0>|Zeta|<C1>" ];   
+ pablo[label = " <C0>|pablo|<C1>" ];   
+ pablo:C0->anthony [arrowhead = none color = black];   
+ anthony[label = " <C0>|anthony|<C1>" ];   
+ anthony:C1->javier [arrowhead = none color = black];   
+ javier[label = " <C0>|javier|<C1>" ];   
+ javier:C1->jimena [arrowhead = none color = black];   
+ jimena[label = " <C0>|jimena|<C1>" ];   
+ pablo:C1->zeta [arrowhead = none color = black];   
+ zeta[label = " <C0>|zeta|<C1>" ];   
+ zeta:C0->pancho [arrowhead = none color = black];   
+ pancho[label = " <C0>|pancho|<C1>" ];   
  subgraph cluster_0 { style = filled; color = lightgrey;node[style = filled, color = gold   , shape = tripleoctagon]; label = "PRE-ORDER" ;  
- Pablo0[label = " Pablo" ] ; 
-Pablo0->Anthony1[arrowhead = "vee"] ; Anthony1[label = " Anthony" ] ; 
-Anthony1->Javier2[arrowhead = "vee"] ; Javier2[label = " Javier" ] ; 
-Javier2->Zeta3[arrowhead = "vee"] ; Zeta3[label = " Zeta" ] ; 
+ pablo0[label = " pablo" ] ; 
+pablo0->anthony1[arrowhead = "vee"] ; anthony1[label = " anthony" ] ; 
+anthony1->javier2[arrowhead = "vee"] ; javier2[label = " javier" ] ; 
+javier2->jimena3[arrowhead = "vee"] ; jimena3[label = " jimena" ] ; 
+jimena3->zeta4[arrowhead = "vee"] ; zeta4[label = " zeta" ] ; 
+zeta4->pancho5[arrowhead = "vee"] ; pancho5[label = " pancho" ] ; 
 }
 subgraph cluster_1 { style = filled; color = lightgrey;node[style = filled, color = lightskyblue2, shape = tripleoctagon]; label = "IN-ORDER" ;  
- Anthony4[label = " Anthony" ] ; 
-Anthony4->Javier5[arrowhead = "vee"]; Javier5[label = " Javier" ] ; 
-Javier5->Pablo6[arrowhead = "vee"]; Pablo6[label = " Pablo" ] ; 
-Pablo6->Zeta7[arrowhead = "vee"]; Zeta7[label = " Zeta" ] ; 
+ anthony6[label = " anthony" ] ; 
+anthony6->javier7[arrowhead = "vee"]; javier7[label = " javier" ] ; 
+javier7->jimena8[arrowhead = "vee"]; jimena8[label = " jimena" ] ; 
+jimena8->pablo9[arrowhead = "vee"]; pablo9[label = " pablo" ] ; 
+pablo9->pancho10[arrowhead = "vee"]; pancho10[label = " pancho" ] ; 
+pancho10->zeta11[arrowhead = "vee"]; zeta11[label = " zeta" ] ; 
 }
 subgraph cluster_2 { style = filled; color = lightgrey;node[style = filled, color = orange2, shape = tripleoctagon]; label = "POST-ORDER" ;  
- Javier8[label = " Javier" ] ; 
-Javier8->Anthony9[arrowhead = "vee"] ; Anthony9[label = " Anthony" ] ; 
-Anthony9->Zeta10[arrowhead = "vee"] ; Zeta10[label = " Zeta" ] ; 
-Zeta10->Pablo11[arrowhead = "vee"] ; Pablo11[label = " Pablo" ] ; 
+ jimena12[label = " jimena" ] ; 
+jimena12->javier13[arrowhead = "vee"] ; javier13[label = " javier" ] ; 
+javier13->anthony14[arrowhead = "vee"] ; anthony14[label = " anthony" ] ; 
+anthony14->pancho15[arrowhead = "vee"] ; pancho15[label = " pancho" ] ; 
+pancho15->zeta16[arrowhead = "vee"] ; zeta16[label = " zeta" ] ; 
+zeta16->pablo17[arrowhead = "vee"] ; pablo17[label = " pablo" ] ; 
 }
 }

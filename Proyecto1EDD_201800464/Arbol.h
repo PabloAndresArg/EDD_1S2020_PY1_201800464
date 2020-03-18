@@ -31,8 +31,9 @@ public:
 	void recursive_PostOrder(NodoArbol*);
 	void getGraphviz(); 
 	void getGraphviz(NodoArbol*); // recolecto en preorder raiz izq derecha
-
-
+	string convertirTodoMinuscula(string);
+	Jugador* buscar(string);
+	NodoArbol* buscarRecursivo(NodoArbol*,string);
 	void llenarListasSimples();
 	void llenarListaPreOrder(NodoArbol*); 
 	void llenarListaInOrder(NodoArbol*);

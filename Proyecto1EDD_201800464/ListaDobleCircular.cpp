@@ -5,6 +5,7 @@
 #include"IO_Archivos.h"
 using namespace std;
 void ListaDobleCircular::add(string palabra) {
+	palabra = aMinuscula(palabra);
 	NodoDobleC* nuevo = new NodoDobleC();
 	nuevo->dato = palabra;
 	if (this->inicio == NULL) {

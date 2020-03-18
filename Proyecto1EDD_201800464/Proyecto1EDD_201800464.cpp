@@ -10,25 +10,42 @@
 #include "IO_Archivos.h"
 #include"ListaDobleCircular.h"
 #include"NodoDobleC.h"
+#include"Ficha.h"
+#include"Global.h"
+using namespace std; 
+
+
+
+
 int main()
 { // NOTA AL ARBOL TENGO QUE VALIDAR QUE TODO ENTRE EN MINUSCULA 
-    system("color a");
+   system("color a");
+    while (true) {
+        menuPrincipal();
+    }
+    /*
     Arbol* nuevaInstancia = new Arbol();
     Jugador* j1 = new Jugador("Pablo"); 
     Jugador* j2 = new Jugador("Anthony");
     Jugador* j3 = new Jugador("Zeta");
     Jugador* j4 = new Jugador("Javier");
     Jugador* j5 = new Jugador("Javier");
+    Jugador* j6 = new Jugador("Pancho");
+    Jugador* j7 = new Jugador("JIMENA");
     NodoArbol* nuevo = new NodoArbol(j1);
     NodoArbol* nuevo2 = new NodoArbol(j2);
     NodoArbol* nuevo3 = new NodoArbol(j3);
     NodoArbol* nuevo4 = new NodoArbol(j4);
     NodoArbol* nuevo5 = new NodoArbol(j5);
+    NodoArbol* nuevo6 = new NodoArbol(j6);
+    NodoArbol* nuevo7 = new NodoArbol(j7);
     nuevaInstancia->add(nuevo);
     nuevaInstancia->add(nuevo2);
     nuevaInstancia->add(nuevo3);
     nuevaInstancia->add(nuevo4);
     nuevaInstancia->add(nuevo5);
+    nuevaInstancia->add(nuevo6);
+    nuevaInstancia->add(nuevo7);
     cout << endl;
     cout << endl;
     cout << endl;
@@ -36,6 +53,8 @@ int main()
     nuevaInstancia->recorrido_PreOrder(); 
     nuevaInstancia->recorrido_PostOrder();
     nuevaInstancia->getGraphviz();
+
+
   /*  ListaSimpleOrdenada* L = new ListaSimpleOrdenada();
     RegistroPuntaje* d1 = new RegistroPuntaje("", 10);
     RegistroPuntaje* d2 = new RegistroPuntaje("", 20);
@@ -61,3 +80,4 @@ int main()
 
     system("PAUSE");
 }
+
