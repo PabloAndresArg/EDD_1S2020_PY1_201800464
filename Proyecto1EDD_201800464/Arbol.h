@@ -38,5 +38,6 @@ public:
 	void llenarListaPreOrder(NodoArbol*); 
 	void llenarListaInOrder(NodoArbol*);
 	void llenarListaPostOrder(NodoArbol*);
+	void vaciar();
 };
 

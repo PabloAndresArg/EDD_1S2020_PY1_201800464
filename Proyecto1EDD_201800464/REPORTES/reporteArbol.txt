@@ -10,7 +10,7 @@ digraph ARBOL { rankdir=TB; style = filled;bgcolor = white;color = lightgrey;nod
  zeta[label = " <C0>|zeta|<C1>" ];   
  zeta:C0->pancho [arrowhead = none color = black];   
  pancho[label = " <C0>|pancho|<C1>" ];   
- subgraph cluster_0 { style = filled; color = lightgrey;node[style = filled, color = gold   , shape = tripleoctagon]; label = "PRE-ORDER" ;  
+ subgraph cluster_0 { style = filled; charset = latin1;color = lightgrey;node[style = filled, color = gold   , shape = tripleoctagon]; label = "PRE-ORDER" ;  
  pablo0[label = " pablo" ] ; 
 pablo0->anthony1[arrowhead = "vee"] ; anthony1[label = " anthony" ] ; 
 anthony1->javier2[arrowhead = "vee"] ; javier2[label = " javier" ] ; 

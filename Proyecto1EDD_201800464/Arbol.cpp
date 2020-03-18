@@ -52,7 +52,8 @@ NodoArbol* Arbol::buscarRecursivo(NodoArbol* actual , string nombre) {
 
 string Arbol::convertirTodoMinuscula(string nombre) {
     string nuevoNombre = "";
-    for (int i = 0; i < nombre.size(); i++)
+    int lon = (int)nombre.size();
+    for (int i = 0; i < lon ; i++)
     {
         char letra = tolower(nombre[i]);
         nuevoNombre += letra;
@@ -255,3 +256,7 @@ void Arbol::limpiarListasAux() {
     this->listaPostOrder.vaciar();
 }
 
+
+void Arbol::vaciar() {
+    this->raiz = NULL;
+}

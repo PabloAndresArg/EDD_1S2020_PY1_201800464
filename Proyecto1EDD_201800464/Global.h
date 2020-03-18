@@ -1,5 +1,7 @@
 #pragma once
 #include<string>
+#include<ctime>
+#include<cstdlib>
 #include <iostream>
 #include<stdlib.h>
 #include"Arbol.h"
@@ -10,6 +12,8 @@
 #include"ListaDobleCircular.h"
 #include"NodoDobleC.h"
 #include"Ficha.h"
+#include"NodoCola.h"
+#include"Cola.h"
 using namespace std;
 
 // prototipos
@@ -17,17 +21,25 @@ void menuPrincipal();
 void llenarFichas();
 void menuJuego(); 
 void menuReportes();
+void mezclarFichas_e_ingresar_Cola();
+
 
 
 // estructuras estaticas y arreglos 
 Ficha* fichas[25];
+Cola* colaJuego = new Cola();
+Arbol* ArbolJugadores = new Arbol();
+
 void menuPrincipal() {
     llenarFichas();
-   /* for (int i = 0; i < 25; i++)
-    {
-        char mostrar = toupper(fichas[i]->getLetra());
-        cout << mostrar << endl;
-    }*/
+    mezclarFichas_e_ingresar_Cola();
+
+
+
+
+    system("pause");
+
+    /*
     cout << "  UNIVERSIDAD DE SAN CARLOS DE GUATEMALA" << endl; 
     cout << "  FACULTAD DE INGENIERIA" << endl; 
     cout << "  ESTRUCTURAS DE DATOS" << endl;
@@ -63,6 +75,7 @@ void menuPrincipal() {
         cout << "ERROR OPCION NO VALIDA" << endl;
         break;
     }
+    */
 
 }
 
@@ -212,4 +225,54 @@ void menuReportes() {
         menuJuego();
         break;
     }
+}
+
+
+void mezclarFichas_e_ingresar_Cola() {
+    int aleatorio = 0;
+    Ficha* temp = new Ficha(0, '0', 0);
+    srand(time(NULL));
+    for (int i = 1; i < 25; i++)
+    {
+        aleatorio = rand() % (5 - 0 + 1) + 0;
+        if (aleatorio == 0) { // cambia la pos actual con el de en medio 
+            temp = fichas[i];
+            fichas[i] = fichas[12];
+            fichas[12] = temp;
+        }
+        else if (aleatorio == 1) {
+            temp = fichas[i];
+            fichas[i] = fichas[24];
+            fichas[24] = temp;
+        }
+        else if (aleatorio == 2) {
+            temp = fichas[i];
+            fichas[i] = fichas[0];
+            fichas[0] = temp;
+        }
+        else if (aleatorio == 3) {
+            temp = fichas[i];
+            fichas[i] = fichas[8];
+            fichas[8] = temp;
+        }
+        else if (aleatorio == 4) {
+            temp = fichas[i];
+            fichas[i] = fichas[7];
+            fichas[7] = temp;
+        }
+        else if (aleatorio == 5) {
+            temp = fichas[i];
+            fichas[i] = fichas[10];
+            fichas[10] = temp;
+        }
+    }
+    
+
+    for (int i = 0; i < 25; i++)
+    {
+        colaJuego->encolar(fichas[i]);
+    }
+   colaJuego->getGraphviz();
+
+ 
 }

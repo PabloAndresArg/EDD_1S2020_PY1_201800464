@@ -7,15 +7,64 @@
 #include<fstream>
 #include"NodoSimple.h"
 #include"NodoDobleC.h"
+#include"NodoCola.h"
+#include"NodoD.h"
 using namespace std;
 class IO_Archivos {
 private:
 
 public:
+	// IMPRIMIR COLA..!!!!!!!!!
+	void GraficaCola(NodoCola* inicio) {
+			system("cls");
+			ofstream w;
+			w.open("REPORTES\\cola.txt", ios::out);//si no existe lo crea  y si ya lo reemplaza
+			if (w.fail()) {
+				cout << "NO SE PUDO ABRIR EL ARCHIVO" << endl;
+				system("pause");
+				exit(1);
+			}
+			if (inicio != NULL) {
+				w << "digraph G {graph[nodesep = 0.01];charset = latin1; style = filled; bgcolor = black;color = lightgrey;node[style = filled, color = white, shape = rect];";
+				NodoCola* aux = new NodoCola();
+				aux = inicio;
+				int x = 1; // porque graph no acepta negativos 
+				while (aux != NULL) {
+					//-91 es Ñ y ñ es -92
+				 
+					if ((int)aux->getFicha()->getLetra() == -92) {
+						w << "a" << x << "[label = \" " << "Ñ" << " x " << aux->getFicha()->getPuntaje()<<"pts"<< " \\n cantidad: "<<aux->getFicha()->getCantidad_de_fichas() <<"\" ] ;";
+					}
+					else {
+						char letra = toupper(aux->getFicha()->getLetra());
+						w << "a" << x << "[label = \" " << letra << " x " << aux->getFicha()->getPuntaje() <<"pts"<< " \\n cantidad: " << aux->getFicha()->getCantidad_de_fichas()<< "\" ] ;";
+					}
+			
+				
+					x++;
+					if (aux->getSig() == NULL) {
+					}
+					else {
+						w << "a" << (x - 1) << " -> " << "a" << x << "[arrowhead = empty color = red]; ";
+					}
+					aux = aux->getSig();
+				}
+				w << "}";
+				w.close();
+				char genera[] = "dot -Tjpg REPORTES\\cola.txt -o REPORTES\\cola.jpg";// usando el prueba par mientrasr 
+				system(genera);
+				char ejecuta[] = "REPORTES\\cola.jpg";
+				system(ejecuta);
+				cout << "----- PROCESO TERMINADO CON EXITO ------ " << endl;
+				cin.get();
+			}
+			else {
+				cout << "NO GENERA NADA PORQUE LA LISTA ESTA VACIA " << endl;
+			}
+	}
 
 	void PuntajePorJugador(NodoSimple* inicio) { // -----------------------para
 		system("cls");
-		system("color 9");
 		ofstream w;
 		w.open("REPORTES\\puntajePorJugador.txt", ios::out);//si no existe lo crea  y si ya lo reemplaza
 		if (w.fail()) {
@@ -24,7 +73,7 @@ public:
 			exit(1);
 		}
 		if (inicio != NULL) {
-			w << "digraph G {rankdir = LR; style = filled; bgcolor = black;color = lightgrey;node[style = filled, color = orange, shape = parallelogram];";
+			w << "digraph G {rankdir = LR;charset = latin1; style = filled; bgcolor = black;color = lightgrey;node[style = filled, color = orange, shape = parallelogram];";
 			NodoSimple* aux = new NodoSimple();
 			aux = inicio;
 			w << "NULL1[label = \" " << "NULL" << "\" ] ;";
@@ -67,7 +116,7 @@ public:
 			exit(1);
 		}
 		if (inicio != NULL) {
-			w << "digraph GraphDOBLE {style = filled;bgcolor = black;color = lightgrey;node[style = filled, color = dodgerblue, shape = component];";
+			w << "digraph GraphDOBLE {style = filled;charset = latin1;bgcolor = black;color = lightgrey;node[style = filled, color = dodgerblue, shape = component];";
 			NodoDobleC* aux = new NodoDobleC();
 			aux = inicio;
 
@@ -123,7 +172,7 @@ public:
 		if (cadenaGraph.compare("") !=0 ) {
 			w << cadenaGraph;
 			// preOrder
-			w<<"subgraph cluster_0 { style = filled; color = lightgrey;node[style = filled, color = gold   , shape = tripleoctagon]; label = \"PRE-ORDER\" ;  \n ";
+			w<<"subgraph cluster_0 { style = filled; charset = latin1;color = lightgrey;node[style = filled, color = gold   , shape = tripleoctagon]; label = \"PRE-ORDER\" ;  \n ";
 			while (cabezaPre != NULL) {
 				w << cabezaPre->getRegistro()->getNombre()<< cabezaPre->getRegistro()->getPuntaje() << "[label = \" " << cabezaPre->getRegistro()->getNombre() << "\" ] ; \n";
 				if (cabezaPre->getSig() != NULL) {
@@ -169,4 +218,74 @@ public:
 			cout << "NO GENERA NADA PORQUE LA LISTA ESTA VACIA " << endl;
 		}
 	}
+
+
+
+	//---------------------------------------- LISTA DOBLE DE FICHAS POR USUARIO 
+	void Graph_LISTA_DOBLE(NodoD* inicio, NodoD* ultimo) {
+		system("cls");
+		ofstream w;
+		w.open("REPORTES\\reporteDobleEnlazada.txt", ios::out);//si no existe lo crea  y si ya lo reemplaza
+		if (w.fail()) {
+			cout << "NO SE PUDO ABRIR EL ARCHIVO" << endl;
+
+			system("pause");
+			exit(1);
+		}
+		if (inicio != NULL) {
+			w << "digraph GraphDOBLE {rankdir = LR; style = filled; charset = latin1; bgcolor = black;color = lightgrey;node[style = filled, color = dodgerblue, shape = component];";
+			NodoD* aux = new NodoD();
+			aux = inicio;
+			int x = 1; // porque graph no acepta neg
+			while (aux != NULL) {
+				w << "a" << x << "[label = \" " << aux->getDato()->getLetra() << "\" ] ;";
+				x++;
+				if (aux->getSig() == NULL) {
+					//w << "a" << (x - 1) << " -> " << "NULL2" << "[arrowhead = empty color = gold2]; ";
+				}
+				else {
+					w << "a" << (x - 1) << " -> " << "a" << x << "[ arrowhead = \"empty\"   color = \"gold2\"]; ";
+				}
+				aux = aux->getSig();
+			}
+			x--;
+			NodoD* aux2 = new NodoD();
+			aux2 = ultimo;
+			while (aux2 != NULL) {// recordar que ya los declare 
+				if (aux2->getAnt() == NULL) {
+
+				}
+				else {
+					w << "a" << x << " -> " << "a" << (x - 1) << "[arrowhead = \"empty\" color = \"gold2\"]; ";
+					x--;
+				}
+				aux2 = aux2->getAnt();
+			}
+			w << "}";
+			w.close();
+			char genera[] = "dot -Tjpg REPORTES\\reporteDobleEnlazada.txt -o REPORTES\\listaDoble.jpg";// usando el prueba par mientrasr 
+			system(genera);
+			char ejecuta[] = "REPORTES\\listaDoble.jpg";
+			system(ejecuta);
+			cout << "----- PROCESO TERMINADO CON EXITO ------ " << endl;
+			cin.get();
+		}
+		else {
+			cout << "NO GENERA NADA PORQUE LA LISTA ESTA VACIA " << endl;
+		}
+		
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
 };

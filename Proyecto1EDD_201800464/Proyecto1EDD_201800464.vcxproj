@@ -148,21 +148,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Arbol.cpp" />
+    <ClCompile Include="Cola.cpp" />
     <ClCompile Include="Jugador.cpp" />
+    <ClCompile Include="ListaDoble.cpp" />
     <ClCompile Include="ListaDobleCircular.cpp" />
     <ClCompile Include="ListaSimpleOrdenada.cpp" />
     <ClCompile Include="Proyecto1EDD_201800464.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arbol.h" />
+    <ClInclude Include="Cola.h" />
     <ClInclude Include="Ficha.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="IO_Archivos.h" />
     <ClInclude Include="Jugador.h" />
+    <ClInclude Include="ListaDoble.h" />
     <ClInclude Include="ListaDobleCircular.h" />
     <ClInclude Include="ListaSimpleOrdenada.h" />
     <ClInclude Include="NodoArbol.h" />
     <ClInclude Include="NodoCola.h" />
+    <ClInclude Include="NodoD.h" />
     <ClInclude Include="NodoDobleC.h" />
     <ClInclude Include="NodoSimple.h" />
     <ClInclude Include="RegistroPuntaje.h" />
