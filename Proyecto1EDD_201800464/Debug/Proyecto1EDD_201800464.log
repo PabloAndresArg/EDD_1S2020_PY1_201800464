@@ -1,2 +1,11 @@
-﻿  ListaDoble.cpp
-  Proyecto1EDD_201800464.vcxproj -> C:\Users\Pablo\Documents\GitHub\EDD_1S2020_PY1_201800464\Proyecto1EDD_201800464\Debug\Proyecto1EDD_201800464.exe
+﻿  Arbol.cpp
+  Cola.cpp
+  ListaDoble.cpp
+  ListaDobleCircular.cpp
+  ListaSimpleOrdenada.cpp
+  Proyecto1EDD_201800464.cpp
+C:\Users\Pablo\Desktop\Proyecto1EDD_201800464\Global.h(25,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+C:\Users\Pablo\Desktop\Proyecto1EDD_201800464\Global.h(300,15): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+  Generando código...
+C:\Users\Pablo\Desktop\Proyecto1EDD_201800464\Arbol.cpp(50): warning C4715: 'Arbol::buscarRecursivo': no todas las rutas de acceso de control devuelven un valor
+  Proyecto1EDD_201800464.vcxproj -> C:\Users\Pablo\Desktop\Proyecto1EDD_201800464\Debug\Proyecto1EDD_201800464.exe

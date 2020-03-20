@@ -9,14 +9,19 @@ void ListaDoble::InsertarPrimero(Ficha* c) {
 }
 
 void ListaDoble::add(Ficha* d) { //inserta en la ultima posicion 
+	this->ultimo = this->getUltimo();
 	NodoD* nuevo = new NodoD(d);
-	cout << "INGRESAR: " << nuevo->getDato();
-	if (this->getInicio() == NULL) {
-		this->setInicio(nuevo);
-		this->setUltimo(nuevo);
-		cout << "----"<<endl;
+	if (this->inicio == NULL) {
+		this->inicio = nuevo;
+		this->ultimo = nuevo;
+	}
+	else {
+		nuevo->setAnt(this->ultimo);
+		this->ultimo->setSig(nuevo);
+		this->ultimo = nuevo; // refrescamos cual es el ultimo ahora 
 	}
 }
+
 
 
 

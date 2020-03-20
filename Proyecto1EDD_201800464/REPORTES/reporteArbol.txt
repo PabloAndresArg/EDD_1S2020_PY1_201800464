@@ -23,7 +23,8 @@ subgraph cluster_1 { style = filled; color = lightgrey;node[style = filled, colo
 anthony6->javier7[arrowhead = "vee"]; javier7[label = " javier" ] ; 
 javier7->jimena8[arrowhead = "vee"]; jimena8[label = " jimena" ] ; 
 jimena8->pablo9[arrowhead = "vee"]; pablo9[label = " pablo" ] ; 
-pablo9->pancho10[arrowhead = "vee"]; pancho10[label = " pancho" ] ; 
+pablo9->KIKO9[arrowhead = "vee"]; KIKO9[label = " KIKO" ] ; 
+KIKO9->pancho10[arrowhead = "vee"]; pancho10[label = " pancho" ] ; 
 pancho10->zeta11[arrowhead = "vee"]; zeta11[label = " zeta" ] ; 
 }
 subgraph cluster_2 { style = filled; color = lightgrey;node[style = filled, color = orange2, shape = tripleoctagon]; label = "POST-ORDER" ;  

@@ -18,15 +18,10 @@ using namespace std;
 
 int main()
 { // NOTA AL ARBOL TENGO QUE VALIDAR QUE TODO ENTRE EN MINUSCULA 
-
-    Jugador* jug = new Jugador("pablo");
-    Ficha* f1 = new Ficha(4, 'A', 5);
-    jug->getListaFichas().add(f1);
-    jug->getListaFichas().imprimir();
-  /* system("color a");
+    system("color a");
     while (true) {
         menuPrincipal();
-    }*/
+    }
     /*
     Arbol* nuevaInstancia = new Arbol();
     Jugador* j1 = new Jugador("Pablo"); 
@@ -58,6 +53,7 @@ int main()
     nuevaInstancia->recorrido_PostOrder();
     nuevaInstancia->getGraphviz();
     */
+
   /*  ListaSimpleOrdenada* L = new ListaSimpleOrdenada();
     RegistroPuntaje* d1 = new RegistroPuntaje("", 10);
     RegistroPuntaje* d2 = new RegistroPuntaje("", 20);

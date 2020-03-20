@@ -50,7 +50,6 @@ void Cola::imprimir() {
 		x++;
 		cout << x<< ". LETRA: " << aux->getFicha()->getLetra();
 		cout << " puntaje: " << aux->getFicha()->getPuntaje();
-		cout << " cantidad: " << aux->getFicha()->getCantidad_de_fichas();
 		cout<< endl;
 		aux = aux->getSig();
 	}

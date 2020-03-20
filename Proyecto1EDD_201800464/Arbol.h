@@ -38,6 +38,11 @@ public:
 	void llenarListaPreOrder(NodoArbol*); 
 	void llenarListaInOrder(NodoArbol*);
 	void llenarListaPostOrder(NodoArbol*);
+
+
+	inline ListaSimpleOrdenada & getlistaPrueba() {
+		return this->listaInOrder;
+	}
 	void vaciar();
 };
 

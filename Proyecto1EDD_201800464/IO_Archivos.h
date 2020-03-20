@@ -16,7 +16,6 @@ private:
 public:
 	// IMPRIMIR COLA..!!!!!!!!!
 	void GraficaCola(NodoCola* inicio) {
-			system("cls");
 			ofstream w;
 			w.open("REPORTES\\cola.txt", ios::out);//si no existe lo crea  y si ya lo reemplaza
 			if (w.fail()) {
@@ -31,16 +30,13 @@ public:
 				int x = 1; // porque graph no acepta negativos 
 				while (aux != NULL) {
 					//-91 es Ñ y ñ es -92
-				 
 					if ((int)aux->getFicha()->getLetra() == -92) {
-						w << "a" << x << "[label = \" " << "Ñ" << " x " << aux->getFicha()->getPuntaje()<<"pts"<< " \\n cantidad: "<<aux->getFicha()->getCantidad_de_fichas() <<"\" ] ;";
+						w << "a" << x << "[label = \" " << "Ñ" << " x " << aux->getFicha()->getPuntaje()<<"pts" <<"\" ] ;";
 					}
 					else {
 						char letra = toupper(aux->getFicha()->getLetra());
-						w << "a" << x << "[label = \" " << letra << " x " << aux->getFicha()->getPuntaje() <<"pts"<< " \\n cantidad: " << aux->getFicha()->getCantidad_de_fichas()<< "\" ] ;";
+						w << "a" << x << "[label = \" " << letra << " x " << aux->getFicha()->getPuntaje() <<"pts"<< "\" ] ;";
 					}
-			
-				
 					x++;
 					if (aux->getSig() == NULL) {
 					}
@@ -105,8 +101,6 @@ public:
 	}
 	//----- GRADO CIRCULAR DOBLE 
 	void DobleCircular(NodoDobleC* inicio, NodoDobleC* ultimo , int tamanio) { // -----------------------para
-		system("cls");
-		system("color 9");
 		ofstream w;
 		w.open("REPORTES\\reporteDobleEnlazadaC.txt", ios::out);//si no existe lo crea  y si ya lo reemplaza
 		if (w.fail()) {
@@ -157,10 +151,11 @@ public:
 		else {
 			cout << "NO GENERA NADA PORQUE LA LISTA ESTA VACIA " << endl;
 		}
+		system("pause");
+		system("cls");
 	}
 	// graficando el arbol-------------------------------------------------------------------------
 	void graficaArbol(string cadenaGraph , NodoSimple* cabezaPre , NodoSimple* cabezaIn , NodoSimple* cabezaPost) {
-		system("color 9");
 		ofstream w;
 		w.open("REPORTES\\reporteArbol.txt", ios::out);//si no existe lo crea  y si ya lo reemplaza
 		if (w.fail()) {

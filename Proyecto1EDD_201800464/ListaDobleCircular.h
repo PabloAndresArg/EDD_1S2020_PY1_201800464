@@ -24,6 +24,11 @@ public:
 		{char letra = tolower(cadena[i]);	nuevoNombre += letra;	}
 		return nuevoNombre;
 	};
+	inline void vaciar() {
+		this->inicio = NULL; 
+		this->ultimo = NULL;
+		this->tamanio = 0; 
+	}
 
 
 };
