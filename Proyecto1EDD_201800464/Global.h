@@ -20,7 +20,8 @@
 #include <conio.h>
 #include <stdlib.h>
 #include <sstream>
-
+#include"Matriz_dispersa.h"
+#include"nMatrix.h"
 
 #include "/Users//Pablo/Downloads/json.hpp";
 using namespace std;
@@ -32,6 +33,7 @@ json json_dimension;
 json casillas_dobles;
 json tripleJs;
 json JsonPalabras_diccionario;
+
 
 int tamanio_tablero = 0;
 
@@ -46,11 +48,18 @@ void menuReportes();
 void mezclarFichas_e_ingresar_Cola();
 void addFicha_a_fichero(Ficha* f);
 void imprimirFichas();
-
+                            // menu-juego
+void crearJugador();
+int escogerQuienVaPrimero();
+void INICIAR_JUEGO();
+void limipiarJugadoresActuales();
+void llenarJugadoresActuales();
+void realizarJugada(int);
 // estructuras estaticas y arreglos 
+Matriz_dispersa* TABLERO = new Matriz_dispersa();
 Ficha* fichas[95];
-Cola* colaJuego = new Cola();
-Arbol* ArbolJugadores = new Arbol();
+Cola* BOLSA = new Cola();
+Arbol* ARBOL_JUGADORES = new Arbol();
 ListaDobleCircular* diccionario = new ListaDobleCircular();
 static int cont = 0;
 
@@ -58,6 +67,7 @@ static int cont = 0;
 
 void Leer_Json() {
     cout << "|||| INGRESE LA DIRECCION DEL JSON ||||" << endl;
+    cout << "RUTA: ";
     string enrutador = "";//  C:\Users\Pablo\Downloads\Library.json
     cin >> enrutador;
     extraerDatos(enrutador);
@@ -70,6 +80,8 @@ void menuPrincipal() {
     imprimirFichas();
     */
 
+    llenarFichas();
+    mezclarFichas_e_ingresar_Cola();
     cout << "  UNIVERSIDAD DE SAN CARLOS DE GUATEMALA" << endl; 
     cout << "  FACULTAD DE INGENIERIA" << endl; 
     cout << "  ESTRUCTURAS DE DATOS" << endl;
@@ -207,6 +219,8 @@ void llenarFichas() {
     addFicha_a_fichero( Z);
 }
 
+
+
 void menuJuego() {
     cout << " |||||||| MENU DE JUEGO ||||||||" << endl;
     cout << " 1.Crear Jugador" << endl;
@@ -218,10 +232,12 @@ void menuJuego() {
     switch (op - 1) {
     case 0:// new jugador
         system("cls");
+        crearJugador();
         menuJuego();
         break;
     case 1:// jugar
         system("cls");
+        INICIAR_JUEGO(); 
         break;
     case 2:// regresar
         system("cls");
@@ -234,6 +250,18 @@ void menuJuego() {
         menuJuego();
         break;
     }
+}
+
+void crearJugador() {
+    cout << "Ingresa un nombre: ";
+    string nombre = "";
+    cin >> nombre;
+    Jugador* nuevo_jugador = new Jugador(nombre);
+    NodoArbol* nuevo_nodo = new NodoArbol(nuevo_jugador);
+    ARBOL_JUGADORES->add(nuevo_nodo);
+    cout <<"  \nProceso Realizado... \n";
+    system("pause");
+    system("cls");
 }
 
 
@@ -261,9 +289,13 @@ void menuReportes() {
         break;
     case 1:// cola fichas 
         system("cls");
+        BOLSA->getGraphviz();
+        menuReportes();
         break;
     case 2:// arbol
         system("cls");
+        ARBOL_JUGADORES->getGraphviz();
+        menuReportes();
         break;
     case 3:// historial de puntajes por jugador
         system("cls");
@@ -294,7 +326,7 @@ void menuReportes() {
 
 
 void mezclarFichas_e_ingresar_Cola() {
-    colaJuego->vaciar();
+    BOLSA->vaciar();
     int aleatorio = 0;
     Ficha* temp = new Ficha(0, '0');
     srand(time(NULL));
@@ -385,47 +417,114 @@ void mezclarFichas_e_ingresar_Cola() {
 
     for (int i = 0; i < 95; i++)
     {
-        colaJuego->encolar(fichas[i]);
+        BOLSA->encolar(fichas[i]);
     }
-   colaJuego->getGraphviz();
-
-  
 }
-
 
 void extraerDatos(string nombre_de_archivo) {
     diccionario->vaciar();
     std::ifstream file(nombre_de_archivo);
     file >> Todo_el_juego;
-    cout << "se esta extrayendo datos del archivo: \n \n \n" << endl;
+    cout << "se esta extrayendo datos del archivo:  \n \n" << endl;
     json_dimension = Todo_el_juego["dimension"];
-    //extrae las dimensiones del tablero
-    tamanio_tablero = json_dimension;// guarda mi tamaño del tablero 
 
+    //extrae las dimensiones del tablero
+    tamanio_tablero = json_dimension;// guarda mi tamaño del tablero
+    TABLERO->setTamanioMaximo(tamanio_tablero);
+    cout << "DIMENSION: " << tamanio_tablero << "\n";
     casillas_dobles = Todo_el_juego["casillas"]["dobles"];
     //extrae las pos dobles del json 
-
     cout << "COORDENADAS DOBLES \n";
     for (const auto cordenada : casillas_dobles) {
         posX = cordenada["x"];
         posY = cordenada["y"];
         cout << "Punto (" << posX << "," << posY << ")" << endl;
+        TABLERO->getLista_Casillas().add(new Casilla(posX , posY , 2));
     }
-    tripleJs = Todo_el_juego["casillas"]["triples"]; //Obtengo las coordenada x y del triple
+    tripleJs = Todo_el_juego["casillas"]["triples"];
     cout << "COORDENADAS TRIPLES" << endl;
     for (const auto cordenada : tripleJs) {
         posX = cordenada["x"];
         posY = cordenada["y"];
         cout << "Punto (" << posX << "," << posY << ")" << endl;
+        TABLERO->getLista_Casillas().add(new Casilla(posX, posY, 3));
     }
-    JsonPalabras_diccionario = Todo_el_juego["diccionario"]; //Obtengo las coordenada x y del triple
-    cout << "Palabras del diccionario:" << endl;
+    JsonPalabras_diccionario = Todo_el_juego["diccionario"];
+    cout << "PALABRAS QUE INGRESARAN AL DICCIONARIO:" << endl;
     for (const auto informacion : JsonPalabras_diccionario) {
         cout << "{" << informacion["palabra"] <<"}\n";
         diccionario->add(informacion["palabra"]);
     }
+    TABLERO->getLista_Casillas().imprimir();
     cout << "\n \n Se termino de leer el Archivo...  \n \n" << endl;
     system("pause");
     system("cls");
 }
 
+
+//|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| LOGICA DEL JUEGO |||||||||||||||||||||||||||||||||||||||||||||
+
+Jugador* jugadoresActuales[2];
+void INICIAR_JUEGO() {
+   
+        limipiarJugadoresActuales();
+        ARBOL_JUGADORES->recorrido_inOrder();
+        llenarJugadoresActuales();
+        int respuesta = escogerQuienVaPrimero(); cout <<" \n";
+        system("pause");
+        system("cls");
+        bool ciclo = true;
+        do {     // ahora imprimo la lista del diccionario y el contador de puntos del jugador 
+            diccionario->imprimeparaAdelnate();
+        if (respuesta == 0) { 
+            respuesta = 1;// cambia turno
+            realizarJugada(0);// JUGADOR 1
+        }
+        else {
+            respuesta = 0;// cambia turno
+            realizarJugada(1);// JUGADOR 2 
+        }
+        system("pause");
+        } while (ciclo);
+}
+int escogerQuienVaPrimero() {
+    // 0 = primero jugador  1 = segundo jugador 
+    cout << "FICHA DEL JUGADOR 1 : ";
+    Ficha* letra1 = BOLSA->getCabeza()->getFicha();
+    BOLSA->desencolar();
+    cout << letra1->getLetra()<<endl;
+    cout << "FICHA DEL JUGADOR 2 : ";
+    Ficha* letra2 = BOLSA->getCabeza()->getFicha();
+    BOLSA->desencolar();
+    cout << letra2->getLetra() << endl;
+    if (letra1->getLetra() == letra2->getLetra()) {
+        cout << "repetidas se vuelve a sacar 2 fichas de la bolsa\n";
+        return escogerQuienVaPrimero();
+    }
+    else {
+        if (letra1->getLetra() < letra2->getLetra()) {
+            cout << "el jugador 1 comienza" << endl; 
+            return 0;
+        }
+        else {
+            cout << "el jugador 2 comienza" << endl;
+            return 1;
+        }
+    }
+    
+}
+void limipiarJugadoresActuales() {
+    for (int i = 0; i < 2; i++)
+    {
+        jugadoresActuales[i] = NULL;
+    }
+}
+void llenarJugadoresActuales() {
+    string nomBuscar = "";
+    for (int i = 0; i < 2; i++)
+    {
+        cout << "\nselecciona Jugador" << (i + 1) << ":" << endl;
+        cin >> nomBuscar;
+        jugadoresActuales[i] = ARBOL_JUGADORES->buscar(nomBuscar);
+    }
+}

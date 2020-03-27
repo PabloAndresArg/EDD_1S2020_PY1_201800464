@@ -12,18 +12,20 @@
 #include"NodoDobleC.h"
 #include"Ficha.h"
 #include"Global.h"
+#include"nMatrix.h"
+#include"Matriz_dispersa.h"
 using namespace std; 
 
 
 
 int main()
-{ // NOTA AL ARBOL TENGO QUE VALIDAR QUE TODO ENTRE EN MINUSCULA 
+{ 
     system("color a");
     while (true) {
         menuPrincipal();
     }
-    /*
-    Arbol* nuevaInstancia = new Arbol();
+
+/*  Arbol* nuevaInstancia = new Arbol();
     Jugador* j1 = new Jugador("Pablo"); 
     Jugador* j2 = new Jugador("Anthony");
     Jugador* j3 = new Jugador("Zeta");

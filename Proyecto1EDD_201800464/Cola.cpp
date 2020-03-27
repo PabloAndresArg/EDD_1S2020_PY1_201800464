@@ -15,7 +15,9 @@ void Cola::encolar(Ficha* dato) {
 }
 
 void Cola::desencolar() {
-	this->cabeza = this->cabeza->getSig();
+	if (this->cabeza != NULL) {
+		this->cabeza = this->cabeza->getSig();
+	}	
 }
 
 void Cola::vaciar() {

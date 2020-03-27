@@ -137,9 +137,9 @@ int Arbol::compararAlfabeticamente(string p1, string p2) {
 
 // RECORRIDOS 
 void Arbol:: recorrido_inOrder() {
-    cout << "recorrido INORDER: ";
-    recursive_inOrder(this->raiz); 
+    cout << "------ LISTA DE JUGADORES --------";
     cout << endl;
+    recursive_inOrder(this->raiz); 
 }
 
 void Arbol:: recursive_inOrder(NodoArbol* actual) {
@@ -147,7 +147,7 @@ void Arbol:: recursive_inOrder(NodoArbol* actual) {
         recursive_inOrder(actual->getIzq());
     }
 
-    cout <<actual->getJugador()->getNombre() <<" -> ";
+    cout <<actual->getJugador()->getNombre() <<"  ";
 
     if (actual->getDer() != NULL) {
         recursive_inOrder(actual->getDer());

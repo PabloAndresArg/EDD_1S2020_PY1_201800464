@@ -153,23 +153,29 @@
     <ClCompile Include="ListaDoble.cpp" />
     <ClCompile Include="ListaDobleCircular.cpp" />
     <ClCompile Include="ListaSimpleOrdenada.cpp" />
+    <ClCompile Include="Matriz_dispersa.cpp" />
     <ClCompile Include="Proyecto1EDD_201800464.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arbol.h" />
+    <ClInclude Include="Casilla.h" />
     <ClInclude Include="Cola.h" />
     <ClInclude Include="Ficha.h" />
     <ClInclude Include="Global.h" />
     <ClInclude Include="IO_Archivos.h" />
     <ClInclude Include="Jugador.h" />
+    <ClInclude Include="ListaCasillas.h" />
     <ClInclude Include="ListaDoble.h" />
     <ClInclude Include="ListaDobleCircular.h" />
     <ClInclude Include="ListaSimpleOrdenada.h" />
+    <ClInclude Include="Matriz_dispersa.h" />
+    <ClInclude Include="nMatrix.h" />
     <ClInclude Include="NodoArbol.h" />
     <ClInclude Include="NodoCola.h" />
     <ClInclude Include="NodoD.h" />
     <ClInclude Include="NodoDobleC.h" />
     <ClInclude Include="NodoSimple.h" />
+    <ClInclude Include="nodoT.h" />
     <ClInclude Include="RegistroPuntaje.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
