@@ -19,6 +19,7 @@ public:
 		indice = 0;
 		// TAMANIO Y CON ESO UN ARREGLO PARA NO TENER QUE CREAR UNA LISTA SIMPLE DIFERENTE 
 	}
+	inline NodoArbol* getRoot() { return this->raiz; }; 
 	void limpiarListasAux();
 	void add(NodoArbol*);
 	void recursive_add(NodoArbol*, NodoArbol*);

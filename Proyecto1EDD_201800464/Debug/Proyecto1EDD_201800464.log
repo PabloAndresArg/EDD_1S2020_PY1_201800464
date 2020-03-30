@@ -1,6 +1,5 @@
-﻿  Cola.cpp
-  Proyecto1EDD_201800464.cpp
+﻿  Proyecto1EDD_201800464.cpp
 C:\Users\Pablo\Desktop\Proyecto1EDD_201800464\Global.h(26,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
-C:\Users\Pablo\Desktop\Proyecto1EDD_201800464\Global.h(331,15): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
-  Generando código...
+C:\Users\Pablo\Desktop\Proyecto1EDD_201800464\Global.h(330,15): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+C:\Users\Pablo\Desktop\Proyecto1EDD_201800464\Matriz_dispersa.h(91): warning C4715: 'Matriz_dispersa::el_centro_esta_lleno': no todas las rutas de acceso de control devuelven un valor
   Proyecto1EDD_201800464.vcxproj -> C:\Users\Pablo\Desktop\Proyecto1EDD_201800464\Debug\Proyecto1EDD_201800464.exe

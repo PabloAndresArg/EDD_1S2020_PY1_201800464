@@ -159,36 +159,57 @@ nMatrix* Matriz_dispersa::insertarOrdenandoColumna(nMatrix* nuevo, nMatrix* cabe
 void Matriz_dispersa::add(char letra, int x , int y ) {
 
 	if (x < this->maximo && y < this->maximo) {
-		nMatrix* nuevo = new nMatrix(x, y, letra);
-		nMatrix* nodoColumna = existeColumna(x);// cabeceras  hacia abajo 
-		nMatrix* nodoFila = existeFIla(y);// cabecera hacia derecha
-		if (nodoColumna == NULL && nodoFila == NULL) {// caso 1 
-			nodoColumna = this->generaColumna(x);
-			nodoFila = this->generaFila(y);
-			nuevo = this->insertarOrdenandoColumna(nuevo, nodoFila);
-			nuevo = this->insertarOrdenadoFila(nuevo, nodoColumna);
-		}
-		else if (nodoColumna == NULL && nodoFila != NULL) { // caso 2 
-			// entonces creo la columna 
-			nodoColumna = this->generaColumna(x);
-			nuevo = this->insertarOrdenandoColumna(nuevo, nodoFila);
-			nuevo = this->insertarOrdenadoFila(nuevo, nodoColumna);
-			return;
 
+		nMatrix* nuevo_nodo = new nMatrix(x, y, letra);
+		nMatrix* cabecera_columna = existeColumna(x);// cabeceras  hacia abajo 
+		nMatrix* cabeceraFila = existeFIla(y);// cabecera hacia derecha
+		int caso = 0; 
+
+		if (cabecera_columna == NULL && cabeceraFila == NULL) {// caso 1 
+			caso = 1;
 		}
-		else if (nodoColumna != NULL && nodoFila == NULL) { // case3
-			nodoFila = this->generaFila(y);
-			nuevo = this->insertarOrdenandoColumna(nuevo, nodoFila);
-			nuevo = this->insertarOrdenadoFila(nuevo, nodoColumna);
-			return;
+		else if (cabecera_columna == NULL && cabeceraFila != NULL) { // caso 2 
+			// entonces creo la columna 
+			caso = 2;
 		}
-		else if (nodoColumna != NULL && nodoFila != NULL) {// case4
-			nuevo = this->insertarOrdenandoColumna(nuevo, nodoFila);
-			nuevo = this->insertarOrdenadoFila(nuevo, nodoColumna);
+		else if (cabecera_columna != NULL && cabeceraFila == NULL) { // case3
+			caso = 3; 
+		}
+		else if (cabecera_columna != NULL && cabeceraFila != NULL) {// case4
+			caso = 4;
+		}
+		switch (caso)
+		{
+		case 1:
+			cabecera_columna = this->generaColumna(x);
+			cabeceraFila = this->generaFila(y);
+			nuevo_nodo = this->insertarOrdenandoColumna(nuevo_nodo, cabeceraFila);
+			nuevo_nodo = this->insertarOrdenadoFila(nuevo_nodo, cabecera_columna);
 			return;
+		break;
+		case 2:
+			cabecera_columna = this->generaColumna(x);
+			nuevo_nodo = this->insertarOrdenandoColumna(nuevo_nodo, cabeceraFila);
+			nuevo_nodo = this->insertarOrdenadoFila(nuevo_nodo, cabecera_columna);
+			return;
+		break;
+
+		case 3:
+			cabeceraFila = this->generaFila(y);
+			nuevo_nodo = this->insertarOrdenandoColumna(nuevo_nodo, cabeceraFila);
+			nuevo_nodo = this->insertarOrdenadoFila(nuevo_nodo, cabecera_columna);
+			return;
+		break;
+
+		case 4:
+			nuevo_nodo = this->insertarOrdenandoColumna(nuevo_nodo, cabeceraFila);
+			nuevo_nodo = this->insertarOrdenadoFila(nuevo_nodo, cabecera_columna);
+			return;
+		break;
+		default:
+			break;
 		}
 		this->cantidad_nodos++;
-
 	}
 	else {
 		cout << "no entra porque coloco una posicion fuera del rango establecido..." << endl;
@@ -217,10 +238,38 @@ void Matriz_dispersa::llenar_al_maximo(int max) {
 
 
 
+bool validarPalabra(ListaCasillas casillasVisitadas, ListaDobleCircular diccionario , string dir) {
+	// tengo que buscar y cocatenar  el camino de recorrido de las letras 
 
+	return false;
+}
 
 
 void Matriz_dispersa::getGraphviz() {
 	IO_Archivos * llama = new  IO_Archivos();
 	llama->grafica_MATRIX(this->root);
+}
+
+
+Matriz_dispersa* Matriz_dispersa:: clonar(Matriz_dispersa* clon) {
+	clon->setCasiTodo(this->lista_casillas, this->centro, this->maximo ,this->centrolleno);
+	nMatrix* aux = root;
+	nMatrix* aux2 = NULL;
+	while (aux != NULL) {
+		if (aux->getDer() != NULL)
+		{
+			aux2 = aux->getDer();
+			while (aux2 != NULL)
+			{
+				if (aux2->getPos_y() != -1) {// si mi pos en x es negativa en y si voy a tener 
+					clon->add(aux2->getLetra(), aux2->getPos_x() , aux->getPos_y());
+					
+				}
+				aux2 = aux2->getDer();
+			}
+		}
+		aux = aux->getDown();
+	}
+	
+	return clon;
 }

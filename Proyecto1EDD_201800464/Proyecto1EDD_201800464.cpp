@@ -20,6 +20,15 @@ using namespace std;
 
 int main()
 { 
+  /*  Matriz_dispersa* m = new Matriz_dispersa();
+    m->setTamanioMaximo(80);
+    m->add('2',4 ,1 );
+    m->add('3',4 ,2 );
+    m->add('2', 80, 7);
+    m->add('3', 6,4);
+    m->add('3', 4, 15);
+    m->add('3', 10, 3);
+    m->getGraphviz();*/
     system("color a");
     while (true) {
         menuPrincipal();

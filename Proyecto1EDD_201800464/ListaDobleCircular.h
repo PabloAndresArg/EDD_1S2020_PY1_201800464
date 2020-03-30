@@ -29,6 +29,7 @@ public:
 		this->ultimo = NULL;
 		this->tamanio = 0; 
 	}
+	bool aparece_en_diccionario(string palabra_buscar);
 
 
 };

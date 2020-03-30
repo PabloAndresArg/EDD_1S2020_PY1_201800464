@@ -4,9 +4,7 @@
 #include"IO_Archivos.h"
 using namespace std; 
 
-void ListaDoble::InsertarPrimero(Ficha* c) {
 
-}
 
 void ListaDoble::add(Ficha* d) { //inserta en la ultima posicion 
 	this->ultimo = this->getUltimo();
@@ -20,28 +18,49 @@ void ListaDoble::add(Ficha* d) { //inserta en la ultima posicion
 		this->ultimo->setSig(nuevo);
 		this->ultimo = nuevo; // refrescamos cual es el ultimo ahora 
 	}
+	this->cantidad_fichas++;
 }
 
+void ListaDoble::llenarAtril() {
 
-
-
-void ListaDoble::imprimir() {
+}
+bool ListaDoble:: existe_en_mi_lista(char letter) {
 	NodoD* aux = this->inicio;
-	cout << " LISTA DEL JUGADOR " << endl;
-	if (this->inicio == NULL) {
-		cout << " no se esta llenando " << endl;
-	}
-	while (aux != NULL) {
-		cout << "letra:" << aux->getDato()->getLetra();
-
+	while (aux != NULL && aux->getDato()->getLetra() != letter) {
 		aux = aux->getSig();
 	}
+	if (aux == NULL) {
+		return false;
+	}
+	else {
+		return true;
+	}
+}
+
+
+
+void ListaDoble::imprimir(string nom) {
+	NodoD* aux = this->inicio;
+	cout << "LISTA DE FICHAS DEL JUGADOR: "<<nom << endl;
+	if (this->inicio == NULL) {
+		cout << " VACIA..." << endl;
+	}
+	else {
+
+		while (aux != NULL) {
+			cout<< "   "<< aux->getDato()->getLetra()<<"  ";
+			
+			aux = aux->getSig();
+		}
+		cout << endl;
+	}
+	
 
 }
 
-void ListaDoble::getGraphviz() {
+void ListaDoble::getGraphviz(string nombre) {
 	IO_Archivos llama; 
-	llama.Graph_LISTA_DOBLE(this->inicio , this->ultimo);
+	llama.Graph_LISTA_DOBLE(this->inicio , this->ultimo , nombre);
 }
 void ListaDoble::eliminar(NodoD*& nBorrar ) {
 	NodoD*& init = this->inicio;
@@ -68,6 +87,7 @@ void ListaDoble::eliminar(NodoD*& nBorrar ) {
 			nBorrar->getSig()->setAnt(nBorrar->getAnt())  ;
 
 		}
+		this->cantidad_fichas--;
 	}
 }
 

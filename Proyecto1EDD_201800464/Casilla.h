@@ -7,6 +7,7 @@ class Casilla{
 		int posX;
 		int posY; 
 		int tipo;
+		char letra; // solo aux para las letras que voy sacando 
 		Casilla(int x , int y , int t) {
 			this->posX = x; 
 			this->posY = y; 

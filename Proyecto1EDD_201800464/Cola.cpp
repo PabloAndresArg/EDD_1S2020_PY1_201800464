@@ -12,16 +12,19 @@ void Cola::encolar(Ficha* dato) {
 			this->ultimo->setSig(nuevo);
 			this->ultimo = nuevo;	
 	}
+	this->tamanio++; 
 }
 
 void Cola::desencolar() {
 	if (this->cabeza != NULL) {
 		this->cabeza = this->cabeza->getSig();
+		this->tamanio--;
 	}	
 }
 
 void Cola::vaciar() {
 	this->cabeza = NULL;
+	this->tamanio = 0;
 }
 
 NodoCola* Cola::buscar(char letter) {

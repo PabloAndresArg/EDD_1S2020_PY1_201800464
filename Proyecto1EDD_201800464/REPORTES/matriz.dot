@@ -1,0 +1,53 @@
+digraph G {bgcolor = black; 
+node[pin = true , shape = box, fontcolor = black  , fillcolor = gray  , width=0.7 ,style = filled] ;
+charset = latin1;
+ style = filled ;
+nodesep = 1.0;
+VAL_0146EEB0->VAL_0147D408 [ dir=both ,color = white]; 
+VAL_0146EEB0->VAL_0147D330 [  dir=both,  color = white]; 
+VAL_0146EEB0[label = "ROOT", group = -1,pos = "-1,1" ];
+VAL_0147D408->VAL_0147D180 [ dir=both, color = white]; 
+VAL_0147D408->VAL_0147D570 [ dir=both, color = white]; 
+VAL_0147D408[label="C0", group = 0,pos = "0,1" ];
+VAL_0147D180->VAL_0147CBE0 [ dir=both, color = white]; 
+VAL_0147D180->VAL_0147CC28 [ dir=both, color = white]; 
+VAL_0147D180[label="C2", group = 2,pos = "2,1" ];
+VAL_0147CBE0->VAL_0147D600 [ dir=both, color = white]; 
+VAL_0147CBE0->VAL_0147CB98 [ dir=both, color = white]; 
+VAL_0147CBE0[label="C4", group = 4,pos = "4,1" ];
+VAL_0147D600->VAL_0147C9A0 [ dir=both, color = white]; 
+VAL_0147D600->VAL_0147D5B8 [ dir=both, color = white]; 
+VAL_0147D600[label="C6", group = 6,pos = "6,1" ];
+VAL_0147C9A0->VAL_0147C958 [ dir=both, color = white]; 
+VAL_0147C9A0[label="C10", group = 10,pos = "10,1" ];
+VAL_0147D330->VAL_0147D570 [ dir=both ,color = white]; 
+VAL_0147D330->VAL_0147CB08 [  dir=both,  color = white]; 
+VAL_0147D330[label="F1" , group = -1,pos = "-1,-1" ];
+VAL_0147D570->VAL_0147D690 [ dir=both, color = white]; 
+VAL_0147D570[ label = " x3 "  ,fillcolor = gold1, group = 0,pos = "0,-1" ];
+VAL_0147CB08->VAL_0147CC28 [ dir=both ,color = white]; 
+VAL_0147CB08->VAL_0147D0A8 [  dir=both,  color = white]; 
+VAL_0147CB08[label="F5" , group = -1,pos = "-1,-5" ];
+VAL_0147CC28[ label = " x2 " ,fillcolor = dodgerblue1, group = 2,pos = "2,-5" ];
+VAL_0147D0A8->VAL_0147CB98 [ dir=both ,color = white]; 
+VAL_0147D0A8->VAL_0147D4E0 [  dir=both,  color = white]; 
+VAL_0147D0A8[label="F10" , group = -1,pos = "-1,-10" ];
+VAL_0147CB98->VAL_0147D5B8 [ dir=both, color = white]; 
+VAL_0147CB98[ label = " x2 " ,fillcolor = dodgerblue1, group = 4,pos = "4,-10" ];
+VAL_0147D5B8[ label = " x3 "  ,fillcolor = gold1, group = 6,pos = "6,-10" ];
+VAL_0147D4E0->VAL_0147D690 [ dir=both ,color = white]; 
+VAL_0147D4E0[label="F15" , group = -1,pos = "-1,-15" ];
+VAL_0147D690->VAL_0147C958 [ dir=both, color = white]; 
+VAL_0147D690[ label = " x3 "  ,fillcolor = gold1, group = 0,pos = "0,-15" ];
+VAL_0147C958[ label = " x2 " ,fillcolor = dodgerblue1, group = 10,pos = "10,-15" ];
+{rank = same; VAL_0146EEB0 VAL_0147D408 VAL_0147D180 VAL_0147CBE0 VAL_0147D600 VAL_0147C9A0 };
+
+{rank = same; VAL_0147D330 VAL_0147D570 };
+
+{rank = same; VAL_0147CB08 VAL_0147CC28 };
+
+{rank = same; VAL_0147D0A8 VAL_0147CB98 VAL_0147D5B8 };
+
+{rank = same; VAL_0147D4E0 VAL_0147D690 VAL_0147C958 };
+
+}

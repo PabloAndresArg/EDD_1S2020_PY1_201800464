@@ -1,22 +1,12 @@
 digraph ARBOL { rankdir=TB; style = filled;bgcolor = white;color = lightgrey;node[style = filled, color = green, shape = record];   
  pablo[label = " <C0>|pablo|<C1>" ];   
- pablo:C0->andres [arrowhead = none color = black];   
- andres[label = " <C0>|andres|<C1>" ];   
- andres:C1->kevin [arrowhead = none color = black];   
- kevin[label = " <C0>|kevin|<C1>" ];   
  subgraph cluster_0 { style = filled; charset = latin1;color = lightgrey;node[style = filled, color = gold   , shape = tripleoctagon]; label = "PRE-ORDER" ;  
  pablo0[label = " pablo" ] ; 
-pablo0->andres1[arrowhead = "vee"] ; andres1[label = " andres" ] ; 
-andres1->kevin2[arrowhead = "vee"] ; kevin2[label = " kevin" ] ; 
 }
 subgraph cluster_1 { style = filled; color = lightgrey;node[style = filled, color = lightskyblue2, shape = tripleoctagon]; label = "IN-ORDER" ;  
- andres3[label = " andres" ] ; 
-andres3->kevin4[arrowhead = "vee"]; kevin4[label = " kevin" ] ; 
-kevin4->pablo5[arrowhead = "vee"]; pablo5[label = " pablo" ] ; 
+ pablo1[label = " pablo" ] ; 
 }
 subgraph cluster_2 { style = filled; color = lightgrey;node[style = filled, color = orange2, shape = tripleoctagon]; label = "POST-ORDER" ;  
- kevin6[label = " kevin" ] ; 
-kevin6->andres7[arrowhead = "vee"] ; andres7[label = " andres" ] ; 
-andres7->pablo8[arrowhead = "vee"] ; pablo8[label = " pablo" ] ; 
+ pablo2[label = " pablo" ] ; 
 }
 }

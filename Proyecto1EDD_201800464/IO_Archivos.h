@@ -219,8 +219,10 @@ public:
 
 
 	//---------------------------------------- LISTA DOBLE DE FICHAS POR USUARIO 
-	void Graph_LISTA_DOBLE(NodoD* inicio, NodoD* ultimo) {
+	void Graph_LISTA_DOBLE(NodoD* inicio, NodoD* ultimo , string nombre) {
+	
 		system("cls");
+		if (inicio != NULL) {
 		ofstream w;
 		w.open("REPORTES\\reporteDobleEnlazada.txt", ios::out);//si no existe lo crea  y si ya lo reemplaza
 		if (w.fail()) {
@@ -229,13 +231,28 @@ public:
 			system("pause");
 			exit(1);
 		}
-		if (inicio != NULL) {
-			w << "digraph GraphDOBLE {rankdir = LR; style = filled; charset = latin1; bgcolor = black;color = lightgrey;node[style = filled, color = dodgerblue, shape = component];";
+		
+		w << "digraph GraphDOBLE {rankdir = LR;";
+		w << " fontcolor = white;";
+		w << "label = \"Lista fichas del usuario:  "+ nombre +"\";";
+		w<<"style = filled; charset = latin1; bgcolor = black; color = lightgrey; node[style = filled, color = dodgerblue, shape = component]; ";
 			NodoD* aux = new NodoD();
 			aux = inicio;
 			int x = 1; // porque graph no acepta neg
 			while (aux != NULL) {
-				w << "a" << x << "[label = \" " << aux->getDato()->getLetra() << "\" ] ;";
+				// nombre 
+				if ((int)aux->getDato()->getLetra() == -92) {
+					w << "a" << x << "[label = \" " << "Ñ"<< "\" ] ;";
+				}
+				else {
+					char letra = toupper(aux->getDato()->getLetra());
+					w << "a" << x << "[label = \" " << letra << "\" ] ;";
+				}
+
+				
+				
+				
+				
 				x++;
 				if (aux->getSig() == NULL) {
 					//w << "a" << (x - 1) << " -> " << "NULL2" << "[arrowhead = empty color = gold2]; ";
@@ -282,28 +299,28 @@ public:
 		}
 		else {
 		ofstream w;
-		w.open("REPORTES\\matriz.neato", ios::out);
+		w.open("REPORTES\\matriz.dot", ios::out);
 		if (w.fail())
 		{
 			cout << "NO SE ABRE :(" << endl;
 			system("pause");
 			exit(1);
 		}
-		w << "digraph G {bgcolor = black; node[pin = true , shape = box, fontcolor = black  , fillcolor = gray  , width=0.7 ,style = filled] ;\ncharset = latin1;\n style = filled \n";
+		w << "digraph G {bgcolor = black; \nnode[pin = true , shape = box, fontcolor = black  , fillcolor = gray  , width=0.7 ,style = filled] ;\ncharset = latin1;\n style = filled ;\nnodesep = 1.0;\n";
 		nMatrix* aux = root;
 		nMatrix* aux2 = NULL;
 		while (aux != NULL) {
 			if (aux->getDer() != NULL) {
-				w << "VAL_" << &*aux << "->" << "VAL_" << &*aux->getDer() << " [arrowhead = empty, color = white]; " << "\n";
+				w << "VAL_" << &*aux << "->" << "VAL_" << &*aux->getDer() << " [ dir=both ,color = white]; " << "\n";
 			}
 			if (aux->getIzq() != NULL) {
-				w << "VAL_" << &*aux << "->" << "VAL_" << &*aux->getIzq() << " [arrowhead = empty, color = white]; " << "\n";
+				//w << "VAL_" << &*aux << "->" << "VAL_" << &*aux->getIzq() << " [arrowhead = empty, color = white]; " << "\n";
 			}
 			if (aux->getDown() != NULL) {
-				w << "VAL_" << &*aux << "->" << "VAL_" << &*aux->getDown() << " [arrowhead = empty, color = white]; " << "\n";
+				w << "VAL_" << &*aux << "->" << "VAL_" << &*aux->getDown() << " [  dir=both,  color = white]; " << "\n";
 			}
 			if (aux->getUp() != NULL) {
-				w << "VAL_" << &*aux << "->" << "VAL_" << &*aux->getUp() << " [arrowhead = empty, color = white]; " << "\n";
+				//w << "VAL_" << &*aux << "->" << "VAL_" << &*aux->getUp() << " [arrowhead = empty, color = white]; " << "\n";
 			}
 			// nomnbre-----------------------------------------------------------
 			if (aux != root && aux->getPos_x() == -1) {
@@ -318,23 +335,37 @@ public:
 				while (aux2 != NULL)
 				{
 					if (aux2->getDer() != NULL) {
-						w << "VAL_" << &*aux2 << "->" << "VAL_" << &*aux2->getDer() << " [arrowhead = empty, color = white]; " << "\n";
+						w << "VAL_" << &*aux2 << "->" << "VAL_" << &*aux2->getDer() << " [ dir=both, color = white]; " << "\n";
 					}
 					if (aux2->getIzq() != NULL) {
-						w << "VAL_" << &*aux2 << "->" << "VAL_" << &*aux2->getIzq() << " [arrowhead = empty, color = white]; " << "\n";
+					//	w << "VAL_" << &*aux2 << "->" << "VAL_" << &*aux2->getIzq() << " [arrowhead = empty, color = white]; " << "\n";
 					}
 					if (aux2->getDown() != NULL) {
-						w << "VAL_" << &*aux2 << "->" << "VAL_" << &*aux2->getDown() << " [arrowhead = empty, color = white]; " << "\n";
+						w << "VAL_" << &*aux2 << "->" << "VAL_" << &*aux2->getDown() << " [ dir=both, color = white]; " << "\n";
 					}
 					if (aux2->getUp() != NULL) {
-						w << "VAL_" << &*aux2 << "->" << "VAL_" << &*aux2->getUp() << " [arrowhead = empty, color = white]; " << "\n";
+					//	w << "VAL_" << &*aux2 << "->" << "VAL_" << &*aux2->getUp() << " [arrowhead = empty, color = white]; " << "\n";
 					}
 					//-------------------------------------------- NOMBRES
 					if (aux2->getPos_y() == -1) {// si mi pos en x es negativa en y si voy a tener 
 						w << "VAL_" << &*aux2 << "[label=\"" << aux2->getLetra() << to_string(aux2->getPos_x()) << "\", group = " << to_string(aux2->getPos_x()) << ",pos = \"" << to_string(aux2->getPos_x()) << "," << to_string((-1) * (aux2->getPos_y())) << "\" ];\n";
 					}
 					else {
-						w << "VAL_" << &*aux2 << "[ label = \"" << aux2->getLetra() << "\" , fillcolor = chartreuse1, group = " << to_string(aux2->getPos_x()) << ",pos = \"" << to_string(aux2->getPos_x()) << "," << to_string((-1) * (aux2->getPos_y())) << "\" ];\n";
+						if ((int)aux2->getLetra() == -92) {
+							w << "VAL_" << &*aux2 << "[ label = \"" <<"Ñ"<< "\" , fillcolor = chartreuse1, group = " << to_string(aux2->getPos_x()) << ",pos = \"" << to_string(aux2->getPos_x()) << "," << to_string((-1) * (aux2->getPos_y())) << "\" ];\n";
+						}
+						else if (aux2->getLetra() == '3') {// triples 
+							w << "VAL_" << &*aux2 << "[ label = \"" << " x3 " << "\"  ,fillcolor = gold1, group = " << to_string(aux2->getPos_x()) << ",pos = \"" << to_string(aux2->getPos_x()) << "," << to_string((-1) * (aux2->getPos_y())) << "\" ];\n";
+						}
+						else if (aux2->getLetra() == '2') {// dobles
+							w << "VAL_" << &*aux2 << "[ label = \"" << " x2 " << "\" ,fillcolor = dodgerblue1, group = " << to_string(aux2->getPos_x()) << ",pos = \"" << to_string(aux2->getPos_x()) << "," << to_string((-1) * (aux2->getPos_y())) << "\" ];\n";
+						}
+						else {
+							char letra = toupper(aux2->getLetra());
+							w << "VAL_" << &*aux2 << "[ label = \"" << letra << "\" ,dir=both ,fillcolor = chartreuse1, group = " << to_string(aux2->getPos_x()) << ",pos = \"" << to_string(aux2->getPos_x()) << "," << to_string((-1) * (aux2->getPos_y())) << "\" ];\n";
+						}
+
+						
 					}
 					aux2 = aux2->getDer();
 				}
@@ -364,7 +395,7 @@ public:
 
 		w << "}\n";
 		w.close();
-		char eje[] = "dot -Tjpg REPORTES\\matriz.neato -o REPORTES\\matriz.jpg";
+		char eje[] = "dot -Tjpg REPORTES\\matriz.dot -o REPORTES\\matriz.jpg";
 		system(eje);
 		char abre[] = "REPORTES\\matriz.jpg";
 		system(abre);

@@ -12,7 +12,7 @@ private:
 	int contador;
 	// un vector de fichas de 7 como maximo ? o es una lista que se puede expandir hasta n 
 public:
-	Jugador() { this->nombre = "ERROR ,  NO ENCONTRADO"; };
+	Jugador() { this->nombre = "ERROR"; };
 	Jugador(string nom) { this->nombre = nom; };
 	inline string getNombre() { return this->nombre; }; 
 	inline void setNombre(string nombre_) { this->nombre = nombre_; };

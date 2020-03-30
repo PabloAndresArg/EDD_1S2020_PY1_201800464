@@ -4,6 +4,8 @@
 #include"nMatrix.h"
 #include"nodoT.h"
 #include"ListaCasillas.h"
+#include"ListaDobleCircular.h"
+#include"ListaCasillas.h"
 using namespace std; 
 class Matriz_dispersa
 {
@@ -13,6 +15,7 @@ private:
 	nMatrix* root; 
 	int maximo;
 	int centro;
+	bool centrolleno;
 public:
 
 	Matriz_dispersa() {
@@ -23,7 +26,18 @@ public:
 		this->root->setPos_x(-1);// una pos en x que nunca usaria
 		this->maximo = NULL;
 		this->centro = NULL;
+		this->centrolleno = false;
 	}
+
+	Matriz_dispersa* clonar(Matriz_dispersa* clon);
+	inline void setCasiTodo(ListaCasillas lista_casillas, int centro, int maximo , bool centro_lleno) {
+		this->lista_casillas = lista_casillas;
+		this->centro = centro;
+		this->maximo = maximo;
+		this->centrolleno = centro_lleno;
+	}
+	void eliminar(int x, int y);
+	nMatrix* getBuscarNodo();
 	inline void vaciar() {
 		this->root = new nMatrix();// reservo memoria 
 		this->cantidad_nodos = 0;
@@ -53,7 +67,31 @@ public:
 		this->maximo = max;
 		this->centro = max / 2;
 	}
-	 void add(char, int, int); // letra x , y
+	inline bool el_centro_esta_lleno() {
+		nMatrix* col_principal = this->root; 
+		nMatrix* aux = NULL; 
+		if (this->centrolleno == false) {
+			while (col_principal != NULL) {
+
+				if (col_principal->getDer() != NULL) {
+
+					while (aux != NULL) {
+						if (aux->getPos_x() == this->centro && aux->getPos_y() == this->centro) {
+							return true;
+						}
+						aux = aux->getDer();
+					}
+				}
+				col_principal = col_principal->getDown();
+			}
+		}
+		else {
+			return true;
+		}
+	}
+
+	 bool validarPalabra(ListaCasillas casillasVisitadas , ListaDobleCircular diccionario , string direccion);// necesito una Lista de posiciones recorridas y la lista del diccionario 
+	 void add(char letra, int x,  int y); // letra x , y
 	 void getGraphviz();
 	 nMatrix* existeColumna(int);
 	 nMatrix* recursive_existeColumna(nMatrix* , int);
