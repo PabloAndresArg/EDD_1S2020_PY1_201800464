@@ -13,7 +13,24 @@ Pasos para construir una matris dispersa:
 3. crar filas y columnas 
 4. metodo insertar Nodo
 */
+nMatrix* Matriz_dispersa::BuscarNodo(int x, int y) {
+	nMatrix* col_principal = this->root;
+	nMatrix* aux = NULL;
+		while (col_principal != NULL) {
 
+			if (col_principal->getDer() != NULL) {
+
+				while (aux != NULL) {
+					if (aux->getPos_x() == x && aux->getPos_y() == y) {
+						return aux;
+					}
+					aux = aux->getDer();
+				}
+			}
+			col_principal = col_principal->getDown();
+		}
+		return NULL;
+}
 // creando filas y columnas
 nMatrix* Matriz_dispersa::generaFila(int y) {
 	nMatrix* raiz = this->root , * F; // ver si no da error
@@ -252,6 +269,9 @@ void Matriz_dispersa::getGraphviz() {
 
 
 Matriz_dispersa* Matriz_dispersa:: clonar(Matriz_dispersa* clon) {
+
+	clon->getRoot()->setDerecha(NULL);
+	clon->getRoot()->setAbajo(NULL);
 	clon->setCasiTodo(this->lista_casillas, this->centro, this->maximo ,this->centrolleno);
 	nMatrix* aux = root;
 	nMatrix* aux2 = NULL;
@@ -272,4 +292,208 @@ Matriz_dispersa* Matriz_dispersa:: clonar(Matriz_dispersa* clon) {
 	}
 	
 	return clon;
+}
+
+
+
+void Matriz_dispersa::add_ilusion(char letra, int x, int y) {
+
+	if (x < this->maximo && y < this->maximo) {
+
+		nMatrix* nuevo_nodo = new nMatrix(x, y, letra);
+		nuevo_nodo->setIs_nueva(true);
+		nMatrix* cabecera_columna = existeColumna(x);// cabeceras  hacia abajo 
+		nMatrix* cabeceraFila = existeFIla(y);// cabecera hacia derecha
+		int caso = 0;
+
+		if (cabecera_columna == NULL && cabeceraFila == NULL) {// caso 1 
+			caso = 1;
+		}
+		else if (cabecera_columna == NULL && cabeceraFila != NULL) { // caso 2 
+			// entonces creo la columna 
+			caso = 2;
+		}
+		else if (cabecera_columna != NULL && cabeceraFila == NULL) { // case3
+			caso = 3;
+		}
+		else if (cabecera_columna != NULL && cabeceraFila != NULL) {// case4
+			caso = 4;
+		}
+		switch (caso)
+		{
+		case 1:
+			cabecera_columna = this->generaColumna(x);
+			cabeceraFila = this->generaFila(y);
+			nuevo_nodo = this->insertarOrdenandoColumna(nuevo_nodo, cabeceraFila);
+			nuevo_nodo = this->insertarOrdenadoFila(nuevo_nodo, cabecera_columna);
+			return;
+			break;
+		case 2:
+			cabecera_columna = this->generaColumna(x);
+			nuevo_nodo = this->insertarOrdenandoColumna(nuevo_nodo, cabeceraFila);
+			nuevo_nodo = this->insertarOrdenadoFila(nuevo_nodo, cabecera_columna);
+			return;
+			break;
+
+		case 3:
+			cabeceraFila = this->generaFila(y);
+			nuevo_nodo = this->insertarOrdenandoColumna(nuevo_nodo, cabeceraFila);
+			nuevo_nodo = this->insertarOrdenadoFila(nuevo_nodo, cabecera_columna);
+			return;
+			break;
+
+		case 4:
+			nuevo_nodo = this->insertarOrdenandoColumna(nuevo_nodo, cabeceraFila);
+			nuevo_nodo = this->insertarOrdenadoFila(nuevo_nodo, cabecera_columna);
+			return;
+			break;
+		default:
+			break;
+		}
+		this->cantidad_nodos++;
+	}
+	else {
+		cout << "no entra porque coloco una posicion fuera del rango establecido..." << endl;
+	}
+
+}
+
+// como usar la libreria VECTOR 
+// para agregar push_back (  );
+/*
+para recorrer es de la siguiente manera 
+for(const auto nombreo_bjeto : nombre_vector){ // la palabra auto deduce el tipo  , no es necesario el const 
+
+}
+
+for(int i ; i < nombreVector.size() ; i++){
+}
+
+// suponiendo un vector llamado vect
+for(std::vector<int>::iterator it = vect.begin();  it != vect.end() ; ++it ){
+cout<<*it<<endl; // porque el iterator no es una posicion es un apuntador   
+}
+
+for(auto it = vect.begin();  it != vect.end() ; ++it ){
+cout<<*it<<endl; // porque el iterator no es una posicion es un apuntador
+}
+
+// EL MAS SIMPLE 
+
+for(tipo_elemento nombre_elemento : nombre_vector){
+
+}
+*/
+
+void Matriz_dispersa :: extraerCasillasNuevas(ListaCasillas* lista_casillas_nuevas) {
+	nodoT* aux = lista_casillas_nuevas->getInicio();
+	while (aux != NULL) {
+		nMatrix* temporal = this->BuscarNodo(aux->casilla->posX , aux->casilla->posY);
+		if (temporal != NULL) { // tons lo metemos al vector 
+			this->vector_de_nodos.push_back(temporal);
+		}
+		aux = aux->sig;
+	}
+	this->imprimirVector();
+}
+void Matriz_dispersa::extraerCasillasNuevas() {
+	nMatrix* col_principal = this->root;
+	nMatrix* aux = NULL;
+	while (col_principal != NULL) {
+
+		if (col_principal->getDer() != NULL) {
+			aux = col_principal->getDer();
+			while (aux != NULL) {
+
+				if (aux->getIs_nueva() == true) {
+					this->vector_de_nodos.push_back(aux);
+				}
+				aux = aux->getDer();
+			}
+		}
+		col_principal = col_principal->getDown();
+	}
+}
+void  Matriz_dispersa::imprimirVector() {
+	cout << " 같같같같같같같같같같같같같 ESTOS NODOS TIENE MI VECTOR :O  같같같같같같같같같같같같같" << endl; 
+	for (nMatrix* n : this->vector_de_nodos) {
+		cout << "LETRA: "<<n->getLetra() << " X: "<<n->getPos_x() <<" Y: "<< n->getPos_y() <<" es nueva: "<<n->getIs_nueva() <<endl;
+	}
+	cout << " 같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같같" << endl;
+	system("pause");
+}
+
+bool Matriz_dispersa:: validarPalabra(ListaDobleCircular* diccionario) {
+	// si encuentra al menos una palabra valida tiene que retornar que el metodo es valido
+	// primero tengo que ver si tiene fichas adyacentes 
+	// la unica forma donde no me interes si hay adyacencia es cuando el centro esta lleno 
+
+
+	return true;
+}
+
+bool Matriz_dispersa:: es_palabra_adyacente() {
+	int z = 0;
+	for (nMatrix* n : this->vector_de_nodos) {
+		z++;
+		cout << "interacion: " << z << endl;
+		if (n->getDer() != NULL) {
+			cout << "DER";
+			if ((n->getDer()->getPos_x() - n->getPos_x()) == 1 && n->getDer()->getIs_nueva() == false) { // 3 -2 = 1 
+			cout << "AD..  "<<n->getLetra()<<" a la derecha de "<< n->getDer()->getLetra();// a la derecha nunca podria tener una cab
+			return true; 
+			}
+		}
+		else if (n->getIzq() != NULL) {
+			cout << "IZQ";
+			if ((n->getIzq()->getPos_x() - n->getPos_x()) == -1 && n->getIzq()->getIs_nueva() == false  && n->getIzq()->getPos_x() != -1) {
+				cout << "AD..  " << n->getLetra() << " a la izq. de " << n->getIzq()->getLetra();
+				return true;
+			}
+		}
+		else if (n->getDown() != NULL){
+			cout << "CASO ABAJO " << n->getDown()->getPos_y() << " - " << n->getPos_y() << endl;
+			if ((n->getDown()->getPos_y() - n->getPos_y()) == 1 && n->getDown()->getIs_nueva() == false) {
+				cout << "AD..  " << n->getLetra() << " a abajo. de " << n->getDown()->getLetra();
+				return true;
+			}
+		}
+		else if (n->getUp() != NULL) {
+			cout << "ARRIBA";
+			if ((n->getUp()->getPos_y() - n->getPos_y()) == -1 && n->getUp()->getIs_nueva() == false && n->getUp()->getPos_y() != -1) {
+				cout << "AD..  " << n->getLetra() << " a arriba. de " << n->getUp()->getLetra();
+				return true;
+			}
+		}
+		// tener en cuenta que la adyacencia con las cabeceras y columnas no valen  , las pos negativas las descartan 
+	}
+	cout << "NO ES ADYACENTE" <<endl ;
+	return false; // si ninguno de los nodos nuevos tiene adyacencia con los viejo esta palabra es invalida 
+}
+
+
+
+
+bool Matriz_dispersa:: el_centro_esta_lleno() {
+
+	nMatrix* col_principal = this->root;
+	nMatrix* aux = NULL;
+	if (this->centrolleno == false) {
+		while (col_principal != NULL) {
+			if (col_principal->getDer() != NULL) {
+				aux = col_principal->getDer();
+				while (aux != NULL) {
+					if (aux->getPos_x() == this->centro && aux->getPos_y() == this->centro) {
+						this->centrolleno = true;
+						return true;
+					}
+					aux = aux->getDer();
+				}
+			}
+			col_principal = col_principal->getDown();
+		}
+	}
+	else {
+		return true;
+	}
 }

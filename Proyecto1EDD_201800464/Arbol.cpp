@@ -93,7 +93,7 @@ void Arbol::recursive_add(NodoArbol* actual, NodoArbol* nuevo) {
 int Arbol::compararAlfabeticamente(string p1, string p2) {
     // p1 nuevo  , p2 de la lista 
     // retorno true para seguir buscando , retorno false si ya enccontre le nodo donde deseo ingresar 
-    if (p1.compare(p2) == 0 ) {
+    if (p1.compare(p2) == 0) {
         return 2; 
     }else{
     string palabraOrdenada = "";
@@ -130,7 +130,22 @@ int Arbol::compararAlfabeticamente(string p1, string p2) {
         }
     }
   //  cout << "LA PALABRA QUE IRIA PRIMERO ES : " << palabraOrdenada << endl;
+
+    // caso en que la similitud es muy grande y no hay mas letras para comparar 
+
+    int logitud_raiz = (int)p1.size();
+    int logitud_nuevo = (int)p2.size();
+    if (logitud_raiz>logitud_nuevo) {
+        return 1; // lo inserto a la izq
+    }
+    else {
+        return 0;
+    }
+    // si son iguales a la derecha
     return 1;
+
+
+
 
     }
 }

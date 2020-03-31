@@ -41,6 +41,8 @@ bool ListaDoble:: existe_en_mi_lista(char letter) {
 
 void ListaDoble::imprimir(string nom) {
 	NodoD* aux = this->inicio;
+	cout << endl;
+	cout << "**************************************************" << endl;
 	cout << "LISTA DE FICHAS DEL JUGADOR: "<<nom << endl;
 	if (this->inicio == NULL) {
 		cout << " VACIA..." << endl;
@@ -48,13 +50,14 @@ void ListaDoble::imprimir(string nom) {
 	else {
 
 		while (aux != NULL) {
-			cout<< "   "<< aux->getDato()->getLetra()<<"  ";
+			char letra = toupper(aux->getDato()->getLetra());
+			cout<< "   "<<letra <<"  ";
 			
 			aux = aux->getSig();
 		}
 		cout << endl;
 	}
-	
+	cout << "*************************************************" << endl;
 
 }
 

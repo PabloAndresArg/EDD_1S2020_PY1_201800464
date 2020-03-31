@@ -9,6 +9,7 @@ private:
 	int pos_y;
 	nMatrix* izq, *der, *down,*up; 
 	char letra;
+	bool iSnueva;
 public:
 	nMatrix() {
 		this->up = NULL; this->down = NULL;
@@ -16,6 +17,7 @@ public:
 		this->pos_x = 0;
 		this->pos_y = 0;
 		this->letra = ' ';
+		this->iSnueva = false;
 	};
 
 	inline nMatrix( int x_, int y_, char letra_) {// x y
@@ -24,7 +26,11 @@ public:
 		this->pos_x = x_;
 		this->pos_y = y_;
 		this->letra = letra_;
+		this->iSnueva = false;
 	}; 
+	inline void setIs_nueva(bool s) {
+		this->iSnueva = s;
+	}
 
 	inline nMatrix* getIzq() {
 		return this->izq;
@@ -56,6 +62,9 @@ public:
 		this->down = down_;
 	}
 
+	inline bool getIs_nueva() {
+		return this->iSnueva;
+	}
 
 
 	inline void setLetra(char letra_) {

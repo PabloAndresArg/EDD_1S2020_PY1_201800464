@@ -33,7 +33,7 @@ json json_dimension;
 json casillas_dobles;
 json tripleJs;
 json JsonPalabras_diccionario;
-
+// REVISAR EL ARBOL 
 
 int tamanio_tablero = 0;
 
@@ -60,7 +60,7 @@ bool terminarJUEGO();
 void llenar_atriles_jugador(int posJugador);
 void excepcion_centro(int);
 void recordar_llenar_Centro_movimiento1();
-
+void encabezado_insertar_juego(int posJugador);
 
 
 // estructuras estaticas y arreglos 
@@ -509,7 +509,9 @@ void INICIAR_JUEGO() {
             respuesta = 0;// cambia turno
             realizarJugada(1);// JUGADOR 2 
         }
-        system("pause");
+
+        // preguntar si ya termino el juego para acabarlo
+        
         } while (ciclo);
 }
 void menu_dentro_turno() {
@@ -519,6 +521,7 @@ void menu_dentro_turno() {
     cout << "1. insertar fichas al tablero " << endl;
     cout << "2. Intercambiar fichas (le valdra el turno)" << endl;
     cout << "3. ver reporte de lista Doble de las fichas de los dos jugadores" << endl;
+    cout << "4. abandonar la partida " << endl;
 }
 bool terminarJUEGO() {
     return false;
@@ -549,77 +552,82 @@ void realizarJugada(int posJugador) {
             ListaCasillas* casillaTemp = new ListaCasillas();
             ilusion = TABLERO->clonar(ilusion); // BACKUP
             while (turno) {
-                recordar_llenar_Centro_movimiento1();
-                DICCIONARIO->imprimeparaAdelnate(); cout << "\n";
-                cout << "Cantidad de Fichas en la Bolsa: "<<BOLSA->getTamanio()<<endl;
-                cout << "Puntaje: " << jugadoresActuales[posJugador]->getContador() << endl;
-                jugadoresActuales[posJugador]->getListaFichas().imprimir(jugadoresActuales[posJugador]->getNombre());
+                
                 // sub-menu  para ver si inserto fichas o si intercambio o si quiero ver el reporte 
                 menu_dentro_turno();
                 int menu_por_turno = 4;
                 cin >> menu_por_turno;
                 if (menu_por_turno == 1) { // INSERTAR 
+                    bool metiendo_fichas = true;
+                    while (metiendo_fichas) {
+                        encabezado_insertar_juego(posJugador);
+                        cout << "SELECCIONES QUE LETRA VA A INGRESAR" << endl;
+                        string aux_lexico = "";
+                        char letra = ' ';
+                        cin >> letra;
+                        if (jugadoresActuales[posJugador]->getListaFichas().existe_en_mi_lista(letra)) {
+                            int x, y;
+                            cout << "INGRESE LA POSICION X: "; cin >> x; cout << "\n";
+                            cout << "INGRESE LA POSICION Y: "; cin >> y;
+                            ilusion->add_ilusion(letra, x, y);
+                            Casilla* cass = new Casilla(x, y, 0);
+                            cass->letra = letra;
+                            casillaTemp->add(cass);
 
-
-                    cout << "SELECCIONES QUE LETRA VA A INGRESAR" << endl;
-                    string aux_lexico = "";
-                    char letra = ' ';
-                    cin >> letra;
-                    if (jugadoresActuales[posJugador]->getListaFichas().existe_en_mi_lista(letra)) {
-                        int x, y;
-                        cout << "INGRESE LA POSICION X: "; cin >> x; cout << "\n";
-                        cout << "INGRESE LA POSICION Y: "; cin >> y;
-                        ilusion->add(letra, x, y);
-                        Casilla* cass = new Casilla(x, y, 0);
-                        cass->letra = letra;
-                        casillaTemp->add(cass);
-                        ilusion->getGraphviz();
-                        cout << "¿DESEA TERMINAR SU TURNO? \n Presione 1 para seguir sino presione otro numero" << endl;
-                        int opcion = 0; cin >> opcion;
-                        if (opcion != 1) {
-                            if (ilusion->el_centro_esta_lleno()) {
-                                turno = false;
-                                primerMovimiento = false;
-                                // forme alguna palabra correcta ? si es asi le doy puntos sino paso de turno y retiro lo ingresado
-                                // es vertical o horizontal  caso 1 solo una letra , caso 2 vertical , case 3 horizontal  SI ESTA CORRECTO YA GUARDO EN MI MATRIZ ORIGINAL
-                                if (casillaTemp->getInicio()->sig == NULL) {// CASO 1
-
-                                }
-                                else {
-                                    cout << "por favor indique que palabra intento formar ?" << endl;
-                                    cin >> aux_lexico;
-                                    int posX1 = casillaTemp->getInicio()->casilla->posX;
-                                    int posX2;
-                                    if (casillaTemp->getInicio()->sig != NULL) {
-                                        posX2 = casillaTemp->getInicio()->sig->casilla->posX;
-                                        if ((posX1 - posX2) == 0) {// es vertical 
-                                            cout << "ingreso una palabra VERTICAL" << endl;
-                                        }
-                                        else {// es horizontal
-                                            cout << "ingreso una palabra HORIZONTAL" << endl;
-                                        }
+                            ilusion->getGraphviz();
+                            cout << "DESEA TERMINAR SU TURNO? \n PRESIONE 1 para seguir sino presione otro numero" << endl;
+                            int opcion = 0; cin >> opcion;
+                            if (opcion != 1) {
+                                if (ilusion->el_centro_esta_lleno()) {
+                                    metiendo_fichas = false;
+                                    turno = false;
+                                    primerMovimiento = false;
+                                    ilusion->extraerCasillasNuevas();      
+                                    ilusion->es_palabra_adyacente();
+                                    ilusion->imprimirVector();
+                                    system("pause");
+                                    // forme alguna palabra correcta ? si es asi le doy puntos sino paso de turno y retiro lo ingresado
+                                    // es vertical o horizontal  caso 1 solo una letra , caso 2 vertical , case 3 horizontal  SI ESTA CORRECTO YA GUARDO EN MI MATRIZ ORIGINAL
+                                    if (casillaTemp->getInicio()->sig == NULL) {// CASO 1
 
                                     }
                                     else {
-                                        cout << "SOLO METIO UNA LETRA" << endl;
-                                    }
+                                        cout << "por favor indique que palabra intento formar ?" << endl;
+                                        cin >> aux_lexico;
+                                        int posX1 = casillaTemp->getInicio()->casilla->posX;
+                                        int posX2;
+                                        if (casillaTemp->getInicio()->sig != NULL) {
+                                            posX2 = casillaTemp->getInicio()->sig->casilla->posX;
+                                            if ((posX1 - posX2) == 0) {// es vertical 
+                                                cout << "ingreso una palabra VERTICAL" << endl;
+                                            }
+                                            else {// es horizontal
+                                                cout << "ingreso una palabra HORIZONTAL" << endl;
+                                            }
 
-                                    // al final si el movimiento es valido retiro las fichas de la listaDoble de mis jugadores
-                                    // y agrego las fichas al TABLERO REAL sino solo no lo agrego ni quito las fichas 
+                                        }
+                                        else {
+                                            cout << "SOLO METIO UNA LETRA" << endl;
+                                        }
+
+                                        // al final si el movimiento es valido retiro las fichas de la listaDoble de mis jugadores
+                                        // y agrego las fichas al TABLERO REAL sino solo no lo agrego ni quito las fichas 
+                                    }
+                                }
+                                else {
+                                    excepcion_centro(posJugador);
                                 }
                             }
-                            else { 
-                                excepcion_centro(posJugador);
-                            }
+                            system("cls");
                         }
-                        system("cls");
+                        else {
+                            cout << "\n\n*** esa letra NO ESTA EN TU LISTA " << endl;
+                            system("PAUSE");
+                            system("cls");
+                        }
+
                     }
-                    else {
-                        cout << "\n\n*** esa letra NO ESTA EN TU LISTA " << endl;
-                        system("PAUSE");
-                        system("cls");
-                    }
-                    
+
 
                 } else if (menu_por_turno == 2) { // INTERCAMBIAR 
                     cout << "cuantas fichas desea cambiar?" << endl; 
@@ -664,8 +672,8 @@ void realizarJugada(int posJugador) {
 
                 }else if (menu_por_turno == 3) { // VER REPORTE
                 IO_Archivos* archi = new IO_Archivos(); 
-                archi->Graph_LISTA_DOBLE(jugadoresActuales[0]->getListaFichas().getInicio() , jugadoresActuales[0]->getListaFichas().getUltimo(), jugadoresActuales[0]->getNombre());
-                archi->Graph_LISTA_DOBLE(jugadoresActuales[1]->getListaFichas().getInicio(), jugadoresActuales[1]->getListaFichas().getUltimo() , jugadoresActuales[1]->getNombre());
+                archi->Graph_LISTA_DOBLE(jugadoresActuales[posJugador]->getListaFichas().getInicio() , jugadoresActuales[posJugador]->getListaFichas().getUltimo(), jugadoresActuales[posJugador]->getNombre());
+        
                 }
                 else {
                     cout << "ingreso algo INCORRECTO"<<endl<<endl;
@@ -701,19 +709,19 @@ int escogerQuienVaPrimero() {
     }
     else {
         if (letra1->getLetra() < letra2->getLetra()) {
-            cout << "\n\n \n\n";
+            cout << "\n";
             cout << "                             *******************************" << endl;
             cout << "                                     COMIENZA JUGADOR 1     " << endl;
             cout << "                             *******************************" << endl;
-            cout << "\n\n \n\n";
+            cout << "\n\n";
             return 0;
         }
         else {
-            cout << "\n\n \n\n";
+            cout << "\n";
             cout << "                             *******************************" << endl;
             cout << "                                     COMIENZA JUGADOR 2     " << endl;
             cout << "                             *******************************" << endl;
-            cout << "\n\n \n\n";
+            cout << "\n\n ";
             return 1;
         }
     }
@@ -775,4 +783,13 @@ void llenar_atriles_jugador(int posJugador) {
             }
         }cout << endl;
     }
+}
+
+
+void encabezado_insertar_juego(int posJugador) {
+    recordar_llenar_Centro_movimiento1();
+    DICCIONARIO->imprimeparaAdelnate(); cout << "\n";
+    cout << "Cantidad de Fichas en la Bolsa: " << BOLSA->getTamanio() << endl;
+    cout << "Puntaje: " << jugadoresActuales[posJugador]->getContador() << endl;
+    jugadoresActuales[posJugador]->getListaFichas().imprimir(jugadoresActuales[posJugador]->getNombre());
 }

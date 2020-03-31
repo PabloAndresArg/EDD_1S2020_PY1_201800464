@@ -233,9 +233,9 @@ public:
 		}
 		
 		w << "digraph GraphDOBLE {rankdir = LR;";
-		w << " fontcolor = white;";
+		w << " fontcolor = white; fontsize = \"30\";";
 		w << "label = \"Lista fichas del usuario:  "+ nombre +"\";";
-		w<<"style = filled; charset = latin1; bgcolor = black; color = lightgrey; node[style = filled, color = dodgerblue, shape = component]; ";
+		w<<"style = filled; charset = latin1; bgcolor = black; color = lightgrey; node[fillcolor = black , fontcolor = white , color = chartreuse1 ,style = filled, shape = component]; ";
 			NodoD* aux = new NodoD();
 			aux = inicio;
 			int x = 1; // porque graph no acepta neg
