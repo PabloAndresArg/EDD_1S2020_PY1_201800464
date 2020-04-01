@@ -18,7 +18,7 @@ public:
 	void add( Ficha* );
 	NodoD* buscar(char);
 	void eliminar(NodoD*&); // para este metodo se tiene que realizar un buscar previamente 
-	int getPuntaje();
+	int getPuntaje_restar();
 	void vaciar();
 	void getGraphviz(string nombre);
 	void imprimir(string nombre_del_jugador);

@@ -34,7 +34,7 @@ int main()
         menuPrincipal();
     }
 
-/*  Arbol* nuevaInstancia = new Arbol();
+   /* Arbol* nuevaInstancia = new Arbol();
     Jugador* j1 = new Jugador("Pablo"); 
     Jugador* j2 = new Jugador("Anthony");
     Jugador* j3 = new Jugador("Zeta");
@@ -56,14 +56,31 @@ int main()
     nuevaInstancia->add(nuevo5);
     nuevaInstancia->add(nuevo6);
     nuevaInstancia->add(nuevo7);
-    cout << endl;
+    Jugador* busque = nuevaInstancia->buscar("pablo");
+    RegistroPuntaje* reg = new RegistroPuntaje(100);
+    busque->getListaPuntajes().add(reg);
+    RegistroPuntaje* reg2 = new RegistroPuntaje(200);
+    busque->getListaPuntajes().add(reg2);
+    RegistroPuntaje* reg3 = new RegistroPuntaje(50);
+    busque->getListaPuntajes().add(reg3);
+    RegistroPuntaje* reg4 = new RegistroPuntaje(600);
+    busque->getListaPuntajes().add(reg4);
+    RegistroPuntaje* reg5 = new RegistroPuntaje(10);
+    busque->getListaPuntajes().add(reg5);
+
+    nuevaInstancia->setJugador(busque);
+
+    Jugador* prueba = nuevaInstancia->buscar("pablo");
+    prueba->getListaPuntajes().getGraphviz_porJugador(busque->getNombre());
+
+   /* cout << endl;
     cout << endl;
     cout << endl;
     nuevaInstancia->recorrido_inOrder();
     nuevaInstancia->recorrido_PreOrder(); 
     nuevaInstancia->recorrido_PostOrder();
-    nuevaInstancia->getGraphviz();
-    */
+    nuevaInstancia->getGraphviz();*/
+    
 
   /*  ListaSimpleOrdenada* L = new ListaSimpleOrdenada();
     RegistroPuntaje* d1 = new RegistroPuntaje("", 10);

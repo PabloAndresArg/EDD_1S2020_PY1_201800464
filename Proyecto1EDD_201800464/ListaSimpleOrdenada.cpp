@@ -15,7 +15,7 @@ void ListaSimpleOrdenada::add(RegistroPuntaje * registro) {
 		NodoSimple* aux = this->cabeza; 
 		NodoSimple* ant = new NodoSimple; 
 												// 5                       // 10 , 20 , 60 
-		while (aux != NULL &&  registro->getPuntaje() > aux->getRegistro()->getPuntaje()) {
+		while (aux != NULL &&  registro->getPuntaje() < aux->getRegistro()->getPuntaje()) {
 			ant = aux;
 			aux = aux->getSig();
 		}
@@ -46,8 +46,8 @@ void ListaSimpleOrdenada::imprimir() {
 	}
 }
 
-void ListaSimpleOrdenada::getGraphviz() {
+void ListaSimpleOrdenada::getGraphviz_porJugador(string nom) {
 	IO_Archivos obj;
-	obj.PuntajePorJugador(this->cabeza);
+	obj.PuntajePorJugador(this->cabeza , nom);
 }
 

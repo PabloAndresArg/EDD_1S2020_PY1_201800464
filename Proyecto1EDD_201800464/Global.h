@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include<ctime>
 #include<cstdlib>
-
+#include<vector>
 #include"Arbol.h"
 #include"Jugador.h"
 #include"ListaSimpleOrdenada.h"
@@ -56,12 +56,14 @@ void limipiarJugadoresActuales();
 void llenarJugadoresActuales();
 void realizarJugada(int);
 void menu_dentro_turno();
-bool terminarJUEGO();
+void terminarJUEGO();
 void llenar_atriles_jugador(int posJugador);
 void excepcion_centro(int);
 void recordar_llenar_Centro_movimiento1();
 void encabezado_insertar_juego(int posJugador);
-
+void agregarFichasOriginal(ListaCasillas* casillaTemp);
+void regresarFIchas_al_atril_por_mala_jugada(ListaCasillas* casillaTemp , int posJugador);
+void reporte_historial_por_jugador();
 
 // estructuras estaticas y arreglos 
 Matriz_dispersa* TABLERO = new Matriz_dispersa();
@@ -70,6 +72,8 @@ Cola* BOLSA = new Cola();
 Arbol* ARBOL_JUGADORES = new Arbol();
 ListaDobleCircular* DICCIONARIO = new ListaDobleCircular();
 ListaSimpleOrdenada* SCOREBOARD = new ListaSimpleOrdenada();
+vector<Casilla*> vector_casillas;
+
 static int cont = 0;
 
 
@@ -83,6 +87,25 @@ void Leer_Json() {
 }
 
 void menuPrincipal() {
+   /* Jugador* pa = new Jugador("pablo");
+    NodoArbol* n = new NodoArbol(pa);
+    ARBOL_JUGADORES->add(n);
+    Jugador* busque = ARBOL_JUGADORES->buscar("pablo");
+    RegistroPuntaje* reg = new RegistroPuntaje(100);
+    busque->getListaPuntajes().add(reg);
+    RegistroPuntaje* reg2 = new RegistroPuntaje(200);
+    busque->getListaPuntajes().add(reg2);
+    RegistroPuntaje* reg3 = new RegistroPuntaje(50);
+    busque->getListaPuntajes().add(reg3);
+    RegistroPuntaje* reg4 = new RegistroPuntaje(600);
+    busque->getListaPuntajes().add(reg4);
+    RegistroPuntaje* reg5 = new RegistroPuntaje(10);
+    busque->getListaPuntajes().add(reg5);
+    ARBOL_JUGADORES->setJugador(busque);*/
+
+
+
+
     llenarFichas();
     mezclarFichas_e_ingresar_Cola();
     cout << "  UNIVERSIDAD DE SAN CARLOS DE GUATEMALA" << endl; 
@@ -122,6 +145,7 @@ void menuPrincipal() {
         break;
     }
 }
+
 
 void addFicha_a_fichero(Ficha* f) {
     if (cont < 95) {
@@ -303,11 +327,11 @@ void menuReportes() {
         menuReportes();
         break;
     case 3:// historial de puntajes por jugador
-        cout << "Ingresa el nombre del jugador al que desea consultar su HISTORIAL DE PUNTAJES " << endl; 
+        reporte_historial_por_jugador();
         system("cls");
         break;
     case 4:// Scoreboard
-        SCOREBOARD->getGraphviz();
+       // SCOREBOARD->getGraphviz();
         system("cls");
         break;
     case 5: // volver menu principal 
@@ -322,6 +346,26 @@ void menuReportes() {
     }
 }
 
+void reporte_historial_por_jugador() {
+    cout << "HISTORIAL DE PUNTAJES POR JUGADOR" << endl;
+    if (ARBOL_JUGADORES->getRoot() != NULL) {
+        ARBOL_JUGADORES->recorrido_inOrder();
+        cout << endl;
+    }
+    else {
+        cout << "NO TIENE JUGADORES CREADOS\n";
+    }
+    cout << "Ingrese el nombre: " << endl;
+    string nombre = ""; 
+    cin >> nombre;
+    Jugador* temporal = ARBOL_JUGADORES->buscar(nombre);
+    if (temporal->getNombre().compare("ERROR") == 0 ) {
+        cout << "JUGADOR NO ENCONTRADO" << endl;
+    }
+    else {
+        temporal->getListaPuntajes().getGraphviz_porJugador(temporal->getNombre());
+    }
+}
 
 void mezclarFichas_e_ingresar_Cola() {
     BOLSA->vaciar();
@@ -418,13 +462,15 @@ void mezclarFichas_e_ingresar_Cola() {
         }
     }
 
-    for (int i = 0; i < 19; i++) //  PRECAUCION :V LLENAR LAS 95
+    for (int i = 0; i < 95; i++)
     {
         BOLSA->encolar(fichas[i]);
     }
 }
 
 void extraerDatos(string nombre_de_archivo) {
+    vector<Casilla*> nuevo;
+    vector_casillas = nuevo;
     DICCIONARIO->vaciar();
     std::ifstream file(nombre_de_archivo);
     file >> Todo_el_juego;
@@ -444,7 +490,7 @@ void extraerDatos(string nombre_de_archivo) {
         cout << "Punto (" << posX << "," << posY << ")" << endl;
         TABLERO->add('2',posX, posY);
         TABLERO->getLista_Casillas().add(new Casilla(posX , posY , 2));
-        
+        vector_casillas.push_back(new Casilla(posX, posY, 2));
     }
     tripleJs = Todo_el_juego["casillas"]["triples"];
     cout << "COORDENADAS TRIPLES" << endl;
@@ -454,6 +500,7 @@ void extraerDatos(string nombre_de_archivo) {
         cout << "Punto (" << posX << "," << posY << ")" << endl;
         TABLERO->add('3', posX, posY);
         TABLERO->getLista_Casillas().add(new Casilla(posX, posY, 3));
+        vector_casillas.push_back(new Casilla(posX, posY, 3));
     }
     JsonPalabras_diccionario = Todo_el_juego["diccionario"];
     cout << "PALABRAS QUE INGRESARAN AL DICCIONARIO:" << endl;
@@ -472,10 +519,11 @@ void extraerDatos(string nombre_de_archivo) {
 
 //|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||| LOGICA DEL JUEGO |||||||||||||||||||||||||||||||||||||||||||||
 
+
 Jugador* jugadoresActuales[2];
 Matriz_dispersa* ilusion = new Matriz_dispersa();
 bool primerMovimiento = true;
-
+bool CICLO_TODO_EL_JUEGO;
 
 
 void INICIAR_JUEGO() {
@@ -494,8 +542,9 @@ void INICIAR_JUEGO() {
         llenarJugadoresActuales();
         int respuesta = escogerQuienVaPrimero(); cout <<" \n\n\n\n\n";
         system("pause");
-        system("cls");
-        bool ciclo = true;
+        system("cls"); 
+
+        CICLO_TODO_EL_JUEGO = true;
         primerMovimiento = true;
         do {     // ahora imprimo la lista del diccionario y el contador de puntos del jugador 
            
@@ -511,8 +560,12 @@ void INICIAR_JUEGO() {
         }
 
         // preguntar si ya termino el juego para acabarlo
+        if (CICLO_TODO_EL_JUEGO == false) {
+
+        }
+
         
-        } while (ciclo);
+        } while (CICLO_TODO_EL_JUEGO);
 }
 void menu_dentro_turno() {
     cout << "\n°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°";
@@ -523,8 +576,64 @@ void menu_dentro_turno() {
     cout << "3. ver reporte de lista Doble de las fichas de los dos jugadores" << endl;
     cout << "4. abandonar la partida " << endl;
 }
-bool terminarJUEGO() {
-    return false;
+void terminarJUEGO() {
+    // cuando el juego termina se consultan los atriles  y las fichas que hayan se le restan al los puntajes de los jugadores 
+    // se registran en las listas personales de puntaje 
+    // se determina quien gano 
+    // LIMPEAR TODO EL JUEGO  tablero , contadores y lista de fichas por jugador 
+    // set en arbol 
+    int resultado = 0; 
+    int resta_atril = jugadoresActuales[0]->getListaFichas().getPuntaje_restar();
+    int puntos_actuales = jugadoresActuales[0]->getContador();
+    resultado = puntos_actuales - resta_atril; 
+
+
+
+    int resultado_2 = 0;
+    int resta_atril_2 = jugadoresActuales[1]->getListaFichas().getPuntaje_restar();
+    int puntos_actuales_2 = jugadoresActuales[1]->getContador();
+    resultado_2 = puntos_actuales_2 - resta_atril_2;
+    cout << "puntos del jugador " << jugadoresActuales[0]->getNombre() << ": " << resultado << endl;
+    cout << "puntos del jugador " << jugadoresActuales[1]->getNombre() << ": " << resultado_2 << endl;
+    IO_Archivos llama;
+    if (resultado > resultado_2) {
+        cout << "GANO EL JUGADOR " <<jugadoresActuales[0]->getNombre() << endl;
+        llama.graph_winner(jugadoresActuales[0]->getNombre());
+    }
+    else if (resultado_2 > resultado) {
+        cout << "GANO EL JUGADOR " <<jugadoresActuales[1]->getNombre() << endl;
+        llama.graph_winner(jugadoresActuales[1]->getNombre());
+    }
+    else {
+        cout << "EMPATES";
+    }
+    // ver si es menor a cero meto puntos como cero
+    RegistroPuntaje* registro1 = new RegistroPuntaje(resultado);
+    jugadoresActuales[0]->getListaPuntajes().add(registro1);
+    RegistroPuntaje* registro2 = new RegistroPuntaje(resultado_2);
+    jugadoresActuales[1]->getListaPuntajes().add(registro2);
+    // limpiando 
+    jugadoresActuales[0]->getListaFichas().vaciar();
+    jugadoresActuales[1]->getListaFichas().vaciar();
+    jugadoresActuales[0]->setContador(0);
+    jugadoresActuales[1]->setContador(0);
+    TABLERO->vaciar();
+    for (Casilla* cass : vector_casillas) {
+        int x = cass->posX; 
+        int y = cass->posY;
+        int tipo = cass->tipo;
+        if (tipo == 2) {
+            TABLERO->add('2',x,y);
+        }
+        else if (tipo == 3) {
+            TABLERO->add('3', x, y);
+        }
+    }
+
+    ARBOL_JUGADORES->setJugador(jugadoresActuales[0]);
+    ARBOL_JUGADORES->setJugador(jugadoresActuales[1]);
+
+  
 }
 
 
@@ -549,7 +658,9 @@ void realizarJugada(int posJugador) {
         }
         else{
             bool turno = true;
+            bool primerPalabra;
             ListaCasillas* casillaTemp = new ListaCasillas();
+            TABLERO->el_centro_esta_lleno();
             ilusion = TABLERO->clonar(ilusion); // BACKUP
             while (turno) {
                 
@@ -560,6 +671,7 @@ void realizarJugada(int posJugador) {
                 if (menu_por_turno == 1) { // INSERTAR 
                     bool metiendo_fichas = true;
                     while (metiendo_fichas) {
+                        primerPalabra = ilusion->getCentroLLeno();            // solo en la primer palabra viene false , una vez se llena siempre sera TRUE
                         encabezado_insertar_juego(posJugador);
                         cout << "SELECCIONES QUE LETRA VA A INGRESAR" << endl;
                         string aux_lexico = "";
@@ -570,25 +682,43 @@ void realizarJugada(int posJugador) {
                             cout << "INGRESE LA POSICION X: "; cin >> x; cout << "\n";
                             cout << "INGRESE LA POSICION Y: "; cin >> y;
                             ilusion->add_ilusion(letra, x, y);
-                            Casilla* cass = new Casilla(x, y, 0);
-                            cass->letra = letra;
-                            casillaTemp->add(cass);
-
-                            ilusion->getGraphviz();
-                            cout << "DESEA TERMINAR SU TURNO? \n PRESIONE 1 para seguir sino presione otro numero" << endl;
+                            if (x <ilusion->getTamanioMax() && y < ilusion->getTamanioMax()) {
+                                Casilla* cass = new Casilla(x, y, 1);
+                                cass->letra = letra;
+                                casillaTemp->add(cass);
+                                NodoD* eliminar = jugadoresActuales[posJugador]->getListaFichas().buscar(letra);
+                                jugadoresActuales[posJugador]->getListaFichas().eliminar(eliminar);
+                                ilusion->getGraphviz();
+                            }
+                           
+                            cout << "//////////////////////////////////////////////////////////////////////////////////////////"<<endl;
+                            cout << "                                      DESEA TERMINAR SU TURNO?"<<endl;
+                            cout<<  "                           PRESIONE 1 para seguir sino presione otro numero" << endl;
+                            cout << "/////////////////////////////////////////////////////////////////////////////////////////" << endl;
                             int opcion = 0; cin >> opcion;
                             if (opcion != 1) {
+
+                                metiendo_fichas = false;
+                                turno = false;
                                 if (ilusion->el_centro_esta_lleno()) {
-                                    metiendo_fichas = false;
-                                    turno = false;
                                     primerMovimiento = false;
                                     ilusion->extraerCasillasNuevas();      
                                     ilusion->es_palabra_adyacente();
                                     ilusion->imprimirVector();
-                                    system("pause");
+                                    int puntosParaJugador = 0;
+                                    bool valida = ilusion->validarPalabra(DICCIONARIO, primerPalabra , puntosParaJugador);
+                                    if (valida) {
+                                        cout << "in metodo global : " << puntosParaJugador;
+                                        agregarFichasOriginal(casillaTemp);
+                                        jugadoresActuales[posJugador]->setContador(jugadoresActuales[posJugador]->getContador() + puntosParaJugador);
+                                    }
+                                    else {
+                                        regresarFIchas_al_atril_por_mala_jugada(casillaTemp , posJugador);
+                                    }
                                     // forme alguna palabra correcta ? si es asi le doy puntos sino paso de turno y retiro lo ingresado
                                     // es vertical o horizontal  caso 1 solo una letra , caso 2 vertical , case 3 horizontal  SI ESTA CORRECTO YA GUARDO EN MI MATRIZ ORIGINAL
-                                    if (casillaTemp->getInicio()->sig == NULL) {// CASO 1
+                                   
+                                  /*  if (casillaTemp->getInicio()->sig == NULL) {// CASO 1
 
                                     }
                                     else {
@@ -612,11 +742,15 @@ void realizarJugada(int posJugador) {
 
                                         // al final si el movimiento es valido retiro las fichas de la listaDoble de mis jugadores
                                         // y agrego las fichas al TABLERO REAL sino solo no lo agrego ni quito las fichas 
-                                    }
+                                    }*/
+
+                                    system("pause");
                                 }
                                 else {
+                                    regresarFIchas_al_atril_por_mala_jugada(casillaTemp, posJugador);
                                     excepcion_centro(posJugador);
                                 }
+
                             }
                             system("cls");
                         }
@@ -630,6 +764,7 @@ void realizarJugada(int posJugador) {
 
 
                 } else if (menu_por_turno == 2) { // INTERCAMBIAR 
+                    jugadoresActuales[posJugador]->getListaFichas().imprimir(jugadoresActuales[posJugador]->getNombre());
                     cout << "cuantas fichas desea cambiar?" << endl; 
                     int numero_de_fichas_cambiar = 0; 
                     cin >> numero_de_fichas_cambiar; 
@@ -647,12 +782,16 @@ void realizarJugada(int posJugador) {
                                 }
                                 else {
                                     cout << "NO TIENES ESA LETRA EN TU LISTA" << endl;
+                                    z--;
                                 }
                                 jugadoresActuales[posJugador]->getListaFichas().imprimir(jugadoresActuales[posJugador]->getNombre());
                             }
 
                             turno = false;
                             llenar_atriles_jugador(posJugador);
+                            cout << "°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°LISTA RESULTANTE CON NUEVAS FICHAS °°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°"<<endl;
+                            jugadoresActuales[posJugador]->getListaFichas().imprimir(jugadoresActuales[posJugador]->getNombre());
+                            cout << "°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°" << endl;
                         }
                         else {
                             cout << "           *****************************************************************   " << endl;
@@ -675,6 +814,15 @@ void realizarJugada(int posJugador) {
                 archi->Graph_LISTA_DOBLE(jugadoresActuales[posJugador]->getListaFichas().getInicio() , jugadoresActuales[posJugador]->getListaFichas().getUltimo(), jugadoresActuales[posJugador]->getNombre());
         
                 }
+
+
+                else if (menu_por_turno == 4 ) {// abandonar :'v
+                CICLO_TODO_EL_JUEGO = false;
+                turno = false;
+                system("cls");
+                }
+
+
                 else {
                     cout << "ingreso algo INCORRECTO"<<endl<<endl;
                 }
@@ -752,7 +900,11 @@ void llenarJugadoresActuales() {
 
 void excepcion_centro(int posJugador_) {
     system("color c");
-    cout << "\n\n EL CENTROOO NO SE LLENOOO\n" << endl; 
+    cout << "°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°";
+    cout << "\n\n                                 EL CENTROOO NO SE LLENOOO        \n" << endl; 
+        cout << "PASA DE TURNO..."<<endl;
+    cout << "°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°\n";
+   
     system("pause");
     if (posJugador_ == 0) {
         system("color 3");
@@ -790,6 +942,30 @@ void encabezado_insertar_juego(int posJugador) {
     recordar_llenar_Centro_movimiento1();
     DICCIONARIO->imprimeparaAdelnate(); cout << "\n";
     cout << "Cantidad de Fichas en la Bolsa: " << BOLSA->getTamanio() << endl;
-    cout << "Puntaje: " << jugadoresActuales[posJugador]->getContador() << endl;
+    cout << "                                                                                                       ===============" << endl;
+    cout << "                                                                                                       PUNTAJE: " << jugadoresActuales[posJugador]->getContador()<<endl;
+    cout << "                                                                                                       ===============" << endl;
     jugadoresActuales[posJugador]->getListaFichas().imprimir(jugadoresActuales[posJugador]->getNombre());
 }
+
+void agregarFichasOriginal(ListaCasillas* casillaTemp) {
+    nodoT* aux_casillas = casillaTemp->getUltimo();
+    while (aux_casillas != NULL)
+    {
+        TABLERO->add(aux_casillas->casilla->letra, aux_casillas->casilla->posX, aux_casillas->casilla->posY);
+        aux_casillas = aux_casillas->sig;
+    }
+    casillaTemp->imprimir();
+}
+
+void regresarFIchas_al_atril_por_mala_jugada(ListaCasillas* casillaTemp, int posJugador) {
+    nodoT* aux_casillas = casillaTemp->getUltimo();
+    while (aux_casillas != NULL)
+    {
+        Ficha* fic = new Ficha(TABLERO->getValor_ficha(aux_casillas->casilla->letra),aux_casillas->casilla->letra);
+        jugadoresActuales[posJugador]->getListaFichas().add(fic);
+        aux_casillas = aux_casillas->sig;
+    }
+}
+
+   

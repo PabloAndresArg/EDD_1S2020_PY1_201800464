@@ -15,7 +15,7 @@ public:
 	void add(RegistroPuntaje*);
 	void imprimir();
 	inline NodoSimple* getCabeza() { return this->cabeza; };
-	void getGraphviz(); // el metodo GENERAL PARA LOS MEJORES PUNTEOS 
+	void getGraphviz_porJugador(string nombre); // el metodo GENERAL PARA LOS MEJORES PUNTEOS 
 	inline void vaciar() { this->cabeza = NULL; };
 };
 

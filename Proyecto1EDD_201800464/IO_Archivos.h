@@ -61,7 +61,7 @@ public:
 			}
 	}
 
-	void PuntajePorJugador(NodoSimple* inicio) { // -----------------------para
+	void PuntajePorJugador(NodoSimple* inicio , string nombreJugador) { // -----------------------para
 		system("cls");
 		ofstream w;
 		w.open("REPORTES\\puntajePorJugador.txt", ios::out);//si no existe lo crea  y si ya lo reemplaza
@@ -71,7 +71,9 @@ public:
 			exit(1);
 		}
 		if (inicio != NULL) {
-			w << "digraph G {rankdir = LR;charset = latin1; style = filled; bgcolor = black;color = lightgrey;node[style = filled, color = orange, shape = parallelogram];";
+			w << "digraph G {";
+			w << "fontcolor = white; fontsize = \"20\" ; label = \""<<"LISTA PUNTAJES DE: "<< nombreJugador <<"\";";
+			w<<"rankdir = LR;charset = latin1; style = filled; bgcolor = black;color = lightgrey;node[style = filled, color = orange, shape = parallelogram];";
 			NodoSimple* aux = new NodoSimple();
 			aux = inicio;
 			w << "NULL1[label = \" " << "NULL" << "\" ] ;";
@@ -402,6 +404,58 @@ public:
 	  }
 	 }
 	 
+
+
+
+
+
+
+
+	void graph_winner(string nombre) {
+
+		system("cls");
+
+		ofstream w;
+		w.open("REPORTES\\winner.txt", ios::out);//si no existe lo crea  y si ya lo reemplaza
+		if (w.fail()) {
+			cout << "NO SE PUDO ABRIR EL ARCHIVO" << endl;
+
+			system("pause");
+			exit(1);
+
+
+			w << "digraph winner{";
+			w << " fontcolor = white; fontsize = \"30\";";
+			w << "label = \"Lista fichas del usuario:  " + nombre + "\";";
+			w << "style = filled; charset = latin1; bgcolor = black; color = lightgrey; node[fillcolor = black , fontcolor = white , color = chartreuse1 ,style = filled,penwidth = 0.8 , color = gold1 , shape = signature]; ";
+			w << " fontcolor = white;";
+			w << "fontsize = \"30\";";
+			w <<"label = \"JUGADOR VICTORIOSO \";";
+			w<<"a1[label = \"" <<nombre<<"\"]";
+			w << "}";
+			w.close();
+			char genera[] = "dot -Tjpg REPORTES\\winner.txt -o REPORTES\\winner.jpg";// usando el prueba par mientrasr 
+			system(genera);
+			char ejecuta[] = "REPORTES\\winner.jpg";
+			system(ejecuta);
+			cin.get();
+		}
+
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 };

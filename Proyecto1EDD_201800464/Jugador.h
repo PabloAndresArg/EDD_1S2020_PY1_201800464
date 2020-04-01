@@ -19,6 +19,7 @@ public:
 	inline ListaDoble&  getListaFichas() { return this->lista_fichas; } // ANDPERSON IMPORTANTE..!!!!!!!!!!!!!!!
 	inline ListaSimpleOrdenada& getListaPuntajes() { return this->lista_puntajes; }
 	inline int getContador() { return this->contador; }
+	inline void setContador(int c) { this->contador = c; }
 	//void getGraphvizPorJugador(string); // cuando quiera puntaje por jugador , aun no implementado 
 };
 

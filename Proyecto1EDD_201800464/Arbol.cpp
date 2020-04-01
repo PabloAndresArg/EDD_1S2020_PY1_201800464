@@ -49,6 +49,13 @@ NodoArbol* Arbol::buscarRecursivo(NodoArbol* actual , string nombre) {
 
 }
 
+void Arbol::setJugador(Jugador* regresa_jugador) {
+    NodoArbol* nodo = buscarRecursivo(this->raiz, regresa_jugador->getNombre());
+    if (nodo != NULL) {
+        nodo->setJugador(regresa_jugador);
+    }
+}
+
 
 string Arbol::convertirTodoMinuscula(string nombre) {
     string nuevoNombre = "";

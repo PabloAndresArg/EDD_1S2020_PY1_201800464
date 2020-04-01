@@ -117,7 +117,7 @@ NodoD* ListaDoble::buscar(char letter) {
 }
 
 
-int ListaDoble :: getPuntaje() { // esto para la lista de los usuarios
+int ListaDoble ::getPuntaje_restar() { // esto para la lista de los usuarios
 	int contadorPuntos = 0;
 	NodoD* aux = this->inicio;
 	while (aux != NULL) {

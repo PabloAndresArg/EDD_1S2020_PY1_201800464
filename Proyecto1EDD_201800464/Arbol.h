@@ -39,7 +39,7 @@ public:
 	void llenarListaPreOrder(NodoArbol*); 
 	void llenarListaInOrder(NodoArbol*);
 	void llenarListaPostOrder(NodoArbol*);
-
+	void setJugador(Jugador* regresa_jugador);
 
 	inline ListaSimpleOrdenada & getlistaPrueba() {
 		return this->listaInOrder;

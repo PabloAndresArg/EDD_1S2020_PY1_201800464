@@ -19,6 +19,9 @@ public:
 	inline void Vaciar() {
 		this->inicio = NULL; 
 	}
+	inline nodoT* getUltimo() {
+		return this->ultimo;
+	}
 	inline void add(Casilla* casilla_) {
 		nodoT* nuevo_nodo = new nodoT(casilla_); 
 		if (this->inicio == NULL) {
@@ -53,6 +56,31 @@ public:
 			cout <<"posX "<<aux->casilla->posX << " posY "<< aux->casilla->posY <<" se multiplica por: "<<aux->casilla->tipo<<endl;
 			aux = aux->sig;
 		}
+	}
+
+	inline bool esCasillaEspecial(int x , int y) { // NO NECESARIO 
+
+		nodoT* aux = this->ultimo;
+		while (aux != NULL)
+		{
+			if (x == aux->casilla->posX && y == aux->casilla->posY) {
+				return true;
+			}
+			aux = aux->sig;
+		}
+		return false; 
+	}
+
+	inline int retornaValorCasillaEspecial(int x , int y) {// lo puedo ejecutar siempre y no afecta
+		nodoT* aux = this->ultimo;
+		while (aux != NULL)
+		{
+			if (x == aux->casilla->posX && y == aux->casilla->posY) {
+				return aux->casilla->tipo;
+			}
+			aux = aux->sig;
+		}
+		return 1;
 	}
 	
 };

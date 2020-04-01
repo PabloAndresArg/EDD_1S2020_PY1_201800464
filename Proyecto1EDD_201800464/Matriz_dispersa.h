@@ -75,7 +75,7 @@ public:
 	}
 	 bool el_centro_esta_lleno();
 	 bool es_palabra_adyacente();
-	 bool validarPalabra(ListaDobleCircular* diccionario);// necesito una Lista de posiciones recorridas y la lista del diccionario 
+	 bool validarPalabra(ListaDobleCircular* diccionario  , bool primerPalabra , int& puntosParaJugador);// necesito una Lista de posiciones recorridas y la lista del diccionario 
 	 void add(char letra, int x,  int y); // letra x , y
 	 void add_ilusion(char letra , int x , int y); // ingresan como nuevas 
 	 void getGraphviz();
@@ -92,13 +92,21 @@ public:
 	inline nMatrix* getRoot() {
 		return this->root;
 	}
-
+	inline bool getCentroLLeno() {
+		return this->centrolleno;
+	}
+	inline int getTamanioMax() {
+		return this->maximo;
+	}
+	int  getValor_ficha(char letra);
 	void llenar_al_maximo(int);
 	void llenar_al_maximo();
 	void extraerCasillasNuevas(ListaCasillas* lista_casillas_nuevas);
 	void extraerCasillasNuevas();
 	void imprimirVector();
 };
+
+
 
 
 
