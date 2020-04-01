@@ -412,7 +412,6 @@ public:
 
 
 	void graph_winner(string nombre) {
-
 		system("cls");
 
 		ofstream w;
@@ -422,12 +421,12 @@ public:
 
 			system("pause");
 			exit(1);
-
+		}
 
 			w << "digraph winner{";
 			w << " fontcolor = white; fontsize = \"30\";";
 			w << "label = \"Lista fichas del usuario:  " + nombre + "\";";
-			w << "style = filled; charset = latin1; bgcolor = black; color = lightgrey; node[fillcolor = black , fontcolor = white , color = chartreuse1 ,style = filled,penwidth = 0.8 , color = gold1 , shape = signature]; ";
+			w << "style = filled; charset = latin1; bgcolor = black; color = lightgrey; node[fillcolor = black , fontcolor = white , color = chartreuse1 ,style = filled,penwidth = 0.85 , color = gold1 , shape = invhouse]; ";
 			w << " fontcolor = white;";
 			w << "fontsize = \"30\";";
 			w <<"label = \"JUGADOR VICTORIOSO \";";
@@ -439,10 +438,60 @@ public:
 			char ejecuta[] = "REPORTES\\winner.jpg";
 			system(ejecuta);
 			cin.get();
+	}
+
+
+
+
+
+
+
+
+
+
+
+	void Graph_scoreboard(NodoSimple* inicio) { // -----------------------para
+		system("cls");
+		ofstream w;
+		w.open("REPORTES\\scoore.txt", ios::out);//si no existe lo crea  y si ya lo reemplaza
+		if (w.fail()) {
+			cout << "NO SE PUDO ABRIR EL ARCHIVO" << endl;
+			system("pause");
+			exit(1);
+		}
+		if (inicio != NULL) {
+			w << "digraph G {";
+			w << "fontcolor = white; fontsize = \"20\" ; label = \"" << "SCOOREBOARD"<< "\";";
+			w << "rankdir = LR;charset = latin1; style = filled; bgcolor = black;color = lightgrey; node[ fillcolor = black , fontcolor = white,style = filled, color = dodgerblue1, shape = egg];";
+			NodoSimple* aux = new NodoSimple();
+			aux = inicio;
+			w << "NULL1[label = \" " << "NULL" << "\" ] ;";
+			int x = 1; // porque graph no acepta negativos 
+			while (aux != NULL) {
+				w << "a" << x << "[label = \" " <<aux->getRegistro()->getNombre() <<"\\n " << aux->getRegistro()->getPuntaje()<<" pts"<< "\" ] ;";
+				x++;
+				if (aux->getSig() == NULL) {
+					w << "a" << (x - 1) << " -> " << "NULL1" << "[arrowhead = empty color = deepskyblue]; ";
+				}
+				else {
+					w << "a" << (x - 1) << " -> " << "a" << x << "[arrowhead = empty color = deepskyblue]; ";
+				}
+				aux = aux->getSig();
+			}
+			w << "}";
+			w.close();
+			char genera[] = "dot -Tjpg REPORTES\\scoore.txt -o REPORTES\\scoore.jpg";// usando el prueba par mientrasr 
+			system(genera);
+			char ejecuta[] = "REPORTES\\scoore.jpg";
+			system(ejecuta);
+			cout << "----- PROCESO TERMINADO CON EXITO ------ " << endl;
+			cin.get();
+		}
+		else {
+			cout << "NO GENERA NADA PORQUE LA LISTA ESTA VACIA " << endl;
 		}
 
 	}
-
 
 
 

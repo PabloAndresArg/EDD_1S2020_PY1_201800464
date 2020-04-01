@@ -104,6 +104,8 @@ public:
 	void extraerCasillasNuevas(ListaCasillas* lista_casillas_nuevas);
 	void extraerCasillasNuevas();
 	void imprimirVector();
+	void SET_NUEVA(int x , int y ); // para las casillas ya existentes 
+
 };
 
 

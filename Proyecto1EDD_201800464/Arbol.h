@@ -12,6 +12,8 @@ private:
 	ListaSimpleOrdenada listaPreOder;
 	ListaSimpleOrdenada listaInOrder;
 	ListaSimpleOrdenada listaPostOrder;
+
+	ListaSimpleOrdenada lista_Scooreboard;
 public:
 	Arbol() {
 		this->raiz = NULL;
@@ -45,5 +47,9 @@ public:
 		return this->listaInOrder;
 	}
 	void vaciar();
+
+	void getScoreBoard();
+	void getScoreBoard(NodoArbol* root_temp);
+
 };
 

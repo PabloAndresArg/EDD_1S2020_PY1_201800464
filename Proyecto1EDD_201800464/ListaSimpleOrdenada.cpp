@@ -51,3 +51,12 @@ void ListaSimpleOrdenada::getGraphviz_porJugador(string nom) {
 	obj.PuntajePorJugador(this->cabeza , nom);
 }
 
+void ListaSimpleOrdenada::graph_scooreBoard_general() {
+	IO_Archivos obj;
+	obj.Graph_scoreboard(this->cabeza);
+}
+void  ListaSimpleOrdenada::pruebaGraph() {
+	IO_Archivos obj;
+	obj.graph_winner("PRUEBA");
+}
+

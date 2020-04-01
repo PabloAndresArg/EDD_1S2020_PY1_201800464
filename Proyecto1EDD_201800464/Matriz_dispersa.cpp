@@ -140,7 +140,7 @@ nMatrix* Matriz_dispersa::insertarOrdenandoColumna(nMatrix* nuevo, nMatrix* cabe
 		{
 			temp->setPos_y(nuevo->getPos_y());
 			temp->setLetra(nuevo->getLetra());
-			nuevo->setIs_nueva(true); //-------------------------------------------------------------------------------
+			
 			return temp; //Retorno puntero
 		}
 		else if (nuevo->getPos_x() < temp->getPos_x()) //Al nuevo lo inserto antes que temp
@@ -452,17 +452,19 @@ bool Matriz_dispersa:: validarPalabra(ListaDobleCircular* diccionario,  bool pri
 			return true;
 		}
 		else {
-			cout << "entra al else ....."<<endl;
+			
 
-			cout << "no se acepta" << endl; 
+			cout << "PALABRA INVALIDA " << endl; 
 
 		}
 
 	}
 	else {
+		// TENGO QUE VALIDAR QUE SEA ADYACENTE A LAS FICHAS VIEJAS , LUEGO QUE PALABRA FORMA , LUEGO SUMA DE PUNTOS 
+
+
 
 	}
-
 	return false;
 }
 
@@ -538,28 +540,49 @@ bool Matriz_dispersa:: el_centro_esta_lleno() {
 int Matriz_dispersa::getValor_ficha(char letra) {
 
 	/*if (letra == 'a' || letra =='e' || letra == 'o' || letra == 'i' || letra == 's' || letra == 'n' || letra =='r'|| letra == 'u' || letra == 't') {
-		return 1; 
+		return 1;
 	}*/
-	if (letra == 'd' || letra == 'g' ) {
+	if (letra == 'd' || letra == 'g') {
 		return 2;
 	}
 	else if (letra == 'c' || letra == 'b' || letra == 'm' || letra == 'p') {
-		return 3; 
+		return 3;
 	}
 	else if (letra == 'h' || letra == 'f' || letra == 'v' || letra == 'y') {
 		return 4;
 	}
-	else if (letra == 'q' ) {
+	else if (letra == 'q') {
 		return 5;
 	}
 	else if (letra == 'z') {
 		return 10;
 	}
-	else if (letra == 'j'|| letra == 'x') {
+	else if (letra == 'j' || letra == 'x') {
 		return 8;
 	}
 	else {
 		return 1;
 	}
-
 }
+
+	void Matriz_dispersa:: SET_NUEVA(int x, int y) {
+		nMatrix* col_principal = this->root;
+		nMatrix* aux = NULL;
+
+			while (col_principal != NULL) {
+				if (col_principal->getDer() != NULL) {
+					aux = col_principal->getDer();
+					while (aux != NULL) {
+						if (aux->getPos_x() == x && aux->getPos_y() == y) {
+							Casilla * encuentra = this->lista_casillas.buscar(x,y);
+							if (encuentra != NULL) {
+								aux->setIs_nueva(true);
+							}
+						}
+						aux = aux->getDer();
+					}
+				}
+				col_principal = col_principal->getDown();
+			}
+	}
+

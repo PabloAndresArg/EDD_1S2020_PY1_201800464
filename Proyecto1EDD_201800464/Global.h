@@ -64,7 +64,7 @@ void encabezado_insertar_juego(int posJugador);
 void agregarFichasOriginal(ListaCasillas* casillaTemp);
 void regresarFIchas_al_atril_por_mala_jugada(ListaCasillas* casillaTemp , int posJugador);
 void reporte_historial_por_jugador();
-
+void prueba_rep();
 // estructuras estaticas y arreglos 
 Matriz_dispersa* TABLERO = new Matriz_dispersa();
 Ficha* fichas[95];
@@ -87,21 +87,7 @@ void Leer_Json() {
 }
 
 void menuPrincipal() {
-   /* Jugador* pa = new Jugador("pablo");
-    NodoArbol* n = new NodoArbol(pa);
-    ARBOL_JUGADORES->add(n);
-    Jugador* busque = ARBOL_JUGADORES->buscar("pablo");
-    RegistroPuntaje* reg = new RegistroPuntaje(100);
-    busque->getListaPuntajes().add(reg);
-    RegistroPuntaje* reg2 = new RegistroPuntaje(200);
-    busque->getListaPuntajes().add(reg2);
-    RegistroPuntaje* reg3 = new RegistroPuntaje(50);
-    busque->getListaPuntajes().add(reg3);
-    RegistroPuntaje* reg4 = new RegistroPuntaje(600);
-    busque->getListaPuntajes().add(reg4);
-    RegistroPuntaje* reg5 = new RegistroPuntaje(10);
-    busque->getListaPuntajes().add(reg5);
-    ARBOL_JUGADORES->setJugador(busque);*/
+    //prueba_rep();
 
 
 
@@ -146,6 +132,48 @@ void menuPrincipal() {
     }
 }
 
+void prueba_rep() {
+    Jugador* pa = new Jugador("pablo");
+    NodoArbol* n = new NodoArbol(pa);
+    ARBOL_JUGADORES->add(n);
+    Jugador* busque = ARBOL_JUGADORES->buscar("pablo");
+    RegistroPuntaje* reg = new RegistroPuntaje(100);
+    busque->getListaPuntajes().add(reg);
+    RegistroPuntaje* reg2 = new RegistroPuntaje(200);
+    busque->getListaPuntajes().add(reg2);
+    RegistroPuntaje* reg3 = new RegistroPuntaje(50);
+    busque->getListaPuntajes().add(reg3);
+    RegistroPuntaje* reg4 = new RegistroPuntaje(600);
+    busque->getListaPuntajes().add(reg4);
+    RegistroPuntaje* reg5 = new RegistroPuntaje(10);
+    busque->getListaPuntajes().add(reg5);
+    ARBOL_JUGADORES->setJugador(busque);
+
+    Jugador* peco = new Jugador("peco");
+    NodoArbol* no = new NodoArbol(peco);
+    ARBOL_JUGADORES->add(no);
+    Jugador* bu2 = ARBOL_JUGADORES->buscar("peco");
+    RegistroPuntaje* r1 = new RegistroPuntaje(1000);
+    bu2->getListaPuntajes().add(r1);
+    RegistroPuntaje* r2 = new RegistroPuntaje(1500);
+    bu2->getListaPuntajes().add(r2);
+    RegistroPuntaje* r3 = new RegistroPuntaje(3);
+    bu2->getListaPuntajes().add(r3);
+    ARBOL_JUGADORES->setJugador(bu2);
+
+    Jugador* val = new Jugador("val");
+    NodoArbol* nod = new NodoArbol(val);
+    ARBOL_JUGADORES->add(nod);
+    Jugador* bu3 = ARBOL_JUGADORES->buscar("val");
+    RegistroPuntaje* r4 = new RegistroPuntaje(2500);
+    bu3->getListaPuntajes().add(r4);
+    RegistroPuntaje* r5 = new RegistroPuntaje(700);
+    bu3->getListaPuntajes().add(r5);
+    RegistroPuntaje* r6 = new RegistroPuntaje(80);
+    bu3->getListaPuntajes().add(r6);
+    ARBOL_JUGADORES->setJugador(bu3);
+
+}
 
 void addFicha_a_fichero(Ficha* f) {
     if (cont < 95) {
@@ -329,10 +357,12 @@ void menuReportes() {
     case 3:// historial de puntajes por jugador
         reporte_historial_por_jugador();
         system("cls");
+        menuReportes();
         break;
     case 4:// Scoreboard
-       // SCOREBOARD->getGraphviz();
+        ARBOL_JUGADORES->getScoreBoard();
         system("cls");
+        menuReportes();
         break;
     case 5: // volver menu principal 
         system("cls");
@@ -682,6 +712,7 @@ void realizarJugada(int posJugador) {
                             cout << "INGRESE LA POSICION X: "; cin >> x; cout << "\n";
                             cout << "INGRESE LA POSICION Y: "; cin >> y;
                             ilusion->add_ilusion(letra, x, y);
+                            ilusion->SET_NUEVA(x, y);
                             if (x <ilusion->getTamanioMax() && y < ilusion->getTamanioMax()) {
                                 Casilla* cass = new Casilla(x, y, 1);
                                 cass->letra = letra;

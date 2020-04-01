@@ -282,3 +282,27 @@ void Arbol::limpiarListasAux() {
 void Arbol::vaciar() {
     this->raiz = NULL;
 }
+
+
+void Arbol::getScoreBoard() {
+    this->lista_Scooreboard.vaciar();
+    getScoreBoard(this->raiz);
+    this->lista_Scooreboard.graph_scooreBoard_general();
+    //this->lista_Scooreboard.pruebaGraph();
+}
+void Arbol::getScoreBoard(NodoArbol* actual) {
+
+    if (actual->getIzq() != NULL) {
+        getScoreBoard(actual->getIzq());
+    }
+
+    if (actual->getJugador()->getListaPuntajes().getCabeza() != NULL) {
+        RegistroPuntaje* nodoRaiz = new RegistroPuntaje(actual->getJugador()->getNombre(), actual->getJugador()->getListaPuntajes().getCabeza()->getRegistro()->getPuntaje());
+        this->lista_Scooreboard.add(nodoRaiz);
+    }
+  
+
+    if (actual->getDer() != NULL) {
+        getScoreBoard(actual->getDer());
+    }
+}
