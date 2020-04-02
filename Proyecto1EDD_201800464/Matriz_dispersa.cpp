@@ -428,8 +428,11 @@ bool Matriz_dispersa:: validarPalabra(ListaDobleCircular* diccionario,  bool pri
 	if (primerPalabra == false) { // en la primera vez manda false , despues simpre es true
 		// como no hay adyacencia solo valido que forme una palabra correcta 
 		string palabraFormada = "";
+		int puntos_generados = 0;
 		for(nMatrix* nodo : this->vector_de_nodos) {
 			palabraFormada += nodo->getLetra();
+			int valor = this->getValor_ficha(nodo->getLetra(),this->lista_casillas.Get_valor_casilla(nodo->getPos_x(), nodo->getPos_y()));
+			puntos_generados += valor;
 		}
 		cout <<"///////////////////////////////////////////////////////////////////////////////"<<endl;
 		cout << "PALABRA INGRESADA: "<<palabraFormada<<endl;
@@ -438,35 +441,259 @@ bool Matriz_dispersa:: validarPalabra(ListaDobleCircular* diccionario,  bool pri
 		if (valida) {
 			cout << "si se acepta" << endl;
 			// paso a darle su respectivo valor  
-			int puntos_generados=0;
-			for (int i = 0; i < palabraFormada.size(); i++)
-			{
-				char letra = palabraFormada[i];
-				int valor =this->getValor_ficha(letra);
-				puntos_generados += valor;
-			}
 			puntosParaJugador = puntos_generados;
-			cout << "=====================================";
-			cout << "PUNTOS GENERADOS: "<<puntos_generados;
-			cout << "=====================================";
+			cout << "=====================================\n";
+			cout << "PUNTOS GENERADOS: "<<puntos_generados<<endl;
+			cout << "por ser la primer palabra recibes +50pts extra" << endl;
+			cout << "=====================================\n";
+			puntosParaJugador += 50;
 			return true;
 		}
 		else {
-			
-
-			cout << "PALABRA INVALIDA " << endl; 
-
+			cout << "LO SIENTO NO ES PALABRA VALIDA... PASA DE TURNO" << endl;
 		}
 
 	}
 	else {
 		// TENGO QUE VALIDAR QUE SEA ADYACENTE A LAS FICHAS VIEJAS , LUEGO QUE PALABRA FORMA , LUEGO SUMA DE PUNTOS 
+		if (this->es_palabra_adyacente()) {
+			// siempre la primera posicion de mi vector es la primera posicion de una posible palabra 
+			// NOTA: SI LA PRIMERA LETRA NO TIENE ADYACENCIA  con ninguna palabra vieja 
+			// ver si es horizontal o vertical o solo 1 letra 
+			// ver si formo una palabra coherente mi primera palabra tiene adyacencia ?  
+			// ver si hay intersecciones 
+			if (this->vector_de_nodos.size() > 1) {
+				
+				// vertical o horizontal ? 
+				if (this->vector_de_nodos[0]->getPos_x() == this->vector_de_nodos[this->vector_de_nodos.size()-1]->getPos_x() ) {
+				//es vertical
+					if (this->hay_adyacencia_up(this->vector_de_nodos[0]) == false) { // concateno hasta encontrar mi ultimo nodo
+						cout << " VERTICAL SIMPLE " << endl;
+						string p_vertical = "";
+						nMatrix* nodoRecorredor = this->vector_de_nodos[0];
+						int puntos_temporales = 0; 
+						int contador_verificador = 0;
+						bool VALIDA = false;
+						
+						while (this->puedoBajar(nodoRecorredor)) {
+							contador_verificador += esta_en_vector_nodos(nodoRecorredor->getPos_x() , nodoRecorredor->getPos_y());
+							p_vertical += nodoRecorredor->getLetra();
+							int valor = this->getValor_ficha(nodoRecorredor->getLetra(), this->lista_casillas.Get_valor_casilla(nodoRecorredor->getPos_x(), nodoRecorredor->getPos_y()));
+							puntos_temporales += valor;
+							bool valida = diccionario->aparece_en_diccionario(p_vertical);
+							if (valida) {
+								cout << "PALABRA:  " << p_vertical <<endl;
+								cout << "cont "<< contador_verificador<<" = "<< this->vector_de_nodos.size() <<endl;
+								if (contador_verificador == this->vector_de_nodos.size()) {
+									cout << "si se acepta" << endl;
+									puntosParaJugador = puntos_temporales;
+									VALIDA = true;
+									 
+								}
+							}
+							nodoRecorredor = nodoRecorredor->getDown();
+						}
+						if (VALIDA) {
+							cout << "=================\n";
+							cout << "PUNTOS GENERADOS: " << puntosParaJugador << endl;
+							cout << "=================\n";
+							return true; // podria levantar una bandera y guardar estos datos
+						}
+						cout << "NO SE ACEPTA" << endl;
+						return false;
+						/*
+						if(){
+						nMatrix* aux = this->vector_de_nodos[vector_de_nodos.size() - 1];
+							while (this->hay_adyacencia_down(aux)) {
+								p_vertical += aux->getLetra();
+								bool ver = diccionario->aparece_en_diccionario(p_vertical);
+								if (ver) {
+									cout << "si se acepta" << endl;
+									// paso a darle su respectivo valor  
+									int puntos_generados = 0;
+									for (int i = 0; i < p_vertical.size(); i++)
+									{
+										char letra = p_vertical[i];
+										int valor = this->getValor_ficha(letra , 1);
+										puntos_generados += valor;
+									}
+									puntosParaJugador = puntos_generados;
+									cout << "=================\n";
+									cout << "PUNTOS GENERADOS: " << puntos_generados << endl;
+									cout << "=================\n";
 
+									return true;
+								}
+								aux = aux->getDown();
+							}
+
+							cout << "LO SIENTO NO ES PALABRA VALIDA... PASA DE TURNO" << endl;
+						}
+
+
+						*/
+
+
+
+					}
+					else {
+						// PREGUNTAR QUE PALABRA DESEABA FORMAR 
+						cout << "VERTICAL NO simple" << endl;
+						nMatrix* nodoSubidor = this->vector_de_nodos[0];
+						while (this->puedoSubir(nodoSubidor)) {
+							nodoSubidor = nodoSubidor->getUp();
+						}// nodoSubidor es el NODO MAS ALTO POSIBLE el punto fijo de partida 
+						cout << "NODO MAS ALTO" << nodoSubidor->getLetra()<< endl;
+
+						nMatrix* puntoFijo = NULL;
+						puntoFijo = nodoSubidor;
+						int cont_verificador_2 = 0;
+						bool VALIDA = false;
+						while (this->puedoBajar(puntoFijo)) {
+							cont_verificador_2 = 0;
+							cont_verificador_2 = esta_en_vector_nodos(puntoFijo->getPos_x(), puntoFijo->getPos_y());
+							string temp = "";
+							int punteo_temp1 = 0;
+							nMatrix* aux = puntoFijo->getDown();
+							// primera interacion 
+							temp += puntoFijo->getLetra();
+							punteo_temp1 += this->getValor_ficha(puntoFijo->getLetra(), this->lista_casillas.Get_valor_casilla(puntoFijo->getPos_x(), puntoFijo->getPos_y()));
+							
+							
+							while (this->puedoBajar(aux)) {
+								cont_verificador_2 = esta_en_vector_nodos(aux->getPos_x(), aux->getPos_y());
+								temp += aux->getLetra();
+								punteo_temp1 += this->getValor_ficha(aux->getLetra(), this->lista_casillas.Get_valor_casilla(aux->getPos_x(), aux->getPos_y()));
+								// pregunto 
+								bool valida = diccionario->aparece_en_diccionario(temp);
+								if (valida) {
+									cout << "PALABRA:  " << temp << endl;
+									cout << "cont " << cont_verificador_2 << " = " << this->vector_de_nodos.size() << endl;
+									if (cont_verificador_2 == this->vector_de_nodos.size()) {
+										cout << "si se acepta" << endl;
+										puntosParaJugador = punteo_temp1;
+
+										VALIDA = true;
+										 // podria levantar una bandera y guardar estos datos 
+									}
+								}
+								aux = aux->getDown();
+							}
+							puntoFijo = puntoFijo->getDown();
+						}
+
+						if (VALIDA) {
+							cout << "=================\n";
+							cout << "PUNTOS GENERADOS: " << puntosParaJugador << endl;
+							cout << "=================\n";
+							return true;
+						}
+						
+
+						cout << "No se acepta"<<endl;
+						return false;
+
+					}
+				}else if (this->vector_de_nodos[0]->getPos_y() == this->vector_de_nodos[this->vector_de_nodos.size() - 1]->getPos_y()) {
+					// horizontal
+
+					if (this->hay_adyacencia_paraNodoPrimero(this->vector_de_nodos[0]) == false) {
+						cout << " HORIZONTAL simple" << endl;
+						string p_horizontal = "";
+						for (nMatrix* nodo : this->vector_de_nodos) {
+							p_horizontal += nodo->getLetra();
+						}
+						bool valida = diccionario->aparece_en_diccionario(p_horizontal);
+						if (valida) {
+							cout << "si se acepta" << endl;
+							// paso a darle su respectivo valor  
+							int puntos_generados = 0;
+							for (int i = 0; i < p_horizontal.size(); i++)
+							{
+								char letra = p_horizontal[i];
+								int valor = this->getValor_ficha(letra , 1);
+								puntos_generados += valor;
+							}
+							puntosParaJugador = puntos_generados;
+							cout << "=================\n";
+							cout << "PUNTOS GENERADOS: " << puntos_generados << endl;
+							cout << "=================\n";
+							return true;
+						}
+						else {
+							cout << "LO SIENTO NO ES PALABRA VALIDA... PASA DE TURNO" << endl;
+						}
+
+
+
+
+
+
+
+					}
+					else {
+						cout << " HORIZONTAL NO simple" << endl;
+					}
+				}
+				else {
+					// invalida
+
+					cout << " ERROR: LA PALABRA NO ESTA EN UN MISMO REGLON ";
+				}
+			
+
+
+			
+
+			}
+			else {
+				// solo 1 letra 
+				cout << "SOLO COLOCO UNA LETRA " << endl;
+			}
+
+		}
+		else {
+			cout << "PALABRA INVALIDA POR FALTA DE ADYACENCIA" << endl;
+		}
 
 
 	}
 	return false;
 }
+
+
+
+
+
+
+int Matriz_dispersa::esta_en_vector_nodos(int x, int y) {
+	for (nMatrix* n : this->vector_de_nodos) {
+		if (n->getPos_x() == x && n->getPos_y() == y) {
+			return 1;
+		}
+	}
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 bool Matriz_dispersa:: es_palabra_adyacente() {
 
@@ -476,38 +703,146 @@ bool Matriz_dispersa:: es_palabra_adyacente() {
 			cout << " CASO DERECHA " << n->getDer()->getPos_x() << " - " << n->getPos_x() << " = " << (n->getDer()->getPos_x() - n->getPos_x())<<endl;
 			if ((n->getDer()->getPos_x() - n->getPos_x()) == 1 && n->getDer()->getIs_nueva() == false) { // 3 -2 = 1 
 			cout << " ADYACENTE  "<<n->getLetra()<<" TIENE A LA DERECHA A "<< n->getDer()->getLetra()<<endl;// a la derecha nunca podria tener una cab
-			//return true; 
+			return true; 
 			}
 		}
 		if (n->getIzq() != NULL) {
 			cout << " CASO IZQ "<<n->getIzq()->getPos_x() << " - " << n->getPos_x()<<  " = "<< (n->getIzq()->getPos_x() - n->getPos_x())<<endl;
 			if ((n->getIzq()->getPos_x() - n->getPos_x()) == -1 && n->getIzq()->getIs_nueva() == false  && n->getIzq()->getPos_x() != -1) {
 				cout << " ADYACENTE  " << n->getLetra() << " TIENE A LA IZQUIERDA " << n->getIzq()->getLetra()<<endl;
-				//return true;
+				return true;
 			}
 		}
 		 if (n->getDown() != NULL){
 			cout << " CASO ABAJO " << n->getDown()->getPos_y() << " - " << n->getPos_y() <<" = "<< (n->getDown()->getPos_y() - n->getPos_y()) << endl;
 			if ((n->getDown()->getPos_y() - n->getPos_y()) == 1 && n->getDown()->getIs_nueva() == false) {
 				cout << "ADYACENTE  " << n->getLetra() << "  TIENE ABAJO A  " << n->getDown()->getLetra()<<endl;
-				//return true;
+				return true;
 			}
 		}
 		 if (n->getUp() != NULL) {
 			cout << " CASO ARRIBA "<< n->getUp()->getPos_y()<< " - "<< n->getPos_y()<< " = " << (n->getUp()->getPos_y() - n->getPos_y())<<endl;
 			if ((n->getUp()->getPos_y() - n->getPos_y()) == -1 && n->getUp()->getIs_nueva() == false && n->getUp()->getPos_y() != -1) {
 				cout << "ADYACENTE  " << n->getLetra() << " TIENE ARRIBA A  " << n->getUp()->getLetra()<<endl;
-				//return true;
+				return true;
 			}
 		}
 		cout << "----------" << endl;
 		// tener en cuenta que la adyacencia con las cabeceras y columnas no valen  , las pos negativas las descartan 
 	}
-//	cout << "NO ES ADYACENTE" <<endl ;
 	return false; // si ninguno de los nodos nuevos tiene adyacencia con los viejo esta palabra es invalida 
 }
 
+bool Matriz_dispersa::hay_adyacencia_up(nMatrix* n) {
+	if (n->getUp() != NULL) {
+		
+		if ((n->getUp()->getPos_y() - n->getPos_y()) == -1 && n->getUp()->getIs_nueva() == false && n->getUp()->getPos_y() != -1 && n->getUp()->getLetra() != '2' && n->getUp()->getLetra() != '3') {
+			
+			return true;
+		}
+	}
+	return false;
+}
+bool Matriz_dispersa::hay_adyacencia_down(nMatrix* n) {
+	if (n->getDown() != NULL) {
+		if ((n->getDown()->getPos_y() - n->getPos_y()) == 1 && n->getDown()->getIs_nueva() == false && n->getDown()->getLetra() != '2' && n->getDown()->getLetra() != '3') {
+			return true;
+		}
+	}
+	return false;
+}
+bool Matriz_dispersa::hay_adyacencia_der(nMatrix* n) {
+	if (n->getDer() != NULL) {
+		if ((n->getDer()->getPos_x() - n->getPos_x()) == 1 && n->getDer()->getIs_nueva() == false && n->getDer()->getLetra() != '2' && n->getDer()->getLetra() != '3') { // 3 -2 = 1 
+			return true; 
+		}
+	}
+	
+		return false;
 
+}
+bool Matriz_dispersa::hay_adyacencia_izq(nMatrix* n) {
+	if (n->getIzq() != NULL) {
+		if ((n->getIzq()->getPos_x() - n->getPos_x()) == -1 && n->getIzq()->getIs_nueva() == false && n->getIzq()->getPos_x() != -1 && n->getDer()->getLetra() != '2' && n->getDer()->getLetra() != '3') {
+			return true;
+		}
+	}
+		return false;
+}
+
+//-------------------------------------- incluye casillas nueva s
+
+bool Matriz_dispersa::puedoBajar(nMatrix* n) {
+	if (n->getDown() != NULL) {
+		if ((n->getDown()->getPos_y() - n->getPos_y()) == 1 && n->getDown()->getLetra() != '2' && n->getDown()->getLetra() != '3') {
+			return true;
+		}
+	}
+	return false;
+}
+bool Matriz_dispersa::puedoSubir(nMatrix* n) {
+	if (n->getUp() != NULL) {
+
+		if ((n->getUp()->getPos_y() - n->getPos_y()) == -1  && n->getUp()->getPos_y() != -1 && n->getUp()->getLetra() != '2' && n->getUp()->getLetra() != '3') {
+
+			return true;
+		}
+	}
+	return false;
+}
+bool Matriz_dispersa::puedoIzq(nMatrix* n) {
+	if (n->getIzq() != NULL) {
+		if ((n->getIzq()->getPos_x() - n->getPos_x()) == -1 && n->getIzq()->getPos_x() != -1 && n->getDer()->getLetra() != '2' && n->getDer()->getLetra() != '3') {
+			return true;
+		}
+	}
+	return false;
+}
+bool Matriz_dispersa::puedoDer(nMatrix* n) {
+	if (n->getDer() != NULL) {
+		if ((n->getDer()->getPos_x() - n->getPos_x()) == 1 && n->getDer()->getLetra() != '2' && n->getDer()->getLetra() != '3') { // 3 -2 = 1 
+			return true;
+		}
+	}
+
+	return false;
+}
+
+
+
+
+
+
+
+bool Matriz_dispersa::hay_adyacencia_paraNodoPrimero(nMatrix* n) { // tambien quitar es aonda de espciales 
+	cout << "REVISANDO  EL PRIMER NODO DE MI PALABRA" << endl;
+	if (n->getDer() != NULL) {
+		if ((n->getDer()->getPos_x() - n->getPos_x()) == 1 && n->getDer()->getIs_nueva() == false) { // 3 -2 = 1 
+			cout << " ADYACENTE  " << n->getLetra() << " TIENE A LA DERECHA A " << n->getDer()->getLetra() << endl;// a la derecha nunca podria tener una cab
+			return true;
+		}
+	}
+	if (n->getIzq() != NULL) {
+		if ((n->getIzq()->getPos_x() - n->getPos_x()) == -1 && n->getIzq()->getIs_nueva() == false && n->getIzq()->getPos_x() != -1) {
+			cout << " ADYACENTE  " << n->getLetra() << " TIENE A LA IZQUIERDA " << n->getIzq()->getLetra() << endl;
+			return true;
+		}
+	}
+	if (n->getDown() != NULL) {
+		cout << " CASO ABAJO " << n->getDown()->getPos_y() << " - " << n->getPos_y() << " = " << (n->getDown()->getPos_y() - n->getPos_y()) << endl;
+		if ((n->getDown()->getPos_y() - n->getPos_y()) == 1 && n->getDown()->getIs_nueva() == false) {
+			cout << "ADYACENTE  " << n->getLetra() << "  TIENE ABAJO A  " << n->getDown()->getLetra() << endl;
+			return true;
+		}
+	}
+	if (n->getUp() != NULL) {
+		if ((n->getUp()->getPos_y() - n->getPos_y()) == -1 && n->getUp()->getIs_nueva() == false && n->getUp()->getPos_y() != -1) {
+			cout << "ADYACENTE  " << n->getLetra() << " TIENE ARRIBA A  " << n->getUp()->getLetra() << endl;
+			return true;
+		}
+	}
+	return false;
+}
 
 
 bool Matriz_dispersa:: el_centro_esta_lleno() {
@@ -537,31 +872,32 @@ bool Matriz_dispersa:: el_centro_esta_lleno() {
 
 
 
-int Matriz_dispersa::getValor_ficha(char letra) {
+
+int Matriz_dispersa::getValor_ficha(char letra , int n) {
 
 	/*if (letra == 'a' || letra =='e' || letra == 'o' || letra == 'i' || letra == 's' || letra == 'n' || letra =='r'|| letra == 'u' || letra == 't') {
 		return 1;
 	}*/
 	if (letra == 'd' || letra == 'g') {
-		return 2;
+		return 2*n;
 	}
 	else if (letra == 'c' || letra == 'b' || letra == 'm' || letra == 'p') {
-		return 3;
+		return 3*n;
 	}
 	else if (letra == 'h' || letra == 'f' || letra == 'v' || letra == 'y') {
-		return 4;
+		return 4*n;
 	}
 	else if (letra == 'q') {
-		return 5;
+		return 5*n;
 	}
 	else if (letra == 'z') {
-		return 10;
+		return 10*n;
 	}
 	else if (letra == 'j' || letra == 'x') {
-		return 8;
+		return 8*n;
 	}
 	else {
-		return 1;
+		return 1*n;
 	}
 }
 
@@ -570,18 +906,27 @@ int Matriz_dispersa::getValor_ficha(char letra) {
 		nMatrix* aux = NULL;
 
 			while (col_principal != NULL) {
+
 				if (col_principal->getDer() != NULL) {
 					aux = col_principal->getDer();
 					while (aux != NULL) {
 						if (aux->getPos_x() == x && aux->getPos_y() == y) {
+							
 							Casilla * encuentra = this->lista_casillas.buscar(x,y);
 							if (encuentra != NULL) {
 								aux->setIs_nueva(true);
+								cout << "                                                 ||||||||||||||||||||||||" << endl;
+								cout << "                                                 BIEN ES CASILLA ESPECIAL " << endl;
+								cout << "                                                 |||||||||||||||||||||||| " << endl;
+							}
+							else {
+								
 							}
 						}
 						aux = aux->getDer();
 					}
 				}
+
 				col_principal = col_principal->getDown();
 			}
 	}

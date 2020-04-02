@@ -412,7 +412,6 @@ public:
 
 
 	void graph_winner(string nombre) {
-		system("cls");
 
 		ofstream w;
 		w.open("REPORTES\\winner.txt", ios::out);//si no existe lo crea  y si ya lo reemplaza

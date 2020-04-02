@@ -98,7 +98,7 @@ public:
 	inline int getTamanioMax() {
 		return this->maximo;
 	}
-	int  getValor_ficha(char letra);
+	int  getValor_ficha(char letra , int n );
 	void llenar_al_maximo(int);
 	void llenar_al_maximo();
 	void extraerCasillasNuevas(ListaCasillas* lista_casillas_nuevas);
@@ -106,6 +106,21 @@ public:
 	void imprimirVector();
 	void SET_NUEVA(int x , int y ); // para las casillas ya existentes 
 
+
+
+	// para la adyacencia de cada casilla 
+	bool hay_adyacencia_up(nMatrix* nodo);
+	bool hay_adyacencia_down(nMatrix* nodo);
+	bool hay_adyacencia_der(nMatrix* nodo);
+	bool hay_adyacencia_izq(nMatrix* nodo);
+	bool hay_adyacencia_paraNodoPrimero(nMatrix* nodo);
+
+	bool puedoBajar(nMatrix* nodo);
+	bool puedoSubir(nMatrix* nodo);
+	bool puedoIzq(nMatrix* nodo);
+	bool puedoDer(nMatrix* nodo);
+	int esta_en_vector_nodos(int x , int y);
+	 // casillas char 2 y 3 no cuentan 
 };
 
 

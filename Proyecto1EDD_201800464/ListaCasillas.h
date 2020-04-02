@@ -5,7 +5,7 @@
 #include<iostream>
 using namespace std; 
 class ListaCasillas{
-private: 
+private:      // NO USARL EL INICIO QUE SE CHINGA :V PARACE PILA ESTA ONDA SOLO CON EL ULTIMO
 	nodoT* inicio;
 	nodoT* ultimo; 
 public:
@@ -34,23 +34,41 @@ public:
 		}
 	}
 	inline Casilla* buscar(int posx , int posy) {
-		if (this->inicio == NULL) {
-			nodoT* aux = this->inicio;
-			while (aux!= NULL) {
-				if (aux->casilla->posX == posx && aux->casilla->posY == posy) {
-					return aux->casilla;
-				}
-				aux = aux->sig;
+
+		nodoT* aux = this->ultimo;
+		while (aux != NULL)
+		{
+			
+			if (aux->casilla->posX == posx && aux->casilla->posY == posy) {
+				
+				return aux->casilla;
 			}
+			
+			aux = aux->sig;
 		}
-		else {
-			return NULL;
-		}
+
+		return NULL;
 	
+	}
+	inline int Get_valor_casilla(int posx, int posy ) {
+
+		nodoT* aux = this->ultimo;
+		while (aux != NULL)
+		{
+
+			if (aux->casilla->posX == posx && aux->casilla->posY == posy) {
+
+				return aux->casilla->tipo;
+			}
+
+			aux = aux->sig;
+		}
+
+		return 1;
 	}
 	inline void imprimir() {
 		nodoT* aux = this->ultimo;
-		cout << "---CASILLAS DE LA MATRIZ---\n";
+		cout << "--->>>>>>>>>   CASILLAS DE LA MATRIZ   <<<<<<<<<---\n";
 		while (aux != NULL)
 		{
 			cout <<"posX "<<aux->casilla->posX << " posY "<< aux->casilla->posY <<" se multiplica por: "<<aux->casilla->tipo<<endl;

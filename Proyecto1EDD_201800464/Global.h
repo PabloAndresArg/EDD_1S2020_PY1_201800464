@@ -87,7 +87,7 @@ void Leer_Json() {
 }
 
 void menuPrincipal() {
-    //prueba_rep();
+    prueba_rep();
 
 
 
@@ -133,7 +133,24 @@ void menuPrincipal() {
 }
 
 void prueba_rep() {
+
     Jugador* pa = new Jugador("pablo");
+    Ficha* a = new Ficha(0, 'n');
+    Ficha* b = new Ficha(0, 'o');
+    Ficha* s = new Ficha(0, 's');
+    Ficha* i = new Ficha(0, 'i');
+    Ficha* simon1 = new Ficha(0, 's');
+    Ficha* simon2 = new Ficha(0, 'i');
+    Ficha* simon3 = new Ficha(0, 'm');
+    Ficha* simon4 = new Ficha(0, 'o');
+    Ficha* simon5 = new Ficha(0, 'n');
+    pa->getListaFichas().add(a);
+    pa->getListaFichas().add(b);
+    pa->getListaFichas().add(simon1);
+    pa->getListaFichas().add(simon2);
+    pa->getListaFichas().add(simon3);
+    pa->getListaFichas().add(simon4);
+    pa->getListaFichas().add(simon5);
     NodoArbol* n = new NodoArbol(pa);
     ARBOL_JUGADORES->add(n);
     Jugador* busque = ARBOL_JUGADORES->buscar("pablo");
@@ -162,6 +179,11 @@ void prueba_rep() {
     ARBOL_JUGADORES->setJugador(bu2);
 
     Jugador* val = new Jugador("val");
+    val->getListaFichas().add(s);
+    val->getListaFichas().add(i);
+    val->getListaFichas().add(a);
+    val->getListaFichas().add(b);
+
     NodoArbol* nod = new NodoArbol(val);
     ARBOL_JUGADORES->add(nod);
     Jugador* bu3 = ARBOL_JUGADORES->buscar("val");
@@ -538,8 +560,8 @@ void extraerDatos(string nombre_de_archivo) {
         cout << "{" << informacion["palabra"] <<"}\n";
         DICCIONARIO->add(informacion["palabra"]);
     }
+
     TABLERO->getLista_Casillas().imprimir();
-    //DICCIONARIO->imprimeparaAdelnate();
     TABLERO->getGraphviz();
     cout << "\n \n Se termino de leer el Archivo...  \n \n" << endl;
     system("pause");
@@ -591,7 +613,7 @@ void INICIAR_JUEGO() {
 
         // preguntar si ya termino el juego para acabarlo
         if (CICLO_TODO_EL_JUEGO == false) {
-
+            terminarJUEGO();
         }
 
         
@@ -627,12 +649,14 @@ void terminarJUEGO() {
     cout << "puntos del jugador " << jugadoresActuales[1]->getNombre() << ": " << resultado_2 << endl;
     IO_Archivos llama;
     if (resultado > resultado_2) {
-        cout << "GANO EL JUGADOR " <<jugadoresActuales[0]->getNombre() << endl;
+        
         llama.graph_winner(jugadoresActuales[0]->getNombre());
+        cout << "GANO EL JUGADOR " << jugadoresActuales[0]->getNombre() << endl;
     }
     else if (resultado_2 > resultado) {
-        cout << "GANO EL JUGADOR " <<jugadoresActuales[1]->getNombre() << endl;
+        
         llama.graph_winner(jugadoresActuales[1]->getNombre());
+        cout << "GANO EL JUGADOR " << jugadoresActuales[1]->getNombre() << endl;
     }
     else {
         cout << "EMPATES";
@@ -647,7 +671,9 @@ void terminarJUEGO() {
     jugadoresActuales[1]->getListaFichas().vaciar();
     jugadoresActuales[0]->setContador(0);
     jugadoresActuales[1]->setContador(0);
+    int tamanioMax = TABLERO->getTamanioMax();
     TABLERO->vaciar();
+    TABLERO->setTamanioMaximo(tamanioMax);
     for (Casilla* cass : vector_casillas) {
         int x = cass->posX; 
         int y = cass->posY;
@@ -663,7 +689,8 @@ void terminarJUEGO() {
     ARBOL_JUGADORES->setJugador(jugadoresActuales[0]);
     ARBOL_JUGADORES->setJugador(jugadoresActuales[1]);
 
-  
+    system("pause");
+    system("cls");
 }
 
 
@@ -734,12 +761,11 @@ void realizarJugada(int posJugador) {
                                 if (ilusion->el_centro_esta_lleno()) {
                                     primerMovimiento = false;
                                     ilusion->extraerCasillasNuevas();      
-                                    ilusion->es_palabra_adyacente();
-                                    ilusion->imprimirVector();
+                                   // ilusion->imprimirVector();
                                     int puntosParaJugador = 0;
                                     bool valida = ilusion->validarPalabra(DICCIONARIO, primerPalabra , puntosParaJugador);
                                     if (valida) {
-                                        cout << "in metodo global : " << puntosParaJugador;
+                                       // cout << "in metodo global : " << puntosParaJugador<<endl;
                                         agregarFichasOriginal(casillaTemp);
                                         jugadoresActuales[posJugador]->setContador(jugadoresActuales[posJugador]->getContador() + puntosParaJugador);
                                     }
@@ -749,31 +775,7 @@ void realizarJugada(int posJugador) {
                                     // forme alguna palabra correcta ? si es asi le doy puntos sino paso de turno y retiro lo ingresado
                                     // es vertical o horizontal  caso 1 solo una letra , caso 2 vertical , case 3 horizontal  SI ESTA CORRECTO YA GUARDO EN MI MATRIZ ORIGINAL
                                    
-                                  /*  if (casillaTemp->getInicio()->sig == NULL) {// CASO 1
-
-                                    }
-                                    else {
-                                        cout << "por favor indique que palabra intento formar ?" << endl;
-                                        cin >> aux_lexico;
-                                        int posX1 = casillaTemp->getInicio()->casilla->posX;
-                                        int posX2;
-                                        if (casillaTemp->getInicio()->sig != NULL) {
-                                            posX2 = casillaTemp->getInicio()->sig->casilla->posX;
-                                            if ((posX1 - posX2) == 0) {// es vertical 
-                                                cout << "ingreso una palabra VERTICAL" << endl;
-                                            }
-                                            else {// es horizontal
-                                                cout << "ingreso una palabra HORIZONTAL" << endl;
-                                            }
-
-                                        }
-                                        else {
-                                            cout << "SOLO METIO UNA LETRA" << endl;
-                                        }
-
-                                        // al final si el movimiento es valido retiro las fichas de la listaDoble de mis jugadores
-                                        // y agrego las fichas al TABLERO REAL sino solo no lo agrego ni quito las fichas 
-                                    }*/
+                                
 
                                     system("pause");
                                 }
@@ -986,14 +988,14 @@ void agregarFichasOriginal(ListaCasillas* casillaTemp) {
         TABLERO->add(aux_casillas->casilla->letra, aux_casillas->casilla->posX, aux_casillas->casilla->posY);
         aux_casillas = aux_casillas->sig;
     }
-    casillaTemp->imprimir();
+    
 }
 
 void regresarFIchas_al_atril_por_mala_jugada(ListaCasillas* casillaTemp, int posJugador) {
     nodoT* aux_casillas = casillaTemp->getUltimo();
     while (aux_casillas != NULL)
     {
-        Ficha* fic = new Ficha(TABLERO->getValor_ficha(aux_casillas->casilla->letra),aux_casillas->casilla->letra);
+        Ficha* fic = new Ficha(TABLERO->getValor_ficha(aux_casillas->casilla->letra , 1),aux_casillas->casilla->letra);
         jugadoresActuales[posJugador]->getListaFichas().add(fic);
         aux_casillas = aux_casillas->sig;
     }

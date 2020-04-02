@@ -29,7 +29,7 @@ void ListaSimpleOrdenada::add(RegistroPuntaje * registro) {
 			this->cabeza = nuevo;
 		}
 		else{
-			cout << " ACTUAL "<< aux->getRegistro()->getPuntaje() <<" ANTERIOR"<<ant->getRegistro()->getPuntaje()<<endl;
+			
 			ant->setSig(nuevo);
 			nuevo->setSig(aux); 
 			this->tamanio++;
