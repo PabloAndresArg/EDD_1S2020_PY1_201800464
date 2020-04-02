@@ -481,8 +481,11 @@ bool Matriz_dispersa:: validarPalabra(ListaDobleCircular* diccionario,  bool pri
 							int valor = this->getValor_ficha(nodoRecorredor->getLetra(), this->lista_casillas.Get_valor_casilla(nodoRecorredor->getPos_x(), nodoRecorredor->getPos_y()));
 							puntos_temporales += valor;
 							bool valida = diccionario->aparece_en_diccionario(p_vertical);
+							cout << "------------------------------------" << endl;
+							cout << "palabra:  " << p_vertical << endl;
+							cout << "------------------------------------" << endl;
 							if (valida) {
-								cout << "PALABRA:  " << p_vertical <<endl;
+								cout << "PALABRA ADENTRO DE VALIDA:  " << p_vertical <<endl;
 								cout << "cont "<< contador_verificador<<" = "<< this->vector_de_nodos.size() <<endl;
 								if (contador_verificador == this->vector_de_nodos.size()) {
 									cout << "si se acepta" << endl;
@@ -493,6 +496,28 @@ bool Matriz_dispersa:: validarPalabra(ListaDobleCircular* diccionario,  bool pri
 							}
 							nodoRecorredor = nodoRecorredor->getDown();
 						}
+
+						contador_verificador += esta_en_vector_nodos(nodoRecorredor->getPos_x(), nodoRecorredor->getPos_y());
+						p_vertical += nodoRecorredor->getLetra();
+						int valor = this->getValor_ficha(nodoRecorredor->getLetra(), this->lista_casillas.Get_valor_casilla(nodoRecorredor->getPos_x(), nodoRecorredor->getPos_y()));
+						puntos_temporales += valor;
+						bool valida2 = diccionario->aparece_en_diccionario(p_vertical);
+						cout << "------------------------------------" << endl;
+						cout << "palabra:  " << p_vertical << endl;
+						cout << "------------------------------------" << endl;
+						if (valida2) {
+							cout << "PALABRA ADENTRO DE VALIDA:  " << p_vertical << endl;
+							cout << "cont " << contador_verificador << " = " << this->vector_de_nodos.size() << endl;
+							if (contador_verificador == this->vector_de_nodos.size()) {
+								cout << "si se acepta" << endl;
+								puntosParaJugador = puntos_temporales;
+								VALIDA = true;
+
+							}
+						}
+
+
+
 						if (VALIDA) {
 							cout << "=================\n";
 							cout << "PUNTOS GENERADOS: " << puntosParaJugador << endl;
@@ -501,37 +526,8 @@ bool Matriz_dispersa:: validarPalabra(ListaDobleCircular* diccionario,  bool pri
 						}
 						cout << "NO SE ACEPTA" << endl;
 						return false;
-						/*
-						if(){
-						nMatrix* aux = this->vector_de_nodos[vector_de_nodos.size() - 1];
-							while (this->hay_adyacencia_down(aux)) {
-								p_vertical += aux->getLetra();
-								bool ver = diccionario->aparece_en_diccionario(p_vertical);
-								if (ver) {
-									cout << "si se acepta" << endl;
-									// paso a darle su respectivo valor  
-									int puntos_generados = 0;
-									for (int i = 0; i < p_vertical.size(); i++)
-									{
-										char letra = p_vertical[i];
-										int valor = this->getValor_ficha(letra , 1);
-										puntos_generados += valor;
-									}
-									puntosParaJugador = puntos_generados;
-									cout << "=================\n";
-									cout << "PUNTOS GENERADOS: " << puntos_generados << endl;
-									cout << "=================\n";
-
-									return true;
-								}
-								aux = aux->getDown();
-							}
-
-							cout << "LO SIENTO NO ES PALABRA VALIDA... PASA DE TURNO" << endl;
-						}
-
-
-						*/
+					
+						// FALTA INTERSECCIONES 
 
 
 
@@ -545,31 +541,38 @@ bool Matriz_dispersa:: validarPalabra(ListaDobleCircular* diccionario,  bool pri
 						}// nodoSubidor es el NODO MAS ALTO POSIBLE el punto fijo de partida 
 						cout << "NODO MAS ALTO" << nodoSubidor->getLetra()<< endl;
 
-						nMatrix* puntoFijo = NULL;
+						nMatrix* puntoFijo = new nMatrix();
 						puntoFijo = nodoSubidor;
 						int cont_verificador_2 = 0;
 						bool VALIDA = false;
 						while (this->puedoBajar(puntoFijo)) {
+							cout << "down..."<< puntoFijo->getLetra() <<" ("<<puntoFijo->getPos_x()<<","<< puntoFijo->getPos_y()<<")"<< endl;
+							
 							cont_verificador_2 = 0;
-							cont_verificador_2 = esta_en_vector_nodos(puntoFijo->getPos_x(), puntoFijo->getPos_y());
+							cont_verificador_2 += esta_en_vector_nodos(puntoFijo->getPos_x(), puntoFijo->getPos_y());
+							cout <<"cont: "<<cont_verificador_2 << endl;
 							string temp = "";
 							int punteo_temp1 = 0;
 							nMatrix* aux = puntoFijo->getDown();
 							// primera interacion 
 							temp += puntoFijo->getLetra();
 							punteo_temp1 += this->getValor_ficha(puntoFijo->getLetra(), this->lista_casillas.Get_valor_casilla(puntoFijo->getPos_x(), puntoFijo->getPos_y()));
-							
-							
 							while (this->puedoBajar(aux)) {
-								cont_verificador_2 = esta_en_vector_nodos(aux->getPos_x(), aux->getPos_y());
+								
+								cont_verificador_2 += esta_en_vector_nodos(aux->getPos_x(), aux->getPos_y());
+								cout << "contw: " << cont_verificador_2 << endl;
 								temp += aux->getLetra();
 								punteo_temp1 += this->getValor_ficha(aux->getLetra(), this->lista_casillas.Get_valor_casilla(aux->getPos_x(), aux->getPos_y()));
 								// pregunto 
+								cout << "----------------------------------" << endl;
+								cout << "palabra:  " << temp << endl;
+								cout << "CONT: " << cont_verificador_2 << endl;
+								cout << "----------------------------------" << endl;
 								bool valida = diccionario->aparece_en_diccionario(temp);
 								if (valida) {
-									cout << "PALABRA:  " << temp << endl;
+									cout << " SI VALIDA , PALABRA:  " << temp << endl;
 									cout << "cont " << cont_verificador_2 << " = " << this->vector_de_nodos.size() << endl;
-									if (cont_verificador_2 == this->vector_de_nodos.size()) {
+									if (cont_verificador_2 == this->vector_de_nodos.size()) { 
 										cout << "si se acepta" << endl;
 										puntosParaJugador = punteo_temp1;
 
@@ -578,9 +581,37 @@ bool Matriz_dispersa:: validarPalabra(ListaDobleCircular* diccionario,  bool pri
 									}
 								}
 								aux = aux->getDown();
+								cout << endl;
 							}
+							cout << "------- ULTIMA INTERACION------------" << endl;
+							cont_verificador_2 += esta_en_vector_nodos(aux->getPos_x(), aux->getPos_y());
+							
+							temp += aux->getLetra();
+							punteo_temp1 += this->getValor_ficha(aux->getLetra(), this->lista_casillas.Get_valor_casilla(aux->getPos_x(), aux->getPos_y()));
+							// pregunto 
+							cout << "------------------------------------" << endl;
+							cout << "palabra:  " << temp << endl;
+							cout << "afuera CONT: "<<cont_verificador_2  << endl;
+							cout << "------------------------------------" << endl;
+							bool valida = diccionario->aparece_en_diccionario(temp);
+							if (valida) {
+								cout << "PALABRA:  " << temp << endl;
+								cout << "cont " << cont_verificador_2 << " = " << this->vector_de_nodos.size()<< endl;
+								if (cont_verificador_2 == this->vector_de_nodos.size()) {
+									cout << "si se acepta" << endl;
+									puntosParaJugador = punteo_temp1;
+
+									VALIDA = true;
+									// podria levantar una bandera y guardar estos datos 
+								}
+							}
+							//----------------
 							puntoFijo = puntoFijo->getDown();
 						}
+
+
+
+
 
 						if (VALIDA) {
 							cout << "=================\n";
@@ -595,44 +626,158 @@ bool Matriz_dispersa:: validarPalabra(ListaDobleCircular* diccionario,  bool pri
 
 					}
 				}else if (this->vector_de_nodos[0]->getPos_y() == this->vector_de_nodos[this->vector_de_nodos.size() - 1]->getPos_y()) {
-					// horizontal
+					//---------------------------------------horizontal
 
-					if (this->hay_adyacencia_paraNodoPrimero(this->vector_de_nodos[0]) == false) {
+					if (this->hay_adyacencia_izq(this->vector_de_nodos[0]) == false) {
 						cout << " HORIZONTAL simple" << endl;
 						string p_horizontal = "";
-						for (nMatrix* nodo : this->vector_de_nodos) {
-							p_horizontal += nodo->getLetra();
-						}
-						bool valida = diccionario->aparece_en_diccionario(p_horizontal);
-						if (valida) {
-							cout << "si se acepta" << endl;
-							// paso a darle su respectivo valor  
-							int puntos_generados = 0;
-							for (int i = 0; i < p_horizontal.size(); i++)
-							{
-								char letra = p_horizontal[i];
-								int valor = this->getValor_ficha(letra , 1);
-								puntos_generados += valor;
+						nMatrix* nodoRecorredor = this->vector_de_nodos[0];
+						int contador_verificador = 0; 
+						int puntos_temporales = 0;
+						bool VALIDA = false;
+						while (this->puedoDer(nodoRecorredor)) {
+							contador_verificador += esta_en_vector_nodos(nodoRecorredor->getPos_x(), nodoRecorredor->getPos_y());
+							p_horizontal += nodoRecorredor->getLetra(); 
+							int valor = this->getValor_ficha(nodoRecorredor->getLetra(), this->lista_casillas.Get_valor_casilla(nodoRecorredor->getPos_x(), nodoRecorredor->getPos_y()));
+							puntos_temporales += valor;
+							bool valida = diccionario->aparece_en_diccionario(p_horizontal);
+							cout << "------------------------------------" << endl;
+							cout << "palabra:  " << p_horizontal << endl;
+							cout << "------------------------------------" << endl;
+							if (valida) {
+								cout << "PALABRA ADENTRO DE VALIDA:  " << p_horizontal << endl;
+								cout << "cont " << contador_verificador << " = " << this->vector_de_nodos.size() << endl;
+								if (contador_verificador == this->vector_de_nodos.size()) {
+									cout << "si se acepta" << endl;
+									puntosParaJugador = puntos_temporales;
+									VALIDA = true;
+
+								}
 							}
-							puntosParaJugador = puntos_generados;
-							cout << "=================\n";
-							cout << "PUNTOS GENERADOS: " << puntos_generados << endl;
-							cout << "=================\n";
-							return true;
+							nodoRecorredor = nodoRecorredor->getDer();
 						}
-						else {
-							cout << "LO SIENTO NO ES PALABRA VALIDA... PASA DE TURNO" << endl;
+						contador_verificador += esta_en_vector_nodos(nodoRecorredor->getPos_x(), nodoRecorredor->getPos_y());
+						p_horizontal += nodoRecorredor->getLetra();
+						int valor = this->getValor_ficha(nodoRecorredor->getLetra(), this->lista_casillas.Get_valor_casilla(nodoRecorredor->getPos_x(), nodoRecorredor->getPos_y()));
+						puntos_temporales += valor;
+						bool valida2 = diccionario->aparece_en_diccionario(p_horizontal);
+						cout << "extra-------------------------------" << endl;
+						cout << "palabra:  " << p_horizontal << endl;
+						cout << "extra----------------------------------" << endl;
+						if (valida2) {
+							cout << "PALABRA ADENTRO DE VALIDA:  " << p_horizontal << endl;
+							cout << "cont " << contador_verificador << " = " << this->vector_de_nodos.size() << endl;
+							if (contador_verificador == this->vector_de_nodos.size()) {
+								cout << "si se acepta" << endl;
+								puntosParaJugador = puntos_temporales;
+								VALIDA = true;
+
+							}
 						}
 
 
 
 
+						if (VALIDA) {
+							cout << "=================\n";
+							cout << "PUNTOS GENERADOS: " << puntosParaJugador << endl;
+							cout << "=================\n";
+							return true; // podria levantar una bandera y guardar estos datos
+						}
+						cout << "NO SE ACEPTA" << endl;
+						return false;
+						
 
 
 
 					}
 					else {
 						cout << " HORIZONTAL NO simple" << endl;
+						nMatrix* nodo_masIzq = this->vector_de_nodos[0];
+						while (this->puedoIzq(nodo_masIzq)) {
+							nodo_masIzq = nodo_masIzq->getIzq();
+						}// nodoSubidor es el NODO MAS IZQUIERDO POSIBLE el punto fijo de partida
+						cout << "MAS IZQUIERDO " << nodo_masIzq->getLetra()<<endl;
+
+						nMatrix* puntoFijo = new nMatrix();
+						puntoFijo = nodo_masIzq;
+						int cont_verificador_2 = 0;
+						bool VALIDA = false;
+						while (this->puedoDer(puntoFijo)) {
+							cout << "DER-->>>" << puntoFijo->getLetra() << " (" << puntoFijo->getPos_x() << "," << puntoFijo->getPos_y() << ")" << endl;
+
+							cont_verificador_2 = 0;
+							cont_verificador_2 += esta_en_vector_nodos(puntoFijo->getPos_x(), puntoFijo->getPos_y());
+							cout << "cont: " << cont_verificador_2 << endl;
+							string temp = "";
+							int punteo_temp1 = 0;
+							nMatrix* aux = puntoFijo->getDer();
+							// primera interacion 
+							temp += puntoFijo->getLetra();
+							punteo_temp1 += this->getValor_ficha(puntoFijo->getLetra(), this->lista_casillas.Get_valor_casilla(puntoFijo->getPos_x(), puntoFijo->getPos_y()));
+							while (this->puedoDer(aux)) {
+
+								cont_verificador_2 += esta_en_vector_nodos(aux->getPos_x(), aux->getPos_y());
+								cout << "contw: " << cont_verificador_2 << endl;
+								temp += aux->getLetra();
+								punteo_temp1 += this->getValor_ficha(aux->getLetra(), this->lista_casillas.Get_valor_casilla(aux->getPos_x(), aux->getPos_y()));
+								// pregunto 
+								cout << "----------------------------------" << endl;
+								cout << "palabra:  " << temp << endl;
+								cout << "CONT: " << cont_verificador_2 << endl;
+								cout << "----------------------------------" << endl;
+								bool valida = diccionario->aparece_en_diccionario(temp);
+								if (valida) {
+									cout << " SI VALIDA , PALABRA:  " << temp << endl;
+									cout << "cont " << cont_verificador_2 << " = " << this->vector_de_nodos.size() << endl;
+									if (cont_verificador_2 == this->vector_de_nodos.size()) {
+										cout << "si se acepta" << endl;
+										puntosParaJugador = punteo_temp1;
+										VALIDA = true;
+										// podria levantar una bandera y guardar estos datos 
+									}
+								}
+								aux = aux->getDer();
+								cout << endl;
+							}
+							cout << "------- ULTIMA INTERACION------------" << endl;
+							cont_verificador_2 += esta_en_vector_nodos(aux->getPos_x(), aux->getPos_y());
+
+							temp += aux->getLetra();
+							punteo_temp1 += this->getValor_ficha(aux->getLetra(), this->lista_casillas.Get_valor_casilla(aux->getPos_x(), aux->getPos_y()));
+							// pregunto 
+							cout << "------------------------------------" << endl;
+							cout << "palabra:  " << temp << endl;
+							cout << "afuera CONT: " << cont_verificador_2 << endl;
+							cout << "------------------------------------" << endl;
+							bool valida = diccionario->aparece_en_diccionario(temp);
+							if (valida) {
+								cout << "PALABRA:  " << temp << endl;
+								cout << "cont " << cont_verificador_2 << " = " << this->vector_de_nodos.size() << endl;
+								if (cont_verificador_2 == this->vector_de_nodos.size()) {
+									cout << "si se acepta" << endl;
+									puntosParaJugador = punteo_temp1;
+
+									VALIDA = true;
+									// podria levantar una bandera y guardar estos datos 
+								}
+							}
+							//----------------
+							puntoFijo = puntoFijo->getDer();
+						}
+
+
+						if (VALIDA) {
+							cout << "=================\n";
+							cout << "PUNTOS GENERADOS: " << puntosParaJugador << endl;
+							cout << "=================\n";
+							return true;
+						}
+
+
+						cout << "No se acepta" << endl;
+						return false;
+					
 					}
 				}
 				else {
@@ -667,12 +812,15 @@ bool Matriz_dispersa:: validarPalabra(ListaDobleCircular* diccionario,  bool pri
 
 
 int Matriz_dispersa::esta_en_vector_nodos(int x, int y) {
+	int suma = 0; 
 	for (nMatrix* n : this->vector_de_nodos) {
+		cout << n->getLetra() << " (" << n->getPos_x() << "," << n->getPos_y() << ") COMPARA "<<"("<<x<<","<<y<<")"<< endl;
 		if (n->getPos_x() == x && n->getPos_y() == y) {
-			return 1;
+			cout << "MATCH" << endl;
+			return suma +1;
 		}
 	}
-	return 0;
+	return suma;
 }
 
 
@@ -695,34 +843,34 @@ int Matriz_dispersa::esta_en_vector_nodos(int x, int y) {
 
 
 
-bool Matriz_dispersa:: es_palabra_adyacente() {
+bool Matriz_dispersa:: es_palabra_adyacente() { // busco por lo menos 1 adyacencia 
 
 	for (nMatrix* n : this->vector_de_nodos) {
 		cout << "---REVISANDO EL NODO----"<< n->getLetra() << endl;
 		if (n->getDer() != NULL) {
-			cout << " CASO DERECHA " << n->getDer()->getPos_x() << " - " << n->getPos_x() << " = " << (n->getDer()->getPos_x() - n->getPos_x())<<endl;
-			if ((n->getDer()->getPos_x() - n->getPos_x()) == 1 && n->getDer()->getIs_nueva() == false) { // 3 -2 = 1 
+			//cout << " CASO DERECHA " << n->getDer()->getPos_x() << " - " << n->getPos_x() << " = " << (n->getDer()->getPos_x() - n->getPos_x())<<endl;
+			if ((n->getDer()->getPos_x() - n->getPos_x()) == 1 && n->getDer()->getIs_nueva() == false && n->getDer()->getLetra() != '2' && n->getDer()->getLetra() != '3') { // 3 -2 = 1 
 			cout << " ADYACENTE  "<<n->getLetra()<<" TIENE A LA DERECHA A "<< n->getDer()->getLetra()<<endl;// a la derecha nunca podria tener una cab
 			return true; 
 			}
 		}
 		if (n->getIzq() != NULL) {
-			cout << " CASO IZQ "<<n->getIzq()->getPos_x() << " - " << n->getPos_x()<<  " = "<< (n->getIzq()->getPos_x() - n->getPos_x())<<endl;
-			if ((n->getIzq()->getPos_x() - n->getPos_x()) == -1 && n->getIzq()->getIs_nueva() == false  && n->getIzq()->getPos_x() != -1) {
+			//cout << " CASO IZQ "<<n->getIzq()->getPos_x() << " - " << n->getPos_x()<<  " = "<< (n->getIzq()->getPos_x() - n->getPos_x())<<endl;
+			if ((n->getIzq()->getPos_x() - n->getPos_x()) == -1 && n->getIzq()->getIs_nueva() == false  && n->getIzq()->getPos_x() != -1 && n->getIzq()->getLetra() != '2' && n->getIzq()->getLetra() != '3') {
 				cout << " ADYACENTE  " << n->getLetra() << " TIENE A LA IZQUIERDA " << n->getIzq()->getLetra()<<endl;
 				return true;
 			}
 		}
 		 if (n->getDown() != NULL){
-			cout << " CASO ABAJO " << n->getDown()->getPos_y() << " - " << n->getPos_y() <<" = "<< (n->getDown()->getPos_y() - n->getPos_y()) << endl;
-			if ((n->getDown()->getPos_y() - n->getPos_y()) == 1 && n->getDown()->getIs_nueva() == false) {
+		//	cout << " CASO ABAJO " << n->getDown()->getPos_y() << " - " << n->getPos_y() <<" = "<< (n->getDown()->getPos_y() - n->getPos_y()) << endl;
+			if ((n->getDown()->getPos_y() - n->getPos_y()) == 1 && n->getDown()->getIs_nueva() == false && n->getDown()->getLetra() != '2' && n->getDown()->getLetra() != '3') {
 				cout << "ADYACENTE  " << n->getLetra() << "  TIENE ABAJO A  " << n->getDown()->getLetra()<<endl;
 				return true;
 			}
 		}
 		 if (n->getUp() != NULL) {
-			cout << " CASO ARRIBA "<< n->getUp()->getPos_y()<< " - "<< n->getPos_y()<< " = " << (n->getUp()->getPos_y() - n->getPos_y())<<endl;
-			if ((n->getUp()->getPos_y() - n->getPos_y()) == -1 && n->getUp()->getIs_nueva() == false && n->getUp()->getPos_y() != -1) {
+			//cout << " CASO ARRIBA "<< n->getUp()->getPos_y()<< " - "<< n->getPos_y()<< " = " << (n->getUp()->getPos_y() - n->getPos_y())<<endl;
+			if ((n->getUp()->getPos_y() - n->getPos_y()) == -1 && n->getUp()->getIs_nueva() == false && n->getUp()->getPos_y() != -1 && n->getUp()->getLetra() != '2' && n->getUp()->getLetra() != '3') {
 				cout << "ADYACENTE  " << n->getLetra() << " TIENE ARRIBA A  " << n->getUp()->getLetra()<<endl;
 				return true;
 			}
@@ -732,6 +880,8 @@ bool Matriz_dispersa:: es_palabra_adyacente() {
 	}
 	return false; // si ninguno de los nodos nuevos tiene adyacencia con los viejo esta palabra es invalida 
 }
+
+//---------------- ESTOS NO CUENTAN PALABRAS NUEVAS SOLO ES PARA VERIFICAR LA ADYACENCIA 
 
 bool Matriz_dispersa::hay_adyacencia_up(nMatrix* n) {
 	if (n->getUp() != NULL) {
@@ -800,6 +950,7 @@ bool Matriz_dispersa::puedoIzq(nMatrix* n) {
 }
 bool Matriz_dispersa::puedoDer(nMatrix* n) {
 	if (n->getDer() != NULL) {
+
 		if ((n->getDer()->getPos_x() - n->getPos_x()) == 1 && n->getDer()->getLetra() != '2' && n->getDer()->getLetra() != '3') { // 3 -2 = 1 
 			return true;
 		}

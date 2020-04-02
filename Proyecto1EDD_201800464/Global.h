@@ -179,10 +179,16 @@ void prueba_rep() {
     ARBOL_JUGADORES->setJugador(bu2);
 
     Jugador* val = new Jugador("val");
+    Ficha* sol1 = new Ficha(0, 's');
+    Ficha* sol2 = new Ficha(0, 'o');
+    Ficha* sol3 = new Ficha(0, 'l');
     val->getListaFichas().add(s);
     val->getListaFichas().add(i);
     val->getListaFichas().add(a);
     val->getListaFichas().add(b);
+    val->getListaFichas().add(sol1);
+    val->getListaFichas().add(sol2);
+    val->getListaFichas().add(sol3);
 
     NodoArbol* nod = new NodoArbol(val);
     ARBOL_JUGADORES->add(nod);
@@ -638,15 +644,18 @@ void terminarJUEGO() {
     int resta_atril = jugadoresActuales[0]->getListaFichas().getPuntaje_restar();
     int puntos_actuales = jugadoresActuales[0]->getContador();
     resultado = puntos_actuales - resta_atril; 
-
-
-
+    cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
+    cout << resultado <<"=" <<puntos_actuales << "-" << resta_atril <<endl;
+    cout << "puntos del jugador " << jugadoresActuales[0]->getNombre() << ": " << resultado << endl;
+    cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
     int resultado_2 = 0;
     int resta_atril_2 = jugadoresActuales[1]->getListaFichas().getPuntaje_restar();
     int puntos_actuales_2 = jugadoresActuales[1]->getContador();
     resultado_2 = puntos_actuales_2 - resta_atril_2;
-    cout << "puntos del jugador " << jugadoresActuales[0]->getNombre() << ": " << resultado << endl;
+    cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
+    cout << resultado_2 << "=" << puntos_actuales_2 << "-" << resta_atril_2 << endl;
     cout << "puntos del jugador " << jugadoresActuales[1]->getNombre() << ": " << resultado_2 << endl;
+    cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
     IO_Archivos llama;
     if (resultado > resultado_2) {
         
