@@ -121,6 +121,18 @@ public:
 	bool puedoDer(nMatrix* nodo);
 	int esta_en_vector_nodos(int x , int y);
 	 // casillas char 2 y 3 no cuentan 
+
+	void interseccionesVerticales(ListaDobleCircular* diccionario ,  int& puntosParaJugador); // van a base del vector de nodos 
+	void interseccionesHorizontales(ListaDobleCircular* diccionario , int& puntosParaJugador);
+
+
+
+
+
+	void acumulaPuntosInterseccionesHORIZONTALES(ListaDobleCircular* diccionario, int& puntosParaJugador); // van a base del vector de nodos 
+	void acumulaPuntosInterseccionesVERTICALES(ListaDobleCircular* diccionario, int& puntosParaJugador);
+
+
 };
 
 

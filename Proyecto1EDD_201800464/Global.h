@@ -137,8 +137,8 @@ void prueba_rep() {
     Jugador* pa = new Jugador("pablo");
     Ficha* a = new Ficha(0, 'n');
     Ficha* b = new Ficha(0, 'o');
-    Ficha* s = new Ficha(0, 's');
-    Ficha* i = new Ficha(0, 'i');
+    Ficha* s = new Ficha(0, 'a');
+    Ficha* i = new Ficha(0, 'e');
     Ficha* simon1 = new Ficha(0, 's');
     Ficha* simon2 = new Ficha(0, 'i');
     Ficha* simon3 = new Ficha(0, 'm');
