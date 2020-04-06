@@ -1,3 +1,14 @@
-﻿  Matriz_dispersa.cpp
-C:\Users\Pablo\Desktop\Proyecto1EDD_201800464\Matriz_dispersa.cpp(1155): warning C4715: 'Matriz_dispersa::el_centro_esta_lleno': no todas las rutas de acceso de control devuelven un valor
+﻿  Arbol.cpp
+  Cola.cpp
+  Jugador.cpp
+  ListaDoble.cpp
+  ListaDobleCircular.cpp
+  ListaSimpleOrdenada.cpp
+  Matriz_dispersa.cpp
+  Proyecto1EDD_201800464.cpp
+C:\Users\Pablo\Desktop\Proyecto1EDD_201800464\Global.h(26,10): warning C4067: símbolos (token) inesperados después de la directiva del preprocesador; se esperaba una nueva línea
+C:\Users\Pablo\Desktop\Proyecto1EDD_201800464\Global.h(430,15): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+  Generando código...
+C:\Users\Pablo\Desktop\Proyecto1EDD_201800464\Matriz_dispersa.cpp(1189): warning C4715: 'Matriz_dispersa::el_centro_esta_lleno': no todas las rutas de acceso de control devuelven un valor
+C:\Users\Pablo\Desktop\Proyecto1EDD_201800464\Arbol.cpp(50): warning C4715: 'Arbol::buscarRecursivo': no todas las rutas de acceso de control devuelven un valor
   Proyecto1EDD_201800464.vcxproj -> C:\Users\Pablo\Desktop\Proyecto1EDD_201800464\Debug\Proyecto1EDD_201800464.exe

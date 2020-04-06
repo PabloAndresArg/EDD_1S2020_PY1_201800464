@@ -90,7 +90,9 @@ void Arbol::recursive_add(NodoArbol* actual, NodoArbol* nuevo) {
         }
     }
     else {
-        cout << "REPETIDO: " + nuevo->getJugador()->getNombre();
+        cout << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx" << endl;
+        cout << "REPETIDO: " + nuevo->getJugador()->getNombre()<<endl;
+        cout << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx" << endl;
     }
 }
 

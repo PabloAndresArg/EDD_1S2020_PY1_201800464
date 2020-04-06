@@ -1,22 +1,17 @@
 digraph ARBOL { rankdir=TB; style = filled;bgcolor = white;color = lightgrey;node[style = filled, color = green, shape = record];   
- pablo[label = " <C0>|pablo|<C1>" ];   
- pablo:C1->peco [arrowhead = none color = black];   
- peco[label = " <C0>|peco|<C1>" ];   
- peco:C1->val [arrowhead = none color = black];   
- val[label = " <C0>|val|<C1>" ];   
+ pa[label = " <C0>|pa|<C1>" ];   
+ pa:C0->ko [arrowhead = none color = black];   
+ ko[label = " <C0>|ko|<C1>" ];   
  subgraph cluster_0 { style = filled; charset = latin1;color = lightgrey;node[style = filled, color = gold   , shape = tripleoctagon]; label = "PRE-ORDER" ;  
- val2[label = " val" ] ; 
-val2->peco1[arrowhead = "vee"] ; peco1[label = " peco" ] ; 
-peco1->pablo0[arrowhead = "vee"] ; pablo0[label = " pablo" ] ; 
+ ko1[label = " ko" ] ; 
+ko1->pa0[arrowhead = "vee"] ; pa0[label = " pa" ] ; 
 }
 subgraph cluster_1 { style = filled; color = lightgrey;node[style = filled, color = lightskyblue2, shape = tripleoctagon]; label = "IN-ORDER" ;  
- val5[label = " val" ] ; 
-val5->peco4[arrowhead = "vee"]; peco4[label = " peco" ] ; 
-peco4->pablo3[arrowhead = "vee"]; pablo3[label = " pablo" ] ; 
+ pa3[label = " pa" ] ; 
+pa3->ko2[arrowhead = "vee"]; ko2[label = " ko" ] ; 
 }
 subgraph cluster_2 { style = filled; color = lightgrey;node[style = filled, color = orange2, shape = tripleoctagon]; label = "POST-ORDER" ;  
- pablo8[label = " pablo" ] ; 
-pablo8->peco7[arrowhead = "vee"] ; peco7[label = " peco" ] ; 
-peco7->val6[arrowhead = "vee"] ; val6[label = " val" ] ; 
+ pa5[label = " pa" ] ; 
+pa5->ko4[arrowhead = "vee"] ; ko4[label = " ko" ] ; 
 }
 }

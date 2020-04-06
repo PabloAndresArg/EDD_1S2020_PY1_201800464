@@ -65,6 +65,7 @@ void agregarFichasOriginal(ListaCasillas* casillaTemp);
 void regresarFIchas_al_atril_por_mala_jugada(ListaCasillas* casillaTemp , int posJugador);
 void reporte_historial_por_jugador();
 void prueba_rep();
+void arte_ascii();
 // estructuras estaticas y arreglos 
 Matriz_dispersa* TABLERO = new Matriz_dispersa();
 Ficha* fichas[95];
@@ -87,11 +88,8 @@ void Leer_Json() {
 }
 
 void menuPrincipal() {
-    prueba_rep();
-
-
-
-
+    system("color a");
+   // prueba_rep();
     llenarFichas();
     mezclarFichas_e_ingresar_Cola();
     cout << "  UNIVERSIDAD DE SAN CARLOS DE GUATEMALA" << endl; 
@@ -520,7 +518,7 @@ void mezclarFichas_e_ingresar_Cola() {
         }
     }
 
-    for (int i = 0; i < 95; i++)
+    for (int i = 0; i < 95; i++) //////////////////////////////////////////////--------------------------------------------
     {
         BOLSA->encolar(fichas[i]);
     }
@@ -585,6 +583,8 @@ bool CICLO_TODO_EL_JUEGO;
 
 
 void INICIAR_JUEGO() {
+       
+
         mezclarFichas_e_ingresar_Cola();
         limipiarJugadoresActuales();
         if (ARBOL_JUGADORES->getRoot() != NULL) {
@@ -618,7 +618,13 @@ void INICIAR_JUEGO() {
         }
 
         // preguntar si ya termino el juego para acabarlo
-        if (CICLO_TODO_EL_JUEGO == false) {
+        if (CICLO_TODO_EL_JUEGO == false || BOLSA->getCabeza() == NULL || BOLSA->getTamanio() <= 0 ) {
+            CICLO_TODO_EL_JUEGO = false;
+            if(BOLSA->getCabeza() == NULL || BOLSA->getTamanio() <= 0){
+                cout << "******************************************************************************************************" << endl;
+                cout << "                      EL JUEGO FINALIZO PORQUE YA NO HAY FICHAS EN LA COLA " << endl;
+                cout << "******************************************************************************************************" << endl;
+            }
             terminarJUEGO();
         }
 
@@ -626,9 +632,10 @@ void INICIAR_JUEGO() {
         } while (CICLO_TODO_EL_JUEGO);
 }
 void menu_dentro_turno() {
-    cout << "\n°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°";
-    cout << "\n          MENU FUNCIONALIDADES, INGRESE UN NUMERO       "<<endl;
-    cout << "°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°"<<endl;
+    cout << endl;
+    cout << "------------------------------------------------------------------------------------------------------" << endl;
+    cout << "                                MENU FUNCIONALIDADES, INGRESE UN NUMERO                                "<<endl;
+    cout << "------------------------------------------------------------------------------------------------------" << endl;
     cout << "1. insertar fichas al tablero " << endl;
     cout << "2. Intercambiar fichas (le valdra el turno)" << endl;
     cout << "3. ver reporte de lista Doble de las fichas de los dos jugadores" << endl;
@@ -640,22 +647,22 @@ void terminarJUEGO() {
     // se determina quien gano 
     // LIMPEAR TODO EL JUEGO  tablero , contadores y lista de fichas por jugador 
     // set en arbol 
+
+
     int resultado = 0; 
-    int resta_atril = jugadoresActuales[0]->getListaFichas().getPuntaje_restar();
     int puntos_actuales = jugadoresActuales[0]->getContador();
-    resultado = puntos_actuales - resta_atril; 
+    resultado = puntos_actuales;
+ 
+    int resultado_2 = 0;
+    int puntos_actuales_2 = jugadoresActuales[1]->getContador();
+    resultado_2 = puntos_actuales_2;
     cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
-    cout << resultado <<"=" <<puntos_actuales << "-" << resta_atril <<endl;
     cout << "puntos del jugador " << jugadoresActuales[0]->getNombre() << ": " << resultado << endl;
     cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
-    int resultado_2 = 0;
-    int resta_atril_2 = jugadoresActuales[1]->getListaFichas().getPuntaje_restar();
-    int puntos_actuales_2 = jugadoresActuales[1]->getContador();
-    resultado_2 = puntos_actuales_2 - resta_atril_2;
     cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
-    cout << resultado_2 << "=" << puntos_actuales_2 << "-" << resta_atril_2 << endl;
     cout << "puntos del jugador " << jugadoresActuales[1]->getNombre() << ": " << resultado_2 << endl;
     cout << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << endl;
+
     IO_Archivos llama;
     if (resultado > resultado_2) {
         
@@ -670,6 +677,19 @@ void terminarJUEGO() {
     else {
         cout << "EMPATES";
     }
+
+
+    if (resultado < 0) {
+        cout << "si el retultado es negativo en su registro tendra un  punteo de: 0" << endl;
+        resultado = 0;
+    }
+    if (resultado_2 < 0) {
+        cout << "si el retultado 2 es negativo en su registro tendra un  punteo de: 0" << endl;
+        resultado_2 = 0; 
+    }
+
+
+
     // ver si es menor a cero meto puntos como cero
     RegistroPuntaje* registro1 = new RegistroPuntaje(resultado);
     jugadoresActuales[0]->getListaPuntajes().add(registro1);
@@ -688,16 +708,19 @@ void terminarJUEGO() {
         int y = cass->posY;
         int tipo = cass->tipo;
         if (tipo == 2) {
+            TABLERO->getLista_Casillas().add(new Casilla(x, y, 2));
             TABLERO->add('2',x,y);
         }
         else if (tipo == 3) {
+            TABLERO->getLista_Casillas().add(new Casilla(x, y, 3));
             TABLERO->add('3', x, y);
         }
     }
+    
 
     ARBOL_JUGADORES->setJugador(jugadoresActuales[0]);
     ARBOL_JUGADORES->setJugador(jugadoresActuales[1]);
-
+    arte_ascii();
     system("pause");
     system("cls");
 }
@@ -720,7 +743,7 @@ void realizarJugada(int posJugador) {
     }
  
         if (jugadoresActuales[posJugador]->getListaFichas().getInicio() == NULL) {
-            cout << "TERMINO EL JUEGO " << endl; system("PAUSE");
+            cout << "ENTRA ACA " << endl;
         }
         else{
             bool turno = true;
@@ -731,9 +754,13 @@ void realizarJugada(int posJugador) {
             while (turno) {
                 
                 // sub-menu  para ver si inserto fichas o si intercambio o si quiero ver el reporte 
+                cout << endl;
+                cout << "RECORDATORIO: revisa tu lista antes de intentar insertar de lo contrario no podras intercambiar fichas" << endl;
+                jugadoresActuales[posJugador]->getListaFichas().imprimir(jugadoresActuales[posJugador]->getNombre());
                 menu_dentro_turno();
                 int menu_por_turno = 4;
                 cin >> menu_por_turno;
+                system("cls");
                 if (menu_por_turno == 1) { // INSERTAR 
                     bool metiendo_fichas = true;
                     while (metiendo_fichas) {
@@ -785,7 +812,7 @@ void realizarJugada(int posJugador) {
                                     // es vertical o horizontal  caso 1 solo una letra , caso 2 vertical , case 3 horizontal  SI ESTA CORRECTO YA GUARDO EN MI MATRIZ ORIGINAL
                                    
                                 
-
+                                    cout << "\n\n" << endl;
                                     system("pause");
                                 }
                                 else {
@@ -1011,3 +1038,48 @@ void regresarFIchas_al_atril_por_mala_jugada(ListaCasillas* casillaTemp, int pos
 }
 
    
+
+
+
+
+
+
+
+
+void arte_ascii() {
+    system("pause"); 
+    system("cls");
+    cout << "\n\n";
+
+    
+    cout << "°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°" << endl;
+    cout << "°************** ************** ******          ****** **************°" << endl;
+    cout << "°**°°°°°°°°°°** **°°°°°°°°°°** **°°**************°°** **°°°°°°°°°°**°" << endl;
+    cout << "°**°°********** **°°******°°** **°°°°°°°°°°°°°°°°°°** **°°**********°" << endl;
+    cout << "°**°°**         **°°**  **°°** **°°******°°******°°** **°°**        °" << endl;
+    cout << "°**°°**         **°°******°°** **°°**  **°°**  **°°** **°°**********°" << endl;
+    cout << "°**°°**  ****** **°°°°°°°°°°** **°°**  **°°**  **°°** **°°°°°°°°°°**°" << endl;
+    cout << "°**°°**  **°°** **°°******°°** **°°**  ******  **°°** **°°**********°" << endl;
+    cout << "°**°°**  **°°** **°°**  **°°** **°°**          **°°** **°°**        °" << endl;
+    cout << "°**°°******°°** **°°**  **°°** **°°**          **°°** **°°**********°" << endl;
+    cout << "°**°°°°°°°°°°** **°°**  **°°** **°°**          **°°** **°°°°°°°°°°**°" << endl;
+    cout << "°************** ******  ****** ******          ****** **************°" << endl;
+    cout << "°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°" << endl;
+    cout << endl;
+
+    cout << "°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°" << endl;
+    cout << "°**************° ************** *************  ****************  °" << endl;
+    cout << "°**          **° **°°  °°  °°** **°°°°°°°°°°** **°°°°°°°°°°°°**  °" << endl;
+    cout << "°**  °°°°°°  **° **°°  °°  °°** **°°********** **°°********°°**  °" << endl;
+    cout << "°**  °°**°°  **° **°°  °°  °°** **°°**         **°°**    **°°**  °" << endl;
+    cout << "°**  °°**°°  **° **°°  °°  °°** **°°********** **°°********°°**  °" << endl;
+    cout << "°**  °°**°°  **° **°°  °°  °°** **°°°°°°°°°°** **°°°°°°°°°°°°**  °" << endl;
+    cout << "°**  °°**°°  **° **°°  °°  °°** **°°********** **°°******°°****  °" << endl;
+    cout << "°**  °°**°°  **° **°°°°  °°°°** **°°**         **°°**  **°°**    °" << endl;
+    cout << "°**  °°°°°°  **° ****°°°°°°**** **°°********** **°°**  **°°******°" << endl;
+    cout << "°**          **°   ****°°****   **°°°°°°°°°°** **°°**  **°°°°°°**°" << endl;
+    cout << "°**************°     ******     ************** ******  **********°" << endl;
+    cout << "°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°" << endl;
+    cout << "\n\n";
+    
+}

@@ -55,6 +55,8 @@ public:
 		this->lista_casillas.Vaciar(); 
 		ListaCasillas nueva;
 		this->lista_casillas = nueva;
+		this->centro = NULL;
+		this->centrolleno = false;
 	}
 	inline ListaCasillas & getLista_Casillas() {
 		return lista_casillas;

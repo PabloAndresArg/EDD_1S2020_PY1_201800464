@@ -42,7 +42,7 @@ bool ListaDoble:: existe_en_mi_lista(char letter) {
 void ListaDoble::imprimir(string nom) {
 	NodoD* aux = this->inicio;
 	cout << endl;
-	cout << "**************************************************" << endl;
+	cout << "******************************************************************************************************" << endl;
 	cout << "LISTA DE FICHAS DEL JUGADOR: "<<nom << endl;
 	if (this->inicio == NULL) {
 		cout << " VACIA..." << endl;
@@ -57,7 +57,7 @@ void ListaDoble::imprimir(string nom) {
 		}
 		cout << endl;
 	}
-	cout << "*************************************************" << endl;
+	cout << "******************************************************************************************************" << endl;
 
 }
 
@@ -97,6 +97,7 @@ void ListaDoble::eliminar(NodoD*& nBorrar ) {
 void ListaDoble::vaciar() {
 	this->inicio = NULL;
 	this->ultimo = NULL;
+	this->cantidad_fichas = 0;
 }
 NodoD* ListaDoble::buscar(char letter) {
 	NodoD* aux = this->inicio;

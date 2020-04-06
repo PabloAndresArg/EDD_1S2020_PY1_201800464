@@ -25,14 +25,14 @@ void ListaDobleCircular::add(string palabra) {
 	}
 }
 void ListaDobleCircular::imprimeparaAdelnate() {
-	cout << "||||||| DICCIONARIO |||||||" << endl;
+	cout <<"XXXXXXXXXXXXXXXXXXXX DICCIONARIO XXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
 	if (this->inicio != NULL) {
 		NodoDobleC* aux = this->ultimo;
 		int numeral = 1;
 		int formato = 0;
 		for (int i = this->tamanio; i > 0; i--)
 		{
-			cout << numeral << ". " + aux->dato << " ";
+			cout << numeral << ". " + aux->dato << "     ";
 			numeral++;
 			formato++;
 			if (formato == 5) {
@@ -43,6 +43,7 @@ void ListaDobleCircular::imprimeparaAdelnate() {
 		}
 		cout << endl;
 	}
+	cout <<"XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
 }
 bool ListaDobleCircular::aparece_en_diccionario(string palabra_buscar) {
 	if (this->inicio != NULL) {
